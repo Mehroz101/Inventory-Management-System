@@ -52,8 +52,7 @@ const CustomSidebar = ({ visible, onHide }) => {
               className="sidebar-link "
               onClick={handleLinkClick}
             >
-              <FontAwesomeIcon icon={faGear} className="pr-2"/>
-              Settings
+              <FontAwesomeIcon icon={faGear} className="pr-2"/>              Settings
             </Link>
           </li>
           <li className=" py-2 px-4 rext-black" onClick={() => handleLogout()}>
