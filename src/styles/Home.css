@@ -1,0 +1,68 @@
+.dashboardpage .dashboard_cards{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.dashboardpage .dashboard_cards > div{
+    flex: 1;
+}
+
+/* ==========================New Sales Container ======================= */
+.add_sale_container{
+    max-width: 500px;
+    padding-bottom: 20px;
+}
+.new_sale_form .btn{
+    text-align: right;
+    margin-top: 20px;
+    flex: none;
+}
+
+/* ===============================Update stock======================= */
+.dashboardcomponent{
+    display: flex;
+}
+.addsalecomonent{
+    flex: 1;
+    min-width: 250px;
+}
+.stockcomponent{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    
+}
+
+.updatestock_container form{
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.updatestock_container form > .input_box{
+    flex: 3;
+    min-width: 150px;
+}
+.updatestock_container form .btn {
+    flex: 1;
+}
+.updatestock_container form .btn button{
+    width: 100%;
+}
+/* ======================View Stock======================== */
+.product_stock_box{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+}
+.product_stock_box .title{
+    font-weight: 600;
+}
+.product_stock_box .stock{
+    font-weight: 600;
+    font-size: 16px;
+    margin-right: 20px;
+}
