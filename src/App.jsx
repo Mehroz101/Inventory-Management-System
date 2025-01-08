@@ -1,11 +1,13 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
+  Categories,
   Home,
   Layout,
   Login,
   NewPurchases,
   NewSales,
+  Products,
   ProtectedRoute,
   Purchases,
   Sales,
@@ -73,6 +75,8 @@ function AppRoutes() {
         <Route path={ROUTES.SALES} element={<Sales />} />
         <Route path={ROUTES.NEWSALES} element={<NewSales />} />
         <Route path={ROUTES.NEWPURCHASE} element={<NewPurchases />} />
+        <Route path={ROUTES.PRODUCTS} element={<Products />} />
+        <Route path={ROUTES.CATEGORIES} element={<Categories />} />
         <Route path={ROUTES.USERS} element={<Users />} />
         <Route path={ROUTES.SETTING} element={<Setting />} />
       </Route>

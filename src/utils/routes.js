@@ -7,5 +7,7 @@ export const ROUTES = {
   PURCHASES : "/purchases",
   NEWPURCHASE :"/purchases/newpurchase",
   SALES:"/sales",
-  NEWSALES:"/sales/newsales"
+  NEWSALES:"/sales/newsales",
+  PRODUCTS:"/products",
+  CATEGORIES:"/categoies"
 };
