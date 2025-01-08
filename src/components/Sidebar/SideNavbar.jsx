@@ -7,7 +7,7 @@ import "../../styles/CustomSidebar.css"; // Optional CSS for custom styles
 import { ROUTES } from "../../utils/routes";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping, faChartLine, faGear } from "@fortawesome/free-solid-svg-icons";
+import { faArrowTrendUp, faCartShopping, faChartLine, faGear } from "@fortawesome/free-solid-svg-icons";
 
 const CustomSidebar = ({ visible, onHide }) => {
   const navigate = useNavigate();
@@ -44,7 +44,16 @@ const CustomSidebar = ({ visible, onHide }) => {
              Purchases
             </Link>
           </li>
-         
+          <li>
+            <Link
+              to={ROUTES.SALES}
+              className="sidebar-link "
+              onClick={handleLinkClick}
+            >
+            <FontAwesomeIcon icon={faArrowTrendUp} className="pr-2"/>
+            Sales
+            </Link>
+          </li>
 
           <li>
             <Link
@@ -52,9 +61,10 @@ const CustomSidebar = ({ visible, onHide }) => {
               className="sidebar-link "
               onClick={handleLinkClick}
             >
-              <FontAwesomeIcon icon={faGear} className="pr-2"/>              Settings
+              <FontAwesomeIcon icon={faGear} className="pr-2"/>Settings
             </Link>
           </li>
+         
           <li className=" py-2 px-4 rext-black" onClick={() => handleLogout()}>
             <i className="pi pi-sign-out pr-2"></i>
             Logout
