@@ -5,5 +5,6 @@ export const ROUTES = {
   USERS: "/users",
   SETTING: "/setting",
   PURCHASES : "/purchases",
-  NEWPURCHASE :"/purchases/newpurchase"
+  NEWPURCHASE :"/purchases/newpurchase",
+  REPORTS : "/reports"
 };
