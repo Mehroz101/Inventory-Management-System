@@ -37,9 +37,7 @@ const CustomSidebar = ({ visible, onHide }) => {
         <ul className="sidebar-links">
           <li>
 
-            <Link to={"/"} className="sidebar-link" onClick={handleLinkClick}>
-              <FontAwesomeIcon icon={faChartLine} /> Dashboard
-</Link>
+          
             <Link
               to={"/"}
               className="sidebar-link"
@@ -56,9 +54,7 @@ const CustomSidebar = ({ visible, onHide }) => {
               onClick={handleLinkClick}
 
             >
-              <FontAwesomeIcon icon={faCartShopping} />
-              Purchases
-
+            
             <FontAwesomeIcon icon={faCartShopping} className="pr-2"/>
              Purchases
 
@@ -112,7 +108,7 @@ const CustomSidebar = ({ visible, onHide }) => {
               className="sidebar-link"
               onClick={handleLinkClick}
             >
-              <FontAwesomeIcon icon={faFileAlt} /> Report
+              <FontAwesomeIcon icon={faFileAlt} className="pr-2"/> Report
             </Link>
           </li>
 

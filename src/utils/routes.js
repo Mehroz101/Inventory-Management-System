@@ -6,9 +6,8 @@ export const ROUTES = {
   SETTING: "/setting",
   PURCHASES : "/purchases",
   NEWPURCHASE :"/purchases/newpurchase",
-
   REPORTS : "/reports",
-
+  
   SALES:"/sales",
   NEWSALES:"/sales/newsales",
   PRODUCTS:"/products",
