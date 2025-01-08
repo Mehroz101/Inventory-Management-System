@@ -7,7 +7,7 @@ import "../../styles/CustomSidebar.css"; // Optional CSS for custom styles
 import { ROUTES } from "../../utils/routes";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping, faChartLine, faGear } from "@fortawesome/free-solid-svg-icons";
+import { faArrowTrendUp, faCartShopping, faChartLine, faCookieBite, faGear, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 
 const CustomSidebar = ({ visible, onHide }) => {
   const navigate = useNavigate();
@@ -44,7 +44,36 @@ const CustomSidebar = ({ visible, onHide }) => {
              Purchases
             </Link>
           </li>
-         
+          <li>
+            <Link
+              to={ROUTES.SALES}
+              className="sidebar-link "
+              onClick={handleLinkClick}
+            >
+            <FontAwesomeIcon icon={faArrowTrendUp} className="pr-2"/>
+            Sales
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={ROUTES.PRODUCTS}
+              className="sidebar-link "
+              onClick={handleLinkClick}
+            >
+            <FontAwesomeIcon icon={faCookieBite} className="pr-2" />
+            Products
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={ROUTES.CATEGORIES}
+              className="sidebar-link "
+              onClick={handleLinkClick}
+            >
+            <FontAwesomeIcon icon={faLayerGroup} className="pr-2"  />
+            Category
+            </Link>
+          </li>
 
           <li>
             <Link
@@ -52,9 +81,10 @@ const CustomSidebar = ({ visible, onHide }) => {
               className="sidebar-link "
               onClick={handleLinkClick}
             >
-              <FontAwesomeIcon icon={faGear} className="pr-2"/>              Settings
+              <FontAwesomeIcon icon={faGear} className="pr-2"/>Settings
             </Link>
           </li>
+         
           <li className=" py-2 px-4 rext-black" onClick={() => handleLogout()}>
             <i className="pi pi-sign-out pr-2"></i>
             Logout
@@ -69,10 +99,10 @@ const CustomSidebar = ({ visible, onHide }) => {
           className="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
         >
           <Avatar
-            image="https://avatars.githubusercontent.com/u/85057779?v=4"
+            image="https://media.licdn.com/dms/image/v2/D4D0BAQFYnsnKEj8M3w/company-logo_200_200/company-logo_200_200/0/1724233190482?e=1744243200&v=beta&t=nUMcynJyqsih3okCbDNLxkSzxIbhHBg8Oo3tuSPVOmo"
             shape="circle"
           />
-          <span className="font-bold">Mehroz Farooq</span>
+          <span className="font-bold">Webtech Smart Solution</span>
         </a>
       </div>
     </Sidebar>
