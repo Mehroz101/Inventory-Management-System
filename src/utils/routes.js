@@ -7,7 +7,7 @@ export const ROUTES = {
   PURCHASES : "/purchases",
   NEWPURCHASE :"/purchases/newpurchase",
 
-  REPORTS : "/reports"
+  REPORTS : "/reports",
 
   SALES:"/sales",
   NEWSALES:"/sales/newsales",

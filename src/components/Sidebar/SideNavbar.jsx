@@ -11,11 +11,11 @@ import {
   faCartShopping,
   faChartLine,
   faGear,
-  faFileAlt
+  faFileAlt,
+  faCookieBite,
+  faLayerGroup,
+  faArrowTrendUp
 } from "@fortawesome/free-solid-svg-icons";
-
-
-import { faArrowTrendUp, faCartShopping, faChartLine, faCookieBite, faGear, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 
 
 const CustomSidebar = ({ visible, onHide }) => {
@@ -39,7 +39,7 @@ const CustomSidebar = ({ visible, onHide }) => {
 
             <Link to={"/"} className="sidebar-link" onClick={handleLinkClick}>
               <FontAwesomeIcon icon={faChartLine} /> Dashboard
-
+</Link>
             <Link
               to={"/"}
               className="sidebar-link"
@@ -59,7 +59,7 @@ const CustomSidebar = ({ visible, onHide }) => {
               <FontAwesomeIcon icon={faCartShopping} />
               Purchases
 
-            ><FontAwesomeIcon icon={faCartShopping} className="pr-2"/>
+            <FontAwesomeIcon icon={faCartShopping} className="pr-2"/>
              Purchases
 
             </Link>
