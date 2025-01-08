@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import CustomTextInput from "../components/FormComponents/CustomTextInput";
 import CDropdown from "../components/FormComponents/CDropDown";
 import { FormColumn, FormRow } from "../components/layoutComponent";
-const NewPurchase = () => {
+const NewSales = () => {
   const method = useForm({
     defaultValues: {
       invoiceNo: 0,
@@ -11,8 +11,8 @@ const NewPurchase = () => {
       category: "",
       productSize: "",
       productPrice: 0,
-      supplierName: "",
-      supplierContact: "",
+      customerName: "",
+      customerContact: "",
       productQuantity: 0,
       paidAmount: 0,
       remainingAmount: 0,
@@ -47,7 +47,7 @@ const NewPurchase = () => {
     <>
       <div className="newpurchases">
         <div className="page_top">
-          <h2>ADD PURCHASES</h2>
+          <h2>ADD SALE</h2>
           <button className="btn">Add</button>
         </div>
 
@@ -59,7 +59,7 @@ const NewPurchase = () => {
                   control={method.control}
                   name="invoiceNo"
                   required={true}
-                  label="Invoice Number"
+                  label="Invoice No."
                   isEnable={true}
                   placeholder="Enter invoice number"
                 />
@@ -101,9 +101,9 @@ const NewPurchase = () => {
               <FormColumn sm={12} md={8} lg={8} xl={8}>
                 <CustomTextInput
                   control={method.control}
-                  name="supplierName"
+                  name="customerName"
                   required={true}
-                  label="Supplier Name"
+                  label="Customer Name"
                   isEnable={true}
                   placeholder="Enter supplier name"
                 />
@@ -111,9 +111,9 @@ const NewPurchase = () => {
               <FormColumn sm={12} md={4} lg={4} xl={2}>
                 <CustomTextInput
                   control={method.control}
-                  name="supplierContact"
+                  name="customerContact"
                   required={true}
-                  label="Supplier Contact"
+                  label="Customer Contact"
                   isEnable={true}
                   placeholder="Enter supplier contact"
                 />
@@ -175,4 +175,5 @@ const NewPurchase = () => {
   );
 };
 
-export default NewPurchase;
+
+export default NewSales
