@@ -32,7 +32,7 @@ const CustomSidebar = ({ visible, onHide }) => {
               className="sidebar-link"
               onClick={handleLinkClick}
             >
-             <FontAwesomeIcon icon={faChartLine} />  Dashboard
+             <FontAwesomeIcon icon={faChartLine} className="pr-2"/>  Dashboard
             </Link>
           </li>
           <li>
@@ -40,19 +40,11 @@ const CustomSidebar = ({ visible, onHide }) => {
               to={ROUTES.PURCHASES}
               className="sidebar-link"
               onClick={handleLinkClick}
-            ><FontAwesomeIcon icon={faCartShopping} />
+            ><FontAwesomeIcon icon={faCartShopping} className="pr-2"/>
              Purchases
             </Link>
           </li>
-          <li>
-            <Link
-              to={ROUTES.USERS}
-              className="sidebar-link"
-              onClick={handleLinkClick}
-            >
-              <i className="pi pi-users"></i> Users
-            </Link>
-          </li>
+         
 
           <li>
             <Link
@@ -60,8 +52,7 @@ const CustomSidebar = ({ visible, onHide }) => {
               className="sidebar-link "
               onClick={handleLinkClick}
             >
-              <FontAwesomeIcon icon={faGear} />
-              Settings
+              <FontAwesomeIcon icon={faGear} className="pr-2"/>              Settings
             </Link>
           </li>
           <li className=" py-2 px-4 rext-black" onClick={() => handleLogout()}>
