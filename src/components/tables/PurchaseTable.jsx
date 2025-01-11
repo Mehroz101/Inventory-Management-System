@@ -14,6 +14,7 @@ import { TriStateCheckbox } from 'primereact/tristatecheckbox';
 import { Button } from 'primereact/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faEye, faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
+import ActionsBtns from '../ActionsBtns';
 const PurchaseDate = [{
     id:1,
     productName:"Product1",
@@ -133,18 +134,30 @@ export default function PurchaseTable() {
         );
     };
 
-const actionBodyTemplate = (rowData)=>{
-    return(
-        <>
-        <div className="actionbtn flex justify-content-center align-content-center gap-1">
-        <Button icon={()=><FontAwesomeIcon icon={faPencil} />} className="p-button p-button-success mr-2"/>
-            <Button icon={()=><FontAwesomeIcon icon={faTrash} />} className="p-button p-button-danger mr-2"/>
-            <Button icon={()=><FontAwesomeIcon icon={faEye} />} className="p-button p-button-info mr-2"/>
-        </div>
-           
-        </>
-    )
-}
+    const handleEdit = (data) => {
+        console.log('Edit clicked for:', data);
+        // Custom edit logic here
+      };
+    
+      const handleDelete = (data) => {
+        console.log('Delete clicked for:', data);
+        // Custom delete logic here
+      };
+    
+      const handleView = (data) => {
+        console.log('View clicked for:', data);
+        // Custom view logic here
+      };
+      const actionBodyTemplate = (rowData) => {
+        return (
+         <ActionsBtns
+             rowData={rowData}
+             onEdit={handleEdit}
+             onDelete={handleDelete}
+             onView={handleView}
+           />
+        )
+       };
     const header = renderHeader();
     const snoBodyTemplate = (rowData, options) => {
         return options.rowIndex + 1; // Row index starts from 0, so add 1 for 1-based numbering
