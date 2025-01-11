@@ -5,8 +5,10 @@ import {
   Home,
   Layout,
   Login,
+  NewPrinting,
   NewPurchases,
   NewSales,
+  Printing,
   Products,
   ProtectedRoute,
   Purchases,
@@ -78,6 +80,8 @@ function AppRoutes() {
         <Route path={ROUTES.NEWPURCHASE} element={<NewPurchases />} />
         <Route path={ROUTES.PRODUCTS} element={<Products />} />
         <Route path={ROUTES.CATEGORIES} element={<Categories />} />
+        <Route path={ROUTES.PRINTING} element={<Printing />} />
+        <Route path={ROUTES.NEWPRINTING} element={<NewPrinting />} />
         <Route path={ROUTES.USERS} element={<Users />} />
         <Route path={ROUTES.REPORTS} element={<ReportPage />} />
         <Route path={ROUTES.SETTING} element={<Setting />} />

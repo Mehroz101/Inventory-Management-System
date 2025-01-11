@@ -27,6 +27,7 @@ const PurchaseData = [
     productName: "Product1",
     category: "cat1",
     productSize: "12 x 12",
+    quantity: 12,
     productPrice: 100,
     Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t ert er  ert ",
   },
@@ -34,6 +35,8 @@ const PurchaseData = [
     id: 2,
     productName: "Product1",
     category: "cat1",
+    quantity: 12,
+
     productSize: "12 x 12",
     productPrice: 100,
     Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t ert er  ert ",
@@ -50,14 +53,12 @@ export default function ProductsTable() {
   const navigate = useNavigate();
   const [statuses] = useState(["unpaid", "paid"]);
 
-
   const location = useLocation();
   const { saleId } = getQueryParams(location.search);
   useEffect(() => {
     setProducts(PurchaseData);
     setLoading(false);
   }, [saleId]); // eslint-disable-line react-hooks/exhaustive-deps
-
 
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
@@ -84,35 +85,30 @@ export default function ProductsTable() {
     );
   };
 
-
-
-
-
-
   const handleEdit = (data) => {
-    console.log('Edit clicked for:', data);
+    console.log("Edit clicked for:", data);
     // Custom edit logic here
   };
 
   const handleDelete = (data) => {
-    console.log('Delete clicked for:', data);
+    console.log("Delete clicked for:", data);
     // Custom delete logic here
   };
 
   const handleView = (data) => {
-    console.log('View clicked for:', data);
+    console.log("View clicked for:", data);
     // Custom view logic here
   };
 
   const actionBodyTemplate = (rowData) => {
-   return (
-    <ActionsBtns
+    return (
+      <ActionsBtns
         rowData={rowData}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onView={handleView}
       />
-   )
+    );
   };
   const header = renderHeader();
   const snoBodyTemplate = (rowData, options) => {
@@ -128,20 +124,27 @@ export default function ProductsTable() {
         filters={filters}
         filterDisplay="row"
         loading={loading}
-    
-        globalFilterFields={[
-          "productName",
-        ]}
+        globalFilterFields={["productName"]}
         header={header}
         emptyMessage="No products found."
       >
         <Column header="#" body={snoBodyTemplate} />
-        <Column header="Action" body={actionBodyTemplate} style={{maxWidth:"140px"}}  />
-        <Column field="productName" header="Product Name" filter style={{minWidth:"240px"}}/>
-        {/* <Column field="category" header="Category"  />
-        <Column field="productSize" header="Product Size"  />
-        <Column field="productPrice" header="Product Price"  /> */}
-       
+
+        <Column
+          field="productName"
+          header="Product Name"
+          filter
+          style={{ minWidth: "240px" }}
+        />
+        <Column field="quantity" header="Quantity" />
+        <Column field="category" header="Category" />
+        <Column field="productSize" header="Product Size" />
+        <Column
+          header="Action"
+          body={actionBodyTemplate}
+          style={{ maxWidth: "140px" }}
+        />
+        {/* <Column field="productPrice" header="Product Price"  /> */}
       </DataTable>
     </div>
   );
