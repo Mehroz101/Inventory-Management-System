@@ -20,6 +20,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getQueryParams } from "../../utils/CommonFunction";
+import ActionsBtns from "../ActionsBtns";
 const PurchaseData = [
   {
     id: 1,
@@ -144,34 +145,30 @@ export default function SalesTable() {
     );
   };
 
+  const handleEdit = (data) => {
+    console.log('Edit clicked for:', data);
+    // Custom edit logic here
+  };
+
+  const handleDelete = (data) => {
+    console.log('Delete clicked for:', data);
+    // Custom delete logic here
+  };
+
+  const handleView = (data) => {
+    console.log('View clicked for:', data);
+    // Custom view logic here
+  };
   const actionBodyTemplate = (rowData) => {
     return (
-      <>
-        <div className="actionbtn flex justify-content-center align-content-center gap-1">
-          <Button
-            icon={() => (
-              <FontAwesomeIcon
-                icon={faPencil}
-                onClick={() => {
-                    console.log("call",rowData)
-                  navigate(`/sales/newsales?saleId=${rowData.saleId}`);
-                }}
-              />
-            )}
-            className="p-button p-button-success mr-2"
-          />
-          <Button
-            icon={() => <FontAwesomeIcon icon={faTrash} />}
-            className="p-button p-button-danger mr-2"
-          />
-          <Button
-            icon={() => <FontAwesomeIcon icon={faEye} />}
-            className="p-button p-button-info mr-2"
-          />
-        </div>
-      </>
-    );
-  };
+     <ActionsBtns
+         rowData={rowData}
+         onEdit={handleEdit}
+         onDelete={handleDelete}
+         onView={handleView}
+       />
+    )
+   };
   const header = renderHeader();
   const snoBodyTemplate = (rowData, options) => {
     return options.rowIndex + 1; // Row index starts from 0, so add 1 for 1-based numbering
