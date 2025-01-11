@@ -20,6 +20,7 @@ import {
 import { Suspense } from "react";
 import { ROUTES } from "./utils/routes";
 import { ErrorBoundary } from "react-error-boundary";
+import ReportPage from "./components/Report/Report";
 function Fallback({ error }) {
   const regex = /\((.*?):\d+:\d+\)/;
   const match = error.stack.match(regex);
@@ -82,6 +83,7 @@ function AppRoutes() {
         <Route path={ROUTES.PRINTING} element={<Printing />} />
         <Route path={ROUTES.NEWPRINTING} element={<NewPrinting />} />
         <Route path={ROUTES.USERS} element={<Users />} />
+        <Route path={ROUTES.REPORTS} element={<ReportPage />} />
         <Route path={ROUTES.SETTING} element={<Setting />} />
       </Route>
     </Routes>
