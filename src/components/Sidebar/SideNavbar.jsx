@@ -7,7 +7,7 @@ import "../../styles/CustomSidebar.css"; // Optional CSS for custom styles
 import { ROUTES } from "../../utils/routes";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowTrendUp, faCartShopping, faChartLine, faCookieBite, faGear, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
+import { faArrowTrendUp, faCartShopping, faChartLine, faCookieBite, faGear, faLayerGroup, faPrint } from "@fortawesome/free-solid-svg-icons";
 
 const CustomSidebar = ({ visible, onHide }) => {
   const navigate = useNavigate();
@@ -52,6 +52,16 @@ const CustomSidebar = ({ visible, onHide }) => {
             >
             <FontAwesomeIcon icon={faArrowTrendUp} className="pr-2"/>
             Sales
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={ROUTES.PRINTING}
+              className="sidebar-link "
+              onClick={handleLinkClick}
+            >
+            <FontAwesomeIcon icon={faPrint}  className="pr-2"/>
+            Printing
             </Link>
           </li>
           <li>
