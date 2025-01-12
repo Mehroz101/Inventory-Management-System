@@ -87,3 +87,29 @@ min-width: 250px;
     color: white;
     font-weight: 600;
 }
+
+/* Guide page */
+/* UserGuide.css */
+.user-guide {
+    padding: 20px;
+  }
+  
+  .guide-container {
+    display: flex;
+  }
+  
+  .steps-container {
+    width: 30%; /* Adjust width as needed */
+    margin-right: 20px; /* Space between steps and details */
+  }
+  
+  .details-container {
+    width: 70%; /* Adjust width as needed */
+  }
+  
+  .step-detail {
+    margin-bottom: 20px; /* Space between step details */
+    border: 1px solid #ccc; /* Optional: border for each detail */
+    padding: 10px; /* Padding for each detail */
+    border-radius: 5px; /* Rounded corners */
+  }

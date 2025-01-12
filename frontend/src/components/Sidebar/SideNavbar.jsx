@@ -27,12 +27,15 @@ const CustomSidebar = ({ visible, onHide }) => {
         </div>
         <ul className="sidebar-links">
           <li>
+
+          
             <Link
               to={"/"}
               className="sidebar-link"
               onClick={handleLinkClick}
             >
              <FontAwesomeIcon icon={faChartLine} className="pr-2"/>  Dashboard
+
             </Link>
           </li>
           <li>
@@ -40,8 +43,12 @@ const CustomSidebar = ({ visible, onHide }) => {
               to={ROUTES.PURCHASES}
               className="sidebar-link"
               onClick={handleLinkClick}
-            ><FontAwesomeIcon icon={faCartShopping} className="pr-2"/>
+
+            >
+            
+            <FontAwesomeIcon icon={faCartShopping} className="pr-2"/>
              Purchases
+
             </Link>
           </li>
           <li>
@@ -87,6 +94,15 @@ const CustomSidebar = ({ visible, onHide }) => {
 
           <li>
             <Link
+              to={ROUTES.GUIDE}
+              className="sidebar-link "
+              onClick={handleLinkClick}
+            >
+              <FontAwesomeIcon icon={faGear} className="pr-2"/>Guide
+            </Link>
+          </li>
+          <li>
+            <Link
               to={ROUTES.SETTING}
               className="sidebar-link "
               onClick={handleLinkClick}
@@ -94,7 +110,20 @@ const CustomSidebar = ({ visible, onHide }) => {
               <FontAwesomeIcon icon={faGear} className="pr-2"/>Settings
             </Link>
           </li>
+
+          <li>
+            
+            <Link
+              to={ROUTES.REPORTS}
+              className="sidebar-link"
+              onClick={handleLinkClick}
+            >
+              <FontAwesomeIcon icon={faFileAlt} className="pr-2"/> Report
+            </Link>
+          </li>
+
          
+
           <li className=" py-2 px-4 rext-black" onClick={() => handleLogout()}>
             <i className="pi pi-sign-out pr-2"></i>
             Logout
