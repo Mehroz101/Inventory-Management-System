@@ -7,11 +7,14 @@ export const ROUTES = {
   GUIDE: "/guide",
   PURCHASES : "/purchases",
   NEWPURCHASE :"/purchases/newpurchase",
+  REPORTS : "/reports",
+  
   SALES:"/sales",
   NEWSALES:"/sales/newsales",
   PRODUCTS:"/products",
   CATEGORIES:"/categoies",
   PRINTING:"/printing",
   NEWPRINTING:"/printing/newprinting",
+
 
 };
