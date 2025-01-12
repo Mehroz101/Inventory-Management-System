@@ -87,6 +87,15 @@ const CustomSidebar = ({ visible, onHide }) => {
 
           <li>
             <Link
+              to={ROUTES.GUIDE}
+              className="sidebar-link "
+              onClick={handleLinkClick}
+            >
+              <FontAwesomeIcon icon={faGear} className="pr-2"/>Guide
+            </Link>
+          </li>
+          <li>
+            <Link
               to={ROUTES.SETTING}
               className="sidebar-link "
               onClick={handleLinkClick}
