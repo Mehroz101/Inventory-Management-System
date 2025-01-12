@@ -2,10 +2,35 @@ import React from "react";
 import "../styles/Auth.css";
 import CustomTextInput from "../components/FormComponents/CustomTextInput";
 import { useForm } from "react-hook-form";
-
+import { login } from "../services/Api";
+import {useMutation} from "@tanstack/react-query"
+import { notify } from "../utils/notification";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const method = useForm();
-  const onsubmit = (data) => console.log(data);
+  const navigate = useNavigate()
+  const  loginMutation = useMutation({
+    mutationFn: (data) => login(data),
+    onSuccess: (data) => {
+      if(data.success){
+        notify("success","Login successfully")
+        navigate("/")
+      }
+      else{
+        notify("error",data.message)
+      }
+    },
+    onError: (error) => {
+      notify("error",error.response.data.message)
+    },
+
+  })
+  const onsubmit = (data) => {
+    loginMutation.mutate({
+      username: data.username,
+      password:data.password,
+    })
+  };
   return (
     <div>
       <div class="container">
@@ -15,11 +40,11 @@ const Login = () => {
               <div class="auth__field">
                 <i class="auth__icon fas fa-user"></i>
                 <CustomTextInput
-                  name="email"
-                  label="Email"
-                  placeHolder="Enter your email"
+                  name="username"
+                  label="Username"
+                  placeHolder="Enter your username"
                   control={method.control}
-                  rules={{ required: "Email is required" }}
+                  rules={{ required: "Username is required" }}
                 />
               </div>
               <div class="auth__field">

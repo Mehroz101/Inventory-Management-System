@@ -39,7 +39,7 @@ const PurchaseData = [
     // Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t ert er  ert ",
   },
 ];
-export default function CategoryTable() {
+export default function CategoryTable({data}) {
   const [category, setCatogory] = useState(null);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -53,7 +53,7 @@ export default function CategoryTable() {
   const location = useLocation();
   const { saleId } = getQueryParams(location.search);
   useEffect(() => {
-    setCatogory(PurchaseData);
+    setCatogory(data);
     setLoading(false);
   }, [saleId]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -125,7 +125,7 @@ export default function CategoryTable() {
       >
         <Column header="#" body={snoBodyTemplate} />
         <Column header="Action" body={actionBodyTemplate} style={{maxWidth:"140px"}} />
-        <Column field="category" header="Category Name" filter />
+        <Column field="categoryName" header="Category Name" filter />
         {/* <Column field="category" header="Category"  />
         <Column field="categoryize" header="Product Size"  />
         <Column field="productPrice" header="Product Price"  /> */}
