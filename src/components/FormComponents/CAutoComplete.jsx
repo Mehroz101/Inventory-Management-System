@@ -9,7 +9,7 @@ export default function CAutoComplete({
   suggestions = [],
   disabled = false,
   required = false,
-  onChange, // Adding onChange to capture parent change event
+  onChange, // Adding onChange to capture parent change event ..
 }) {
   const [localSuggestions, setLocalSuggestions] = React.useState([]);
 
