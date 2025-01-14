@@ -3,68 +3,83 @@ import { useForm } from "react-hook-form";
 import CustomTextInput from "../components/FormComponents/CustomTextInput";
 import CDropdown from "../components/FormComponents/CDropDown";
 import { FormColumn, FormRow } from "../components/layoutComponent";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { GetCategory } from "../services/Api";
+import { Button } from "primereact/button";
+import { notify } from "../utils/notification";
+import { useNavigate } from "react-router-dom";
 const NewPurchase = () => {
   const method = useForm({
     defaultValues: {
       invoiceNo: 0,
       productName: "",
       category: "",
-      productSize: "",
       productPrice: 0,
       supplierName: "",
       supplierContact: "",
       productQuantity: 0,
       paidAmount: 0,
       remainingAmount: 0,
-      status: "",
       Note: "",
     },
   });
+  const  navigate = useNavigate()
+  const addPurchasesMutation = useMutation({
+    mutationFn:AddPurchase,
+    onSuccess:(data)=>{
+      if(data.success){
+        notify("success","New purchase created")
+        navigate("/purchases")
+      }
+      
+    },
+    onError:()=>{
+      notify("error","Purchase not made")
+
+    }
+  })
   const onsubmit = (data) => {
     console.log(data);
+    addPurchasesMutation.mutate(data)
   };
-  const category = [
-    {
-      label: "Category 1",
-      value: "Cat1",
-    },
-    {
-      label: "Category 2",
-      value: "Cat2",
-    },
-  ];
-  const productSize = [
-    {
-      label: "12 x 12",
-      value: "12x12",
-    },
-    {
-      label: "24 x 24",
-      value: "24x24",
-    },
-  ];
+  const { data: category } = useQuery({
+    queryKey: ["categories"],
+    queryFn: GetCategory,
+  });
+  // const productSize = [
+  //   {
+  //     label: "12 x 12",
+  //     value: "12x12",
+  //   },
+  //   {
+  //     label: "24 x 24",
+  //     value: "24x24",
+  //   },
+  // ];
   return (
     <>
       <div className="newpurchases">
         <div className="page_top">
           <h2>ADD PURCHASES</h2>
-          <button className="btn">Add</button>
+          {/* <button className="btn" onClick={method.handleSubmit(onsubmit)}>
+            Add
+          </button> */}
         </div>
 
         <div className="newpurchases_container">
           <form onSubmit={method.handleSubmit(onsubmit)}>
             <FormRow className="flex">
-              <FormColumn sm={12} md={4} lg={2} xl={2}>
+              <FormColumn sm={12} md={2} lg={2} xl={2}>
                 <CustomTextInput
                   control={method.control}
                   name="invoiceNo"
                   required={true}
-                  label="Invoice Number"
-                  isEnable={true}
+                  label="Invoice No"
+                  isEnable={false}
                   placeholder="Enter invoice number"
                 />
               </FormColumn>
-              <FormColumn sm={12} md={8} lg={8} xl={8}>
+              <FormColumn sm={12} md={10} lg={10} xl={8}>
                 <CustomTextInput
                   control={method.control}
                   name="productName"
@@ -74,19 +89,19 @@ const NewPurchase = () => {
                   placeholder="Enter product name"
                 />
               </FormColumn>
-              <FormColumn sm={12} md={6} lg={2} xl={2}>
+              <FormColumn sm={12} md={6} lg={4} xl={4}>
                 <CDropdown
                   control={method.control}
                   name="category"
                   required={true}
                   label="Category"
-                  optionLabel="label"
-                  optionValue="value"
+                  optionLabel="categoryName"
+                  optionValue="categoryID"
                   placeholder="Select category"
                   options={category}
                 />
               </FormColumn>
-              <FormColumn sm={12} md={6} lg={2} xl={2}>
+              {/* <FormColumn sm={12} md={6} lg={2} xl={2}>
                 <CDropdown
                   control={method.control}
                   name="productSize"
@@ -97,7 +112,7 @@ const NewPurchase = () => {
                   placeholder="Select size"
                   options={productSize}
                 />
-              </FormColumn>
+              </FormColumn> */}
               <FormColumn sm={12} md={8} lg={8} xl={8}>
                 <CustomTextInput
                   control={method.control}
@@ -112,7 +127,6 @@ const NewPurchase = () => {
                 <CustomTextInput
                   control={method.control}
                   name="supplierContact"
-                  required={true}
                   label="Supplier Contact"
                   isEnable={true}
                   placeholder="Enter supplier contact"
@@ -167,6 +181,9 @@ const NewPurchase = () => {
                   placeholder="Enter note"
                 />
               </FormColumn>
+            </FormRow>
+            <FormRow>
+              <Button type="submit" label="Add"/>
             </FormRow>
           </form>
         </div>

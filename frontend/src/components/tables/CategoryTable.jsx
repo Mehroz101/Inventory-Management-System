@@ -25,24 +25,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteCategory } from "../../services/Api";
 import { confirmDialog } from "primereact/confirmdialog";
 import { notify } from "../../utils/notification";
-const PurchaseData = [
-  {
-    id: 1,
-    // productName: "Product1",
-    category: "cat1",
-    // categorySize: "12 x 12",
-    // productPrice: 100,
-    // Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t ert er  ert ",
-  },
-  {
-    id: 2,
-    // productName: "Product1",
-    category: "cat1",
-    // categorySize: "12 x 12",
-    // productPrice: 100,
-    // Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t ert er  ert ",
-  },
-];
+
 export default function CategoryTable({ data, onEditCategory }) {
   const queryClient = useQueryClient();
 

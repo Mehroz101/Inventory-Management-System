@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ProductsTable from "../components/tables/ProductsTable";
-import { ROUTES } from "../utils/routes";
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { FormColumn, FormRow } from "../components/layoutComponent";
@@ -8,22 +7,77 @@ import CustomTextInput from "../components/FormComponents/CustomTextInput";
 import { useForm } from "react-hook-form";
 import { Button } from "primereact/button";
 import CDropdown from "../components/FormComponents/CDropDown";
-import { useQuery } from "@tanstack/react-query";
-import { GetCategory } from "../services/Api";
+import CCheckBox from "../components/FormComponents/CCheckBox";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  AddProduct,
+  GetCategory,
+  GetProduct,
+  UpdateProduct,
+} from "../services/Api";
+import { notify } from "../utils/notification";
 
 const Products = () => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
+  const [editProduct, setEditProduct] = useState(null); // For editing a product
+
   const method = useForm({
     defaultValues: {
       productName: "",
-      category: "",
+      quantity: 0,
+      isRawData: false,
     },
   });
-  const {data:category} = useQuery({
-    queryKey:["categories"],
-    queryFn:GetCategory
-  })
+
+  const { data: product, refetch: refetchProducts } = useQuery({
+    queryKey: ["products"],
+    queryFn: GetProduct,
+  });
+
+  const addProductMutation = useMutation({
+    mutationFn: AddProduct,
+    onSuccess: (data) => {
+      if (data.success) {
+        notify("success", "Product added successfully");
+        setVisible(false);
+        refetchProducts();
+      } else {
+        notify("error", data.message);
+      }
+    },
+    onError: () => {},
+  });
+
+  const editProductMutation = useMutation({
+    mutationFn: UpdateProduct,
+    onSuccess: () => {
+      notify("success", "Product updated successfully");
+      setVisible(false);
+      setEditProduct(null);
+      refetchProducts();
+    },
+  });
+
+  const onSubmit = (data) => {
+    if (editProduct) {
+      editProductMutation.mutate({
+        productId: editProduct.productID,
+        ...data,
+      });
+    } else {
+      addProductMutation.mutate(data);
+    }
+  };
+
+  const handleEditProduct = (product) => {
+    setEditProduct(product);
+    method.setValue("productName", product.productName);
+    method.setValue("quantity", product.quantity);
+    method.setValue("isRawData", product.isRawData);
+    setVisible(true);
+  };
+
   return (
     <>
       <div className="Productspage">
@@ -32,6 +86,8 @@ const Products = () => {
           <button
             className="btn"
             onClick={() => {
+              setEditProduct(null);
+              method.reset();
               setVisible(true);
             }}
           >
@@ -39,45 +95,55 @@ const Products = () => {
           </button>
         </div>
         <div className="all_Products">
-          <ProductsTable />
+          <ProductsTable data={product} onEditProduct={handleEditProduct} />
         </div>
       </div>
       <Dialog
-        header="Add Product"
+        header={editProduct ? "Edit Product" : "Add Product"}
         visible={visible}
         style={{ maxWidth: "700px" }}
         onHide={() => {
-          if (!visible) return;
           setVisible(false);
+          method.reset();
+          setEditProduct(null);
         }}
       >
-        <FormRow>
-          <FormColumn>
-            <CustomTextInput
-              control={method.control}
-              name="productName"
-              required={true}
-              label="Product Name"
-              isEnable={true}
-              placeholder="Enter product name"
-            />
-          </FormColumn>
-          <FormColumn>
-            <CDropdown
-              control={method.control}
-              name="category"
-              required={true}
-              label="Category"
-              optionLabel="categoryName"
-              optionValue="categoryID"
-              placeholder="Select category"
-              options={category}
-            />
-          </FormColumn>
-          <FormColumn>
-            <Button label="Add" />
-          </FormColumn>
-        </FormRow>
+        <form onSubmit={method.handleSubmit(onSubmit)}>
+          <FormRow>
+            <FormColumn>
+              <CustomTextInput
+                control={method.control}
+                name="productName"
+                required={true}
+                label="Product Name"
+                isEnable={true}
+                placeholder="Enter product name"
+              />
+            </FormColumn>
+
+            <FormColumn>
+              <CustomTextInput
+                control={method.control}
+                name="quantity"
+                required={true}
+                label="Quantity"
+                isEnable={true}
+                type="number"
+                placeholder="Enter quantity"
+              />
+            </FormColumn>
+            <FormColumn>
+              <CCheckBox
+                control={method.control}
+                name="isRawData"
+                label="Raw Data"
+              />
+            </FormColumn>
+            <FormColumn>
+              <Button label={editProduct ? "Update" : "Add"} type="submit" />
+            </FormColumn>
+          </FormRow>
+        </form>
       </Dialog>
     </>
   );

@@ -23,7 +23,7 @@ const CustomTextInput = ({
         name={name}
         control={control}
         defaultValue={defaultValue}
-        rules={required}
+        rules={required ? { required: errorMessage } : {}}
         render={({ field, fieldState: { error } }) => (
           <>
             <label htmlFor={field.name} className={`custom-label `}>

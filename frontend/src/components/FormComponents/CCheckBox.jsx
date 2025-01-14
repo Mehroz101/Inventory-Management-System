@@ -5,8 +5,7 @@ import { Controller } from "react-hook-form";
 const CCheckBox = ({
   control,
   name,
-  rules,
-  required,
+  required=false,
   defaultValue = "",
   label = "",
   isEnable = true,
@@ -22,12 +21,13 @@ const CCheckBox = ({
           name={name}
           control={control}
           defaultValue={defaultValue}
-          rules={rules}
+          rules={required ? { required: errorMessage } : {}}
           render={({ field, fieldState: { error } }) => (
             <>
-              <label htmlFor={field.name} className={`custom-label `}>
-                {label}
-              </label>
+               <label htmlFor={field.name} className={`custom-label `}>
+              {label}
+              {required && <span className="text-red-700 fw-bold ">*</span>}
+            </label>
               <Checkbox
                 {...field}
                 id={field.name}

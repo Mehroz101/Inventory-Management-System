@@ -1,64 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { classNames } from "primereact/utils";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { FilterMatchMode } from "primereact/api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { IconField } from "primereact/iconfield";
 import { InputIcon } from "primereact/inputicon";
-import { Dropdown } from "primereact/dropdown";
-import { MultiSelect } from "primereact/multiselect";
-import { Tag } from "primereact/tag";
-import { TriStateCheckbox } from "primereact/tristatecheckbox";
-import { Button } from "primereact/button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCartShopping,
-  faEye,
-  faPencil,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getQueryParams } from "../../utils/CommonFunction";
 import ActionsBtns from "../ActionsBtns";
-const PurchaseData = [
-  {
-    id: 1,
-    productName: "Product1",
-    category: "cat1",
-    productSize: "12 x 12",
-    quantity: 12,
-    productPrice: 100,
-    Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t ert er  ert ",
-  },
-  {
-    id: 2,
-    productName: "Product1",
-    category: "cat1",
-    quantity: 12,
+import { confirmDialog } from "primereact/confirmdialog";
+import { notify } from "../../utils/notification";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { DeleteProduct } from "../../services/Api";
 
-    productSize: "12 x 12",
-    productPrice: 100,
-    Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t ert er  ert ",
-  },
-];
-export default function ProductsTable() {
-  const [products, setProducts] = useState(null);
+export default function ProductsTable({ data, onEditProduct }) {
+  const [products, setProducts] = useState(data);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     productName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+  const queryClient = useQueryClient();
+
   const [loading, setLoading] = useState(true);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const navigate = useNavigate();
-  const [statuses] = useState(["unpaid", "paid"]);
 
-  const location = useLocation();
-  const { saleId } = getQueryParams(location.search);
   useEffect(() => {
-    setProducts(PurchaseData);
+    setProducts(data);
     setLoading(false);
-  }, [saleId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [ data]);
 
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
@@ -85,35 +55,47 @@ export default function ProductsTable() {
     );
   };
 
-  const handleEdit = (data) => {
-    console.log("Edit clicked for:", data);
-    // Custom edit logic here
+  const handleEdit = (rowData) => {
+    onEditProduct(rowData); // Trigger parent's edit dialog or action
+  };
+  const deleteProductMutation = useMutation({
+    mutationFn: DeleteProduct,
+    onSuccess: (data) => {
+      if (data.success) {
+        notify("success", "Product deleted successfully");
+        queryClient.invalidateQueries(["products"]);
+      }
+    },
+  });
+  const handleDelete = (rowData) => {
+    confirmDialog({
+      message: "Do you want to delete this product?",
+      header: "Delete Confirmation",
+      icon: "pi pi-info-circle",
+      defaultFocus: "reject",
+      acceptClassName: "p-button-danger",
+        accept: () => deleteProductMutation.mutate({ productId: rowData.productID }),
+    });
   };
 
-  const handleDelete = (data) => {
-    console.log("Delete clicked for:", data);
-    // Custom delete logic here
-  };
-
-  const handleView = (data) => {
-    console.log("View clicked for:", data);
+  const handleView = (rowData) => {
+    console.log("View clicked for:", rowData);
     // Custom view logic here
   };
 
-  const actionBodyTemplate = (rowData) => {
-    return (
-      <ActionsBtns
-        rowData={rowData}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onView={handleView}
-      />
-    );
-  };
+  const actionBodyTemplate = (rowData) => (
+    <ActionsBtns
+      rowData={rowData}
+      onEdit={handleEdit}
+      onDelete={handleDelete}
+      // onView={handleView}
+    />
+  );
+
+  const snoBodyTemplate = (rowData, options) => options.rowIndex + 1;
+
   const header = renderHeader();
-  const snoBodyTemplate = (rowData, options) => {
-    return options.rowIndex + 1; // Row index starts from 0, so add 1 for 1-based numbering
-  };
+
   return (
     <div className="card">
       <DataTable
@@ -129,7 +111,6 @@ export default function ProductsTable() {
         emptyMessage="No products found."
       >
         <Column header="#" body={snoBodyTemplate} />
-
         <Column
           field="productName"
           header="Product Name"
@@ -137,14 +118,11 @@ export default function ProductsTable() {
           style={{ minWidth: "240px" }}
         />
         <Column field="quantity" header="Quantity" />
-        <Column field="category" header="Category" />
-        <Column field="productSize" header="Product Size" />
         <Column
           header="Action"
           body={actionBodyTemplate}
           style={{ maxWidth: "140px" }}
         />
-        {/* <Column field="productPrice" header="Product Price"  /> */}
       </DataTable>
     </div>
   );
