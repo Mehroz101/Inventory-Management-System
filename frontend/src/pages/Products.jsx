@@ -7,14 +7,22 @@ import { FormColumn, FormRow } from "../components/layoutComponent";
 import CustomTextInput from "../components/FormComponents/CustomTextInput";
 import { useForm } from "react-hook-form";
 import { Button } from "primereact/button";
+import CDropdown from "../components/FormComponents/CDropDown";
+import { useQuery } from "@tanstack/react-query";
+import { GetCategory } from "../services/Api";
 
 const Products = () => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const method = useForm({
-    defaultValues:{
-        productName:""
-    }
+    defaultValues: {
+      productName: "",
+      category: "",
+    },
+  });
+  const {data:category} = useQuery({
+    queryKey:["categories"],
+    queryFn:GetCategory
   })
   return (
     <>
@@ -55,9 +63,19 @@ const Products = () => {
             />
           </FormColumn>
           <FormColumn>
-            <Button
-            label="Add"
+            <CDropdown
+              control={method.control}
+              name="category"
+              required={true}
+              label="Category"
+              optionLabel="categoryName"
+              optionValue="categoryID"
+              placeholder="Select category"
+              options={category}
             />
+          </FormColumn>
+          <FormColumn>
+            <Button label="Add" />
           </FormColumn>
         </FormRow>
       </Dialog>

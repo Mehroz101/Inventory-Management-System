@@ -21,6 +21,10 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { getQueryParams } from "../../utils/CommonFunction";
 import ActionsBtns from "../ActionsBtns";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { DeleteCategory } from "../../services/Api";
+import { confirmDialog } from "primereact/confirmdialog";
+import { notify } from "../../utils/notification";
 const PurchaseData = [
   {
     id: 1,
@@ -39,96 +43,55 @@ const PurchaseData = [
     // Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t ert er  ert ",
   },
 ];
-export default function CategoryTable({data}) {
-  const [category, setCatogory] = useState(null);
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    category: { value: null, matchMode: FilterMatchMode.CONTAINS },
+export default function CategoryTable({ data, onEditCategory }) {
+  const queryClient = useQueryClient();
+
+  const deleteCategoryMutation = useMutation({
+    mutationFn: DeleteCategory,
+    onSuccess: (data) => {
+      if (data.success) {
+        notify("success", "Category deleted successfully");
+        queryClient.invalidateQueries(["categories"]);
+      }
+    },
   });
-  const [loading, setLoading] = useState(true);
-  const [globalFilterValue, setGlobalFilterValue] = useState("");
-  const navigate = useNavigate();
-  const [statuses] = useState(["unpaid", "paid"]);
 
-  const location = useLocation();
-  const { saleId } = getQueryParams(location.search);
-  useEffect(() => {
-    setCatogory(data);
-    setLoading(false);
-  }, [saleId]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const onGlobalFilterChange = (e) => {
-    const value = e.target.value;
-    let _filters = { ...filters };
-
-    _filters["global"].value = value;
-
-    setFilters(_filters);
-    setGlobalFilterValue(value);
+  const handleEdit = (rowData) => {
+    onEditCategory(rowData); // Trigger parent's edit dialog
   };
 
-  const renderHeader = () => {
-    return (
-      <div className="flex justify-content-end">
-        <IconField iconPosition="left">
-          <InputIcon className="pi pi-search" />
-          <InputText
-            value={globalFilterValue}
-            onChange={onGlobalFilterChange}
-            placeholder="Keyword Search"
-          />
-        </IconField>
-      </div>
-    );
-  };
-  const handleEdit = (data) => {
-    console.log('Edit clicked for:', data);
-    // Custom edit logic here
+  const handleDelete = (rowData) => {
+    confirmDialog({
+      message: "Do you want to delete this record?",
+      header: "Delete Confirmation",
+      icon: "pi pi-info-circle",
+      defaultFocus: "reject",
+      acceptClassName: "p-button-danger",
+      accept: () => deleteCategoryMutation.mutate({ categoryId: rowData.categoryID }),
+    });
   };
 
-  const handleDelete = (data) => {
-    console.log('Delete clicked for:', data);
-    // Custom delete logic here
-  };
+  const actionBodyTemplate = (rowData) => (
+    <ActionsBtns
+      rowData={rowData}
+      onEdit={handleEdit}
+      onDelete={handleDelete}
+    />
+  );
 
-  const handleView = (data) => {
-    console.log('View clicked for:', data);
-    // Custom view logic here
-  };
-  const actionBodyTemplate = (rowData) => {
-    return (
-     <ActionsBtns
-         rowData={rowData}
-         onEdit={handleEdit}
-         onDelete={handleDelete}
-         onView={handleView}
-       />
-    )
-   };
-  const header = renderHeader();
-  const snoBodyTemplate = (rowData, options) => {
-    return options.rowIndex + 1; // Row index starts from 0, so add 1 for 1-based numbering
-  };
   return (
     <div className="card">
       <DataTable
-        value={category}
+        value={data}
         paginator
         rows={10}
         dataKey="id"
-        filters={filters}
-        filterDisplay="row"
-        loading={loading}
         globalFilterFields={["category"]}
-        header={header}
         emptyMessage="No category found."
       >
-        <Column header="#" body={snoBodyTemplate} />
-        <Column header="Action" body={actionBodyTemplate} style={{maxWidth:"140px"}} />
-        <Column field="categoryName" header="Category Name" filter />
-        {/* <Column field="category" header="Category"  />
-        <Column field="categoryize" header="Product Size"  />
-        <Column field="productPrice" header="Product Price"  /> */}
+        <Column header="#" body={(rowData, options) => options.rowIndex + 1} />
+        <Column field="categoryName" header="Category Name" />
+        <Column header="Action" body={actionBodyTemplate} />
       </DataTable>
     </div>
   );

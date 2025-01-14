@@ -11,12 +11,15 @@ import { ToastContainer, toast } from "react-toastify";
 const queryClient = new QueryClient();
 
 import { PrimeReactProvider } from "primereact/api";
+import { ConfirmDialog } from "primereact/confirmdialog";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <PrimeReactProvider>
         <PrimeReactProvider>
           <App />
+          <ConfirmDialog />
+
           <ToastContainer />
         </PrimeReactProvider>
       </PrimeReactProvider>
