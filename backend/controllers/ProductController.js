@@ -4,7 +4,9 @@ const addProduct = async (req, res) => {
     const { productName, quantity, isRawData } = req.body;
     const userId = req.user.id;
     if (!productName) {
-      return res.status(400).json({success:false, message: "Product name is required." });
+      return res
+        .status(400)
+        .json({ success: false, message: "Product name is required." });
     }
 
     // Check if the Product already exists
@@ -14,7 +16,9 @@ const addProduct = async (req, res) => {
       userId: userId,
     });
     if (isExist) {
-      return res.status(400).json({success:false, message: "Product already exists." });
+      return res
+        .status(400)
+        .json({ success: false, message: "Product already exists." });
     }
 
     // Generate the next ProductID
@@ -28,6 +32,7 @@ const addProduct = async (req, res) => {
       productName: productName,
       quantity: quantity,
       isRawData: isRawData,
+      inProcessing: 0,
     });
 
     return res.status(201).json({
@@ -37,9 +42,11 @@ const addProduct = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in addProduct:", error);
-    return res
-      .status(500)
-      .json({success:false, message: "An error occurred.", error: error.message });
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred.",
+      error: error.message,
+    });
   }
 };
 const updateProduct = async (req, res) => {
@@ -48,15 +55,16 @@ const updateProduct = async (req, res) => {
     const { productId, productName, quantity, isRawData } = req.body;
     console.log(req.body);
     if (!productId || !productName) {
-      return res
-        .status(400)
-        .json({success:false, message: "Both ProductId and ProductName are required." });
+      return res.status(400).json({
+        success: false,
+        message: "Both ProductId and ProductName are required.",
+      });
     }
     const product = await Product.findOne({
       userId: userId,
-      ProductName: productName,
+      productName: productName,
     });
-    if (product) {
+    if (product && product.productID!==productId) {
       return res
         .status(404)
         .json({ success: false, message: "Product name exist." });
@@ -65,8 +73,8 @@ const updateProduct = async (req, res) => {
     // Find and update the Product
     const updatedProduct = await Product.findOneAndUpdate(
       { productID: productId },
-      { productName: productName ,isRawData:isRawData,quantity:quantity},
-      
+      { productName: productName, isRawData: isRawData, quantity: quantity },
+
       { new: true } // Return the updated document
     );
     if (!updatedProduct) {
@@ -126,7 +134,42 @@ const deleteProduct = async (req, res) => {
     });
   }
 };
+const TransferProduct = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { productId, transferQuantity, createdProduct, note } = req.body;
 
+    console.log(req.body);
+    const product = await Product.findOne({
+      userId: userId,
+      productID: productId,
+    });
+    if (product) {
+      console.log(product);
+      const quantity = product.quantity;
+      if (transferQuantity > quantity) {
+        res
+          .status(400)
+          .json({ success: false, message: "You dont have enough quantity" });
+      } else {
+        product.quantity = product.quantity - transferQuantity;
+        product.inProcessing = product?.inProcessing + transferQuantity;
+        product.note = note;
+        product.createdProductID = createdProduct;
+        product.save();
+        res.status(201).json({
+          success: true,
+          message: "Transfer quantity to printing department",
+        });
+      }
+    } else {
+      res.status(400).json({ success: false, message: "Product not found" });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: "something wents wrong" });
+  }
+};
 const GetProduct = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -137,7 +180,8 @@ const GetProduct = async (req, res) => {
         return {
           productID: pro.productID,
           productName: pro.productName,
-          quantity: pro.quantity,
+          quantity: pro.quantity || 0,
+          inProcessing: pro.inProcessing || 0,
           isRawData: pro.isRawData,
         };
       });
@@ -159,4 +203,80 @@ const GetProduct = async (req, res) => {
       .json({ message: "An error occurred.", error: error.message });
   }
 };
-module.exports = { deleteProduct, updateProduct, addProduct, GetProduct };
+const SpecificProduct = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const product = await Product.find({ userId: userId, isRawData: false });
+    if (product) {
+      const sendData = product.map((pro) => {
+        return {
+          productID: pro.productID,
+          productName: pro.productName,
+        };
+      });
+      return res.status(200).json({
+        success: true,
+        data: sendData,
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        message: "Product not found.",
+        data: [],
+      });
+    }
+  } catch (error) {
+    console.error("Error in GetProduct:", error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred.", error: error.message });
+  }
+};
+const PrintingProduct = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const product = await Product.find({ userId: userId, isRawData:true });
+    if (product) {
+      const sendData = product.map( (pro) => {
+        // if(pro.inProcessing>0)
+            return {
+              productName: pro.productName,
+              createdProduct: pro.createdProductID,
+              inProcessing: pro.inProcessing,
+              quantity: pro.quantity,
+              printingDate: pro.createdAt,
+              note: pro.note,
+            };
+          })
+    
+      console.log(sendData)
+      return res.status(200).json({
+        success: true,
+        data: sendData,
+      });
+    
+    } else {
+      return res.status(200).json({
+        success: true,
+        message: "Product not found.",
+        data: [],
+      });
+    }
+  } catch (error) {
+    console.error("Error in GetProduct:", error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred.", error: error.message });
+  }
+};
+module.exports = {
+  deleteProduct,
+  updateProduct,
+  addProduct,
+  GetProduct,
+  TransferProduct,
+  SpecificProduct,
+  PrintingProduct,
+};

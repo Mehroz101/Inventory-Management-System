@@ -10,12 +10,21 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     productID: {
-      type: String,
+      type: Number,
       required: true,
     },
     quantity: {
       type: Number,
       required: true,
+    },
+    inProcessing: {
+      type: Number,
+    },
+    createdProductID: {
+      type: Number,
+    },
+    note: {
+      type: String,
     },
     isRawData: {
       type: Boolean,

@@ -125,7 +125,6 @@ export const DeleteCategory = async (categoryId) => {
 // =============================Product ==========================
 export const AddProduct = async (data) => {
   try {
-    console.log(data)
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
       headers: {
@@ -223,4 +222,70 @@ export const DeleteProduct = async (productId) => {
     notify("error", error.response?.data?.message || "An error occurred.");
     return { success: false, message: error.response.data.message };
   }
+
+}
+export const Transferproduct = async (transferproductdata) => {
+  try {
+    console.log(transferproductdata)
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/product/transferproduct`,
+      transferproductdata,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Transferproduct Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
 };
+
+export const SpecificProducts = async () =>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/product/specificproduct`,config)
+     if (response.data.success) {
+      return response.data.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Transferproduct Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+}
+export const GetPrintingData = async () =>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/product/printingproduct`,config)
+     if (response.data.success) {
+      return response.data.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.log(error.message)
+  }
+}
