@@ -16,8 +16,9 @@ const CustomSidebar = ({ visible, onHide }) => {
     onHide(); // Close the sidebar
   };
   const handleLogout = () => {
-    // logout();
+
 localStorage.removeItem("inventorytoken")
+
     navigate("/login");
   };
   return (
