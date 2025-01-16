@@ -19,6 +19,9 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import ActionsBtns from "../ActionsBtns";
+import { useQuery } from "@tanstack/react-query";
+import { GetPrintingData } from "../../services/Api";
+import { formatDate } from "../../utils/CommonFunction";
 const PrintingDate = [
   {
     id: 1,
@@ -54,7 +57,7 @@ const PrintingDate = [
   },
 ];
 export default function PrintingTable() {
-  const [printing, setPrinting] = useState(null);
+  // const [printing, setPrinting] = useState(null);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     invoiceNo: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -87,17 +90,14 @@ export default function PrintingTable() {
     //     setLoading(false);
     // });
     // setSales(getCustomers(salesDate))
-    setPrinting(PrintingDate);
+    // setPrinting(PrintingDate);
     setLoading(false);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const getCustomers = (data) => {
-    return [...(data || [])].map((d) => {
-      d.date = new Date(d.date);
-
-      return d;
-    });
-  };
+  const { data: printing } = useQuery({
+    queryKey: ["printingData"],
+    queryFn: GetPrintingData,
+  });
 
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
@@ -159,7 +159,7 @@ export default function PrintingTable() {
     // Custom delete logic here
   };
 
-  const handleView = (data) => {
+  const handleTransfer = (data) => {
     console.log("View clicked for:", data);
     // Custom view logic here
   };
@@ -167,9 +167,10 @@ export default function PrintingTable() {
     return (
       <ActionsBtns
         rowData={rowData}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onView={handleView}
+        // onEdit={handleEdit}
+        // onDelete={handleDelete}
+        // onView={handleView}
+        onTransfer={handleTransfer}
       />
     );
   };
@@ -205,26 +206,28 @@ export default function PrintingTable() {
           filterPlaceholder="Search by name"
           style={{ minWidth: "12rem" }}
         />
+
         <Column
-          field="productSize"
-          header=" Size"
-          style={{ minWidth: "11rem" }}
-        />
-       
-        <Column
-          field="productQuantity"
+          field="inProcessing"
           header="Quantity"
           style={{ minWidth: "11rem" }}
         />
-       
+
         <Column
-          field="PrintingDate"
+          body={(rowData) => {
+            console.log(rowData.printingDate);
+            return (
+              <>
+                <span>{formatDate(rowData.printingDate)}</span>
+              </>
+            );
+          }}
           header="Printing Date"
           style={{ minWidth: "11rem" }}
         />
-       
-        <Column field="Note" header="Note" style={{ minWidth: "14rem" }} />
-        <Column
+
+        <Column field="note" header="Note" style={{ minWidth: "14rem" }} />
+        {/* <Column
           field="status"
           header="Status"
           showFilterMenu={false}
@@ -233,7 +236,7 @@ export default function PrintingTable() {
           body={statusBodyTemplate}
           filter
           filterElement={statusRowFilterTemplate}
-        />
+        /> */}
       </DataTable>
     </div>
   );

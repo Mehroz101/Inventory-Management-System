@@ -132,13 +132,16 @@ const Products = () => {
                 placeholder="Enter quantity"
               />
             </FormColumn>
-            <FormColumn>
-              <CCheckBox
-                control={method.control}
-                name="isRawData"
-                label="Raw Data"
-              />
-            </FormColumn>
+            {!editProduct && (
+              <FormColumn>
+                <CCheckBox
+                  control={method.control}
+                  name="isRawData"
+                  label="Raw Data"
+                />
+              </FormColumn>
+            )}
+
             <FormColumn>
               <Button label={editProduct ? "Update" : "Add"} type="submit" />
             </FormColumn>
