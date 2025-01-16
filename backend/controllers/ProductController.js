@@ -62,9 +62,9 @@ const updateProduct = async (req, res) => {
     }
     const product = await Product.findOne({
       userId: userId,
-      ProductName: productName,
+      productName: productName,
     });
-    if (product) {
+    if (product && product.productID!==productId) {
       return res
         .status(404)
         .json({ success: false, message: "Product name exist." });
