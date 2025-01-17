@@ -250,6 +250,32 @@ export const Transferproduct = async (transferproductdata) => {
     return { success: false, message: error.response.data.message };
   }
 };
+export const TransferPrintingToProduct = async (transferproductdata) => {
+  try {
+    console.log(transferproductdata)
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/product/transferprintingtoproduct`,
+      transferproductdata,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Transferproduct Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+};
 
 export const SpecificProducts = async () =>{
   try {
@@ -287,5 +313,99 @@ export const GetPrintingData = async () =>{
     }
   } catch (error) {
     console.log(error.message)
+  }
+}
+
+// ===================Pruchase================
+
+export const AddPurchase = async(data)=>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/purchase/addpurchase`,
+      data,
+      config
+    );
+    console.log(response.data)
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+export const GetPurchases =async () =>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/purchase/getpurchase`, config);
+
+    if (response.data.success) {
+      console.log(response.data.data)
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    
+  }
+}
+export const GetPurchaseData = async (id) =>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/purchase/getpurchasedata/${id}`, config);
+
+    if (response.data.success) {
+      console.log(response.data.data)
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    console.log(error.message)
+    
+  }
+}
+export const DeletePurchase = async (id)=>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/purchase/deletepurchase`,
+      id,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Deletepurchase Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
   }
 }

@@ -12,12 +12,20 @@ const purchaseSchema = new mongoose.Schema(
     invoiceNo: {
       type: Number,
     },
+    productID: {
+      type: Number,
+      required: true,
+    },
     productName: {
       type: String,
       required: true,
     },
     categoryID: {
       type: Number,
+      required: true,
+    },
+    categoryName: {
+      type: String,
       required: true,
     },
     supplierName: {
@@ -42,6 +50,14 @@ const purchaseSchema = new mongoose.Schema(
     remainingAmount: {
       type: Number,
       required: true,
+    },
+    purchaseDate:{
+        type: String,
+        required:true
+    },
+    status:{
+      type:String,
+      default:"unpaid"
     },
     note:{
         type: String,

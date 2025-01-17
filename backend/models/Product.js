@@ -20,9 +20,7 @@ const productSchema = new mongoose.Schema(
     inProcessing: {
       type: Number,
     },
-    createdProductID: {
-      type: Number,
-    },
+   
     note: {
       type: String,
     },

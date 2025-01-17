@@ -35,7 +35,7 @@ export default function ProductsTable({ data, onEditProduct }) {
     defaultValues: {
       quantity: 0,
       productId: null,
-      createdProduct:null,
+      // createdProduct:null,
       note:"",
     },
   });
@@ -109,7 +109,7 @@ export default function ProductsTable({ data, onEditProduct }) {
     transferProductMutation.mutate({
       productId: method.getValues("productId"),
       transferQuantity: parseInt(data.quantity),
-      createdProduct: data.createdProduct,
+      // createdProduct: data.createdProduct,
       note: data.note,
     });
   };
@@ -119,10 +119,7 @@ export default function ProductsTable({ data, onEditProduct }) {
     method.setValue("productId", parseInt(rowData.productID));
     setIsTransferVisible(true);
   };
-const {data:productsData} = useQuery({
-  queryKey:["specificProduct"],
-  queryFn:SpecificProducts
-})
+
   const actionBodyTemplate = (rowData) => (
     <ActionsBtns
       rowData={rowData}
@@ -192,7 +189,7 @@ const {data:productsData} = useQuery({
       >
         <form onSubmit={method.handleSubmit(onsubmit)}>
           <FormRow>
-            <FormColumn>
+            {/* <FormColumn>
             <CDropdown
               control={method.control}
               name={"createdProduct"}
@@ -203,7 +200,7 @@ const {data:productsData} = useQuery({
               label="Created Product"
               placeholder="Select product"
             />
-            </FormColumn>
+            </FormColumn> */}
             <FormColumn>
               <CustomTextInput
                 control={method.control}

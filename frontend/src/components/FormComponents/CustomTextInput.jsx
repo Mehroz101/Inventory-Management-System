@@ -5,7 +5,7 @@ import "../../styles/CustomTextInput.css"
 const CustomTextInput = ({
   control,
   name,
-  required,
+  required=false,
   defaultValue = "",
   label = "",
   isEnable = true,

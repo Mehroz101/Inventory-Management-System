@@ -19,9 +19,15 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import ActionsBtns from "../ActionsBtns";
-import { useQuery } from "@tanstack/react-query";
-import { GetPrintingData } from "../../services/Api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { GetPrintingData, SpecificProducts, TransferPrintingToProduct, Transferproduct } from "../../services/Api";
 import { formatDate } from "../../utils/CommonFunction";
+import { FormColumn, FormRow } from "../layoutComponent";
+import CustomTextInput from "../FormComponents/CustomTextInput";
+import { Dialog } from "primereact/dialog";
+import CDropdown from "../FormComponents/CDropDown";
+import { useForm } from "react-hook-form";
+import { notify } from "../../utils/notification";
 const PrintingDate = [
   {
     id: 1,
@@ -68,9 +74,18 @@ export default function PrintingTable() {
   });
   const [loading, setLoading] = useState(true);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
+  const queryClient = useQueryClient();
+  const [isTransferVisible, setIsTransferVisible] = useState(false);
 
   const [statuses] = useState(["processing", "printed"]);
-
+  const method = useForm({
+    defaultValues: {
+      quantity: 0,
+      productId: null,
+      createdProduct:null,
+      // note:"",
+    },
+  });
   const getSeverity = (status) => {
     switch (status) {
       case "processing":
@@ -93,10 +108,31 @@ export default function PrintingTable() {
     // setPrinting(PrintingDate);
     setLoading(false);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+  const transferProductMutation = useMutation({
+    mutationFn: TransferPrintingToProduct,
+    onSuccess: (data) => {
+      if (data.success) {
+        notify("success", data.message);
+        setIsTransferVisible(false);
+        method.reset();
+        queryClient.invalidateQueries({ queryKey: ["products"] });
+      } else {
+      }
+    },
+  });
+  const onsubmit = (data) => {
+    console.log(data);
+    transferProductMutation.mutate({
+      productId: method.getValues("productId"),
+      transferQuantity: parseInt(data.quantity),
+      createdProduct: data.createdProduct,
+      // note: data.note,
+    });
+  };
   const { data: printing } = useQuery({
     queryKey: ["printingData"],
     queryFn: GetPrintingData,
+    enabled:isTransferVisible
   });
 
   const onGlobalFilterChange = (e) => {
@@ -152,7 +188,10 @@ export default function PrintingTable() {
   const handleEdit = (data) => {
     console.log("Edit clicked for:", data);
     // Custom edit logic here
-  };
+  };const {data:productsData} = useQuery({
+    queryKey:["specificProduct"],
+    queryFn:SpecificProducts
+  })
 
   const handleDelete = (data) => {
     console.log("Delete clicked for:", data);
@@ -161,6 +200,8 @@ export default function PrintingTable() {
 
   const handleTransfer = (data) => {
     console.log("View clicked for:", data);
+    setIsTransferVisible(true)
+    method.setValue("productId",data.productId)
     // Custom view logic here
   };
   const actionBodyTemplate = (rowData) => {
@@ -174,6 +215,7 @@ export default function PrintingTable() {
       />
     );
   };
+
   const header = renderHeader();
   const snoBodyTemplate = (rowData, options) => {
     return options.rowIndex + 1; // Row index starts from 0, so add 1 for 1-based numbering
@@ -238,6 +280,55 @@ export default function PrintingTable() {
           filterElement={statusRowFilterTemplate}
         /> */}
       </DataTable>
+      <Dialog
+        header={"Tranfer Product"}
+        visible={isTransferVisible}
+        style={{ maxWidth: "700px" }}
+        onHide={() => {
+          setIsTransferVisible(false);
+          method.reset();
+          // isTransferVisible(null);
+        }}
+      >
+        <form onSubmit={method.handleSubmit(onsubmit)}>
+          <FormRow>
+            <FormColumn>
+            <CDropdown
+              control={method.control}
+              name={"createdProduct"}
+              optionLabel="productName"
+              optionValue="productID"
+              options={productsData}
+              required={true}
+              label="Created Product"
+              placeholder="Select product"
+            />
+            </FormColumn>
+            <FormColumn>
+              <CustomTextInput
+                control={method.control}
+                name="quantity"
+                required={true}
+                label="Quantity"
+                isEnable={true}
+                type="number"
+                placeholder="Enter quantity"
+              />
+            </FormColumn>
+            {/* <FormColumn>
+              <CustomTextInput
+                control={method.control}
+                name="note"
+                label="Note"
+                isEnable={true}
+                placeholder="Write note"
+              />
+            </FormColumn> */}
+            <Button label="Transfer" type="submit" />
+          </FormRow>
+        </form>
+      </Dialog>
     </div>
+    
   );
 }
