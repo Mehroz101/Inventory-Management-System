@@ -1,4 +1,9 @@
-import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faPencil,
+  faShuffle,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "primereact/button";
 import React from "react";
@@ -9,6 +14,7 @@ const ActionsBtns = ({
   onEdit = null,
   onDelete = null,
   onView = null,
+  onTransfer = null,
 }) => {
   const navigate = useNavigate();
 
@@ -18,6 +24,7 @@ const ActionsBtns = ({
         <Button
           icon={<FontAwesomeIcon icon={faPencil} />}
           className="p-button p-button-success mr-2"
+          tooltip="edit"
           onClick={() => {
             if (onEdit) {
               onEdit(rowData);
@@ -32,6 +39,7 @@ const ActionsBtns = ({
           icon={<FontAwesomeIcon icon={faTrash} />}
           className="p-button p-button-danger mr-2"
           onClick={() => onDelete && onDelete(rowData)}
+          tooltip="delete"
         />
       )}
       {onView && (
@@ -39,6 +47,15 @@ const ActionsBtns = ({
           icon={<FontAwesomeIcon icon={faEye} />}
           className="p-button p-button-info mr-2"
           onClick={() => onView && onView(rowData)}
+          tooltip="view"
+        />
+      )}
+      {onTransfer && (
+        <Button
+          icon={<FontAwesomeIcon icon={faShuffle} />}
+          className="p-button p-button-warning mr-2"
+          onClick={() => onTransfer && onTransfer(rowData)}
+          tooltip="shift"
         />
       )}
     </div>

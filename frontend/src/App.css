@@ -113,3 +113,9 @@ min-width: 250px;
     padding: 10px; /* Padding for each detail */
     border-radius: 5px; /* Rounded corners */
   }
+
+
+  /* ======================Row Color=============== */
+  .productDataLine{
+    background-color: rgba(192, 255, 164, 0.5);
+  }

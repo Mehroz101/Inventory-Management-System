@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken"); // Example of another require
 const User = require("../models/User");
 const signup = async (req, res) => {
   try {
-    console.log(req.body);
+    
     const { username, password, confirmPassword } = req.body;
     if (password === confirmPassword ) {
       const isUserExits = await User.findOne({ username });

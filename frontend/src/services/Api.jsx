@@ -1,6 +1,6 @@
 import axios from "axios";
 const REACT_APP_API_URL = import.meta.env.REACT_APP_API_BASE_URL;
-const API_URL = REACT_APP_API_URL + "api";
+const API_URL = REACT_APP_API_URL + "/api";
 import { notify } from "../utils/notification";
 export const login = async (data) => {
   try {
@@ -125,7 +125,6 @@ export const DeleteCategory = async (categoryId) => {
 // =============================Product ==========================
 export const AddProduct = async (data) => {
   try {
-    console.log(data)
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
       headers: {
@@ -223,4 +222,165 @@ export const DeleteProduct = async (productId) => {
     notify("error", error.response?.data?.message || "An error occurred.");
     return { success: false, message: error.response.data.message };
   }
+
+}
+export const Transferproduct = async (transferproductdata) => {
+  try {
+    console.log(transferproductdata)
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/product/transferproduct`,
+      transferproductdata,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Transferproduct Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
 };
+export const TransferPrintingToProduct = async (transferproductdata) => {
+  try {
+    console.log(transferproductdata)
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/product/transferprintingtoproduct`,
+      transferproductdata,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Transferproduct Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+};
+
+export const SpecificProducts = async () =>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/product/specificproduct`,config)
+     if (response.data.success) {
+      return response.data.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Transferproduct Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+}
+export const GetPrintingData = async () =>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/product/printingproduct`,config)
+     if (response.data.success) {
+      return response.data.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+// ===================Pruchase================
+
+export const AddPurchase = async(data)=>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/purchase/addpurchase`,
+      data,
+      config
+    );
+    console.log(response.data)
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+export const GetPurchases =async () =>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/purchase/getpurchase`, config);
+
+    if (response.data.success) {
+      console.log(response.data.data)
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    
+  }
+}
+export const GetPurchaseData = async (id) =>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/purchase/getpurchasedata/${id}`, config);
+
+    if (response.data.success) {
+      console.log(response.data.data)
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    console.log(error.message)
+    
+  }
+}

@@ -5,8 +5,7 @@ import { Controller } from "react-hook-form";
 const CDatePicker = ({
   control,
   name,
-  rules,
-  required,
+  required=false,
   defaultValue = "",
   label = "",
   isEnable = true,
@@ -24,7 +23,7 @@ const CDatePicker = ({
           name={name}
           control={control}
           defaultValue={defaultValue}
-          rules={rules}
+          rules={required ? { required: errorMessage } : {}}
           render={({ field, fieldState: { error } }) => (
             <>
               <label htmlFor={field.name} className={`custom-label `}>

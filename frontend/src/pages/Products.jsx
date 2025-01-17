@@ -51,11 +51,13 @@ const Products = () => {
 
   const editProductMutation = useMutation({
     mutationFn: UpdateProduct,
-    onSuccess: () => {
-      notify("success", "Product updated successfully");
-      setVisible(false);
-      setEditProduct(null);
-      refetchProducts();
+    onSuccess: (data) => {
+      if(data.success){
+        notify("success", "Product updated successfully");
+        setVisible(false);
+        setEditProduct(null);
+        refetchProducts();
+      }
     },
   });
 
@@ -132,15 +134,18 @@ const Products = () => {
                 placeholder="Enter quantity"
               />
             </FormColumn>
+            {!editProduct && (
+              <FormColumn>
+                <CCheckBox
+                  control={method.control}
+                  name="isRawData"
+                  label="Raw Data"
+                />
+              </FormColumn>
+            )}
+
             <FormColumn>
-              <CCheckBox
-                control={method.control}
-                name="isRawData"
-                label="Raw Data"
-              />
-            </FormColumn>
-            <FormColumn>
-              <Button label={editProduct ? "Update" : "Add"} type="submit" />
+              <Button label={editProduct ? "Update" : "Add"} disabled={editProductMutation.isPending} type="submit" />
             </FormColumn>
           </FormRow>
         </form>
