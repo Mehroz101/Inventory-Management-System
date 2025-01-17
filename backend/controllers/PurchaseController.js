@@ -148,7 +148,45 @@ const addPurchase = async (req, res) => {
 };
 const deletePurchase = async (req, res) => {
   try {
-  } catch (error) {}
+    const userId = req.user.id;
+    const { purchaseId } = req.body;
+    if (!purchaseId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "purchase ID is required." });
+    }
+    const findPurchase = await Purchases.findOne({ purchaseID: purchaseId });
+    const qunatity = findPurchase.productQuantity;
+    const findProduct = await Product.findOne({
+      productID: findPurchase.productID,
+    });
+    findProduct.quantity -= qunatity;
+    findProduct.save();
+
+    // Find and delete the Product
+    const deletePurchase = await Purchases.findOneAndDelete({
+      purchaseID: purchaseId,
+      userId: userId,
+    });
+
+    if (!deletePurchase) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Purchase not found." });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Purchase deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Error in deletePurchase:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred.",
+      error: error.message,
+    });
+  }
 };
 const updatePurchase = async (req, res) => {
   try {
