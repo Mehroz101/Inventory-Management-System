@@ -21,6 +21,10 @@ import {
 import ActionsBtns from "../ActionsBtns";
 import { formatDate } from "../../utils/CommonFunction";
 import { useNavigate } from "react-router-dom";
+import { confirmDialog } from "primereact/confirmdialog";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { DeletePurchase } from "../../services/Api";
+import { notify } from "../../utils/notification";
 const PurchaseDate = [
   {
     id: 1,
@@ -140,11 +144,30 @@ const navigate = useNavigate()
       />
     );
   };
+  const queryClient = useQueryClient();
 
   const handleEdit = (data) => {
   };
-
+  const deletePurchaseMutation = useMutation({
+    mutationFn: DeletePurchase,
+    onSuccess: (data) => {
+      if (data.success) {
+        notify("success", "Purchase deleted successfully");
+        queryClient.invalidateQueries({ queryKey: ["purchases"] });
+        queryClient.invalidateQueries({ queryKey: ["products"] });
+      }
+    },
+  });
   const handleDelete = (data) => {
+    confirmDialog({
+        message: "Do you want to delete this product?",
+        header: "Delete Confirmation",
+        icon: "pi pi-info-circle",
+        defaultFocus: "reject",
+        acceptClassName: "p-button-danger",
+        accept: () =>
+          deletePurchaseMutation.mutate({ purchaseId: data.purchaseID }),
+      });
   };
 
   const handleView = (data) => {

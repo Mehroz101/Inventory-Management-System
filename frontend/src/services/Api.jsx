@@ -384,3 +384,28 @@ export const GetPurchaseData = async (id) =>{
     
   }
 }
+export const DeletePurchase = async (id)=>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/purchase/deletepurchase`,
+      id,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Deletepurchase Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+}
