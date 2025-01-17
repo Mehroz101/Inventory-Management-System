@@ -137,7 +137,7 @@ const deleteProduct = async (req, res) => {
 const TransferProduct = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { productId, transferQuantity, createdProduct, note } = req.body;
+    const { productId, transferQuantity, note } = req.body;
 
     console.log(req.body);
     const product = await Product.findOne({
@@ -155,12 +155,54 @@ const TransferProduct = async (req, res) => {
         product.quantity = product.quantity - transferQuantity;
         product.inProcessing = product?.inProcessing + transferQuantity;
         product.note = note;
-        product.createdProductID = createdProduct;
         product.save();
         res.status(201).json({
           success: true,
           message: "Transfer quantity to printing department",
         });
+      }
+    } else {
+      res.status(400).json({ success: false, message: "Product not found" });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: "something wents wrong" });
+  }
+};
+const TransferPrintingtoProduct = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { productId, transferQuantity,createdProduct, note } = req.body;
+
+    console.log(req.body);
+    const product = await Product.findOne({
+      userId: userId,
+      productID: productId,
+    });
+    if (product) {
+      console.log(product);
+      const quantity = product.inProcessing;
+      if (transferQuantity > quantity) {
+        res
+          .status(400)
+          .json({ success: false, message: "You dont have enough quantity" });
+      } else {
+        const createdproduct = await Product.findOne({
+          userId: userId,
+          productID: createdProduct,
+        });
+        if(createdproduct){
+          console.log("created product: ",createdproduct)
+          createdproduct.quantity = createdproduct.quantity + transferQuantity;
+          product.inProcessing = product.inProcessing - transferQuantity;
+          createdproduct.save();
+          product.save();
+          res.status(201).json({
+            success: true,
+            message: "Transfer quantity to product stock",
+          });
+        }
+       
       }
     } else {
       res.status(400).json({ success: false, message: "Product not found" });
@@ -239,17 +281,18 @@ const PrintingProduct = async (req, res) => {
 
     const product = await Product.find({ userId: userId, isRawData:true });
     if (product) {
-      const sendData = product.map( (pro) => {
-        // if(pro.inProcessing>0)
-            return {
-              productName: pro.productName,
-              createdProduct: pro.createdProductID,
-              inProcessing: pro.inProcessing,
-              quantity: pro.quantity,
-              printingDate: pro.createdAt,
-              note: pro.note,
-            };
-          })
+      const sendData = product
+      .filter(pro => pro.inProcessing > 0) // Filter out products with inProcessing <= 0
+      .map(pro => {
+        return {
+          productName: pro.productName,
+          inProcessing: pro.inProcessing,
+          quantity: pro.quantity,
+          printingDate: pro.createdAt,
+          note: pro.note,
+          productId: pro.productID
+        };
+      });
     
       console.log(sendData)
       return res.status(200).json({
@@ -279,4 +322,5 @@ module.exports = {
   TransferProduct,
   SpecificProduct,
   PrintingProduct,
+  TransferPrintingtoProduct
 };
