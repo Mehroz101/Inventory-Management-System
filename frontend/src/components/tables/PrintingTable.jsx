@@ -132,7 +132,7 @@ export default function PrintingTable() {
   const { data: printing } = useQuery({
     queryKey: ["printingData"],
     queryFn: GetPrintingData,
-    enabled:isTransferVisible
+    // enabled:isTransferVisible
   });
 
   const onGlobalFilterChange = (e) => {
