@@ -12,7 +12,13 @@ const PurchaseRouter = require("./routes/PurchaseRouter.js");
 const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
+var whitelist = [
+  "http://localhost:5173",
+  "https://webtech-inventorysystem.netlify.app/",
+];
+var corsOptions = { origin: whitelist, credentials: true };
+app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, "uploads")));
 
 // Swagger setup
