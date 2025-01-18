@@ -51,6 +51,7 @@ const addPurchase = async (req, res) => {
       });
       if (purchase) {
         const isProduct = await Product.findOne({ productID: productId });
+        console.log(isProduct); 
         isProduct.quantity = isProduct.quantity + productQuantity;
         isProduct.save();
         res.status(201).json({
