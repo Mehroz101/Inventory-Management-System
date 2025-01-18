@@ -1,7 +1,9 @@
 import axios from "axios";
 const REACT_APP_API_URL = import.meta.env.REACT_APP_API_BASE_URL;
-// const API_URL = REACT_APP_API_URL + "/api";
-const API_URL =  "https://inventory-management-system-cyan.vercel.app/api";
+
+// const API_URL = REACT_APP_API_URL + "api";
+const API_URL = "https://inventory-management-system-beige.vercel.app/api";
+
 import { notify } from "../utils/notification";
 export const login = async (data) => {
   try {
@@ -138,7 +140,7 @@ export const AddProduct = async (data) => {
       data,
       config
     );
-    console.log(response.data)
+    console.log(response.data);
     if (response.data.success) {
       return response.data;
     } else {
@@ -146,7 +148,7 @@ export const AddProduct = async (data) => {
     }
   } catch (error) {
     console.log(error.message);
-    notify("error",error.response.data.message)
+    notify("error", error.response.data.message);
   }
 };
 
@@ -162,7 +164,7 @@ export const GetProduct = async () => {
     const response = await axios.get(`${API_URL}/product/getproduct`, config);
 
     if (response.data.success) {
-      console.log(response.data.data)
+      console.log(response.data.data);
       return response.data.data; // Return the data if successful
     } else {
       return []; // Return an empty array if not successful
@@ -173,9 +175,9 @@ export const GetProduct = async () => {
   }
 };
 
-export const UpdateProduct = async (productId)=>{
+export const UpdateProduct = async (productId) => {
   try {
-    console.log(productId)
+    console.log(productId);
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
       headers: {
@@ -198,7 +200,7 @@ export const UpdateProduct = async (productId)=>{
     console.log("Updateproduct Error:", error);
     notify("error", error.response?.data?.message || "An error occurred.");
   }
-}
+};
 export const DeleteProduct = async (productId) => {
   try {
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
@@ -223,11 +225,10 @@ export const DeleteProduct = async (productId) => {
     notify("error", error.response?.data?.message || "An error occurred.");
     return { success: false, message: error.response.data.message };
   }
-
-}
+};
 export const Transferproduct = async (transferproductdata) => {
   try {
-    console.log(transferproductdata)
+    console.log(transferproductdata);
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
       headers: {
@@ -253,7 +254,7 @@ export const Transferproduct = async (transferproductdata) => {
 };
 export const TransferPrintingToProduct = async (transferproductdata) => {
   try {
-    console.log(transferproductdata)
+    console.log(transferproductdata);
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
       headers: {
@@ -278,7 +279,7 @@ export const TransferPrintingToProduct = async (transferproductdata) => {
   }
 };
 
-export const SpecificProducts = async () =>{
+export const SpecificProducts = async () => {
   try {
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
@@ -286,8 +287,11 @@ export const SpecificProducts = async () =>{
         Authorization: `Bearer ${token}`, // Add the token to the Authorization header
       },
     };
-    const response = await axios.get(`${API_URL}/product/specificproduct`,config)
-     if (response.data.success) {
+    const response = await axios.get(
+      `${API_URL}/product/specificproduct`,
+      config
+    );
+    if (response.data.success) {
       return response.data.data;
     } else {
       return { success: false, message: response.data.message };
@@ -297,8 +301,8 @@ export const SpecificProducts = async () =>{
     notify("error", error.response?.data?.message || "An error occurred.");
     return { success: false, message: error.response.data.message };
   }
-}
-export const GetPrintingData = async () =>{
+};
+export const GetPrintingData = async () => {
   try {
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
@@ -306,20 +310,23 @@ export const GetPrintingData = async () =>{
         Authorization: `Bearer ${token}`, // Add the token to the Authorization header
       },
     };
-    const response = await axios.get(`${API_URL}/product/printingproduct`,config)
-     if (response.data.success) {
+    const response = await axios.get(
+      `${API_URL}/product/printingproduct`,
+      config
+    );
+    if (response.data.success) {
       return response.data.data;
     } else {
       return { success: false, message: response.data.message };
     }
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
 // ===================Pruchase================
 
-export const AddPurchase = async(data)=>{
+export const AddPurchase = async (data) => {
   try {
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
@@ -333,18 +340,18 @@ export const AddPurchase = async(data)=>{
       data,
       config
     );
-    console.log(response.data)
+    console.log(response.data);
     if (response.data.success) {
       return response.data;
     } else {
       return { success: false, message: response.data.message };
     }
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
-export const GetPurchases =async () =>{
+export const GetPurchases = async () => {
   try {
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
@@ -355,16 +362,14 @@ export const GetPurchases =async () =>{
     const response = await axios.get(`${API_URL}/purchase/getpurchase`, config);
 
     if (response.data.success) {
-      console.log(response.data.data)
+      console.log(response.data.data);
       return response.data.data; // Return the data if successful
     } else {
       return []; // Return an empty array if not successful
     }
-  } catch (error) {
-    
-  }
-}
-export const GetPurchaseData = async (id) =>{
+  } catch (error) {}
+};
+export const GetPurchaseData = async (id) => {
   try {
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
@@ -372,20 +377,22 @@ export const GetPurchaseData = async (id) =>{
         Authorization: `Bearer ${token}`, // Add the token to the Authorization header
       },
     };
-    const response = await axios.get(`${API_URL}/purchase/getpurchasedata/${id}`, config);
+    const response = await axios.get(
+      `${API_URL}/purchase/getpurchasedata/${id}`,
+      config
+    );
 
     if (response.data.success) {
-      console.log(response.data.data)
+      console.log(response.data.data);
       return response.data.data; // Return the data if successful
     } else {
       return []; // Return an empty array if not successful
     }
   } catch (error) {
-    console.log(error.message)
-    
+    console.log(error.message);
   }
-}
-export const DeletePurchase = async (id)=>{
+};
+export const DeletePurchase = async (id) => {
   try {
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
@@ -410,3 +417,4 @@ export const DeletePurchase = async (id)=>{
     return { success: false, message: error.response.data.message };
   }
 }
+
