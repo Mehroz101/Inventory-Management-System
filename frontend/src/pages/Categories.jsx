@@ -107,6 +107,16 @@ const Categories = () => {
               />
             </FormColumn>
             <FormColumn>
+              <CustomTextInput
+                control={method.control}
+                name="category"
+                required={true}
+                label="Category Name"
+                isEnable={true}
+                placeholder="Enter category name"
+              />
+            </FormColumn>
+            <FormColumn>
               <Button label={editCategory ? "Update" : "Add"} type="submit" />
             </FormColumn>
           </FormRow>

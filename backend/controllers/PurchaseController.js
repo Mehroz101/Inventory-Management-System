@@ -188,10 +188,7 @@ const deletePurchase = async (req, res) => {
     });
   }
 };
-const updatePurchase = async (req, res) => {
-  try {
-  } catch (error) {}
-};
+
 const GetPurchase = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -277,7 +274,6 @@ const GetPurchaseData = async (req, res) => {
 
 module.exports = {
   deletePurchase,
-  updatePurchase,
   addPurchase,
   GetPurchase,
   GetPurchaseData,

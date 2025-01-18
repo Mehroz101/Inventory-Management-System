@@ -409,3 +409,96 @@ export const DeletePurchase = async (id)=>{
     return { success: false, message: error.response.data.message };
   }
 }
+
+// ==================== Sale  ======================
+export const AddSale = async (data) =>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+console.log(data)
+    const response = await axios.post(
+      `${API_URL}/sale/addsale`,
+      data,
+      config
+    );
+    console.log(response.data)
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.log(error.message)
+    notify("error",error.response.data.message)
+  }
+}
+export const GetSales = async () =>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/sale/getsale`, config);
+
+    if (response.data.success) {
+      console.log(response.data.data)
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    
+  }
+}
+export const DeleteSale = async(id)=>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/sale/deletesale`,
+      id,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Deletesale Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+}
+export const GetSaleData = async (id)=>{
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/sale/getsaledata/${id}`, config);
+
+    if (response.data.success) {
+      console.log(response.data.data)
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    console.log(error.message)
+    
+  }
+}

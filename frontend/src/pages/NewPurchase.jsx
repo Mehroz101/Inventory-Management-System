@@ -110,9 +110,12 @@ const NewPurchase = () => {
       <div className="newpurchases">
         <div className="page_top">
           <h2>{ispurchaseId? "Edit":"New"} PURCHASES</h2>
-          <button className="btn" onClick={()=>setFieldEnabled(true)}>
-            enable
+          {ispurchaseId && (
+            <button className="btn" onClick={()=>setFieldEnabled(true)}>
+            Enable
           </button>
+          )}
+          
         </div>
 
         <div className="newpurchases_container">
@@ -124,7 +127,7 @@ const NewPurchase = () => {
                   name="invoiceNo"
                   required={true}
                   label="Invoice No"
-                  isEnable={fieldEnabled}
+                  isEnable={false}
                   placeholder="Enter invoice number"
                 />
               </FormColumn>

@@ -146,13 +146,12 @@ const navigate = useNavigate()
   };
   const queryClient = useQueryClient();
 
-  const handleEdit = (data) => {
-  };
+ 
   const deletePurchaseMutation = useMutation({
     mutationFn: DeletePurchase,
     onSuccess: (data) => {
       if (data.success) {
-        notify("success", "Purchase deleted successfully");
+        notify("success", data.message);
         queryClient.invalidateQueries({ queryKey: ["purchases"] });
         queryClient.invalidateQueries({ queryKey: ["products"] });
       }
