@@ -1,6 +1,7 @@
 import axios from "axios";
 const REACT_APP_API_URL = import.meta.env.REACT_APP_API_BASE_URL;
-const API_URL = REACT_APP_API_URL + "/api";
+// const API_URL = REACT_APP_API_URL + "/api";
+const API_URL =  "https://inventory-management-system-cyan.vercel.app/api";
 import { notify } from "../utils/notification";
 export const login = async (data) => {
   try {
