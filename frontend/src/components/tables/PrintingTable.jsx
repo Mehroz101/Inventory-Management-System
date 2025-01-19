@@ -121,7 +121,6 @@ export default function PrintingTable() {
     },
   });
   const onsubmit = (data) => {
-    console.log(data);
     transferProductMutation.mutate({
       productId: method.getValues("productId"),
       transferQuantity: parseInt(data.quantity),
@@ -186,7 +185,6 @@ export default function PrintingTable() {
   };
 
   const handleEdit = (data) => {
-    console.log("Edit clicked for:", data);
     // Custom edit logic here
   };const {data:productsData} = useQuery({
     queryKey:["specificProduct"],
@@ -194,12 +192,10 @@ export default function PrintingTable() {
   })
 
   const handleDelete = (data) => {
-    console.log("Delete clicked for:", data);
     // Custom delete logic here
   };
 
   const handleTransfer = (data) => {
-    console.log("View clicked for:", data);
     setIsTransferVisible(true)
     method.setValue("productId",data.productId)
     // Custom view logic here
@@ -257,7 +253,6 @@ export default function PrintingTable() {
 
         <Column
           body={(rowData) => {
-            console.log(rowData.printingDate);
             return (
               <>
                 <span>{formatDate(rowData.printingDate)}</span>

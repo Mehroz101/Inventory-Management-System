@@ -1,30 +1,61 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DashboardCard from "../components/DashboardComponents/DashboardCard";
-import "../styles/Home.css"
-import { faMoneyBillTrendUp ,faCreditCard,faSackDollar,faChartSimple} from "@fortawesome/free-solid-svg-icons";
+import "../styles/Home.css";
+import {
+  faMoneyBillTrendUp,
+  faChartLine,
+  faHandHoldingUsd,
+  faShoppingCart,
+  faMoneyCheckAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import SaleProduct from "../components/DashboardComponents/SaleProduct";
 import UpdateStock from "../components/DashboardComponents/UpdateStock";
 import ViewStock from "../components/DashboardComponents/ViewStock";
+import { DashboardData } from "../services/Api";
+import { useQuery } from "@tanstack/react-query";
+
+const iconMapping = {
+  "Revenue": faMoneyBillTrendUp,
+  "Receivable": faHandHoldingUsd,
+  "Purchase": faShoppingCart,
+  "Payable": faMoneyCheckAlt,
+  "No of Sales": faChartLine,
+};
+
 const Home = () => {
+  const { data: Dashboarddata } = useQuery({
+    queryKey: ["dashboarddata"],
+    queryFn: DashboardData,
+  });
+
+
   return (
     <>
       <div className="dashboardpage">
         <div className="page_top"></div>
         <div className="dashboard_cards">
-          <DashboardCard card_no={"1"} card_title={"Total Revenue"} card_amount={"2122"} card_icon={faMoneyBillTrendUp}/>
-          <DashboardCard card_no={"2"} card_title={"Loan"} card_amount={"2122"} card_icon={faCreditCard}/>
-          <DashboardCard card_no={"3"} card_title={"Profit"} card_amount={"2122"} card_icon={faSackDollar}/>
-          <DashboardCard card_no={"4"} card_title={"Sales"} card_amount={"2122"} card_icon={faChartSimple}/>
+          {Dashboarddata && Dashboarddata.map((data, index) => {
+            const key = Object.keys(data)[0]; // Get the key (e.g., "Revenue")
+            const value = data[key]; // Get the corresponding value (e.g., 7000)
+
+            return (
+              <DashboardCard
+                key={index} // Use index as a key (or better, use a unique identifier if available)
+                card_no={`${index + 1}`}
+                card_title={key} // Use the key as the title
+                card_amount={value} // Use the value as the amount
+                card_icon={iconMapping[key]} // Get the icon from the mapping
+              />
+            );
+          })}
         </div>
         <div className="dashboardcomponent w-full flex justify-content-between mt-4 gap-2 flex-wrap">
-        <div className="addsalecomonent ">
-
-        <SaleProduct/>
-        </div>
-        <div className="stockcomponent w-full">
-          <UpdateStock/>
-          <ViewStock/>
-        </div>
+          <div className="addsalecomonent ">
+          <UpdateStock />
+          </div>
+          <div className="stockcomponent w-full">
+            <ViewStock />
+          </div>
         </div>
       </div>
     </>

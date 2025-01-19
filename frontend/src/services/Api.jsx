@@ -1,7 +1,7 @@
 import axios from "axios";
 const REACT_APP_API_URL = import.meta.env.REACT_APP_API_BASE_URL;
-// const API_URL = REACT_APP_API_URL + "api";
-const API_URL = "https://inventory-management-system-beige.vercel.app/api";
+const API_URL = REACT_APP_API_URL + "api";
+// const API_URL = "https://inventory-management-system-beige.vercel.app/api";
 
 import { notify } from "../utils/notification";
 export const login = async (data) => {
@@ -12,15 +12,14 @@ export const login = async (data) => {
     //     Authorization: `Bearer ${token}`, // Add the token to the Authorization header
     //   },
     // };
-    console.log(data);
     const response = await axios.post(`${API_URL}/auth/login`, data);
     if (response.data.success) {
       localStorage.setItem("inventorytoken", response.data.token);
       return response.data;
     }
   } catch (error) {
-    console.log(error);
-    notify("error", error.response.data.message);
+    console.log(error.message)
+    // notify("error", error.response.data.message);
   }
 };
 
@@ -41,7 +40,7 @@ export const GetCategory = async () => {
       return []; // Return an empty array if not successful
     }
   } catch (error) {
-    console.error("GetCategory Error:", error);
+    console.error("GetCategory Error:", error.message);
     notify("error", error.response?.data?.message || "An error occurred.");
     return []; // Return an empty array in case of an error
   }
@@ -63,7 +62,6 @@ export const AddCategory = async (data) => {
     );
 
     if (response.data.success) {
-      console.log(response.data);
       return response.data;
     } else {
       return { success: false, message: response.data.message };
@@ -124,6 +122,106 @@ export const DeleteCategory = async (categoryId) => {
   }
 };
 
+// ====================== City ======================
+export const GetCity = async () => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.get(`${API_URL}/city/getcity`, config);
+
+    if (response.data.success) {
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    console.error("GetCity Error:", error.message);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return []; // Return an empty array in case of an error
+  }
+};
+
+export const AddCity = async (data) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/city/addcity`,
+      data,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("AddCity Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+  }
+};
+export const UpdateCity = async (cityId) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/city/updatecity`,
+      cityId,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.log("UpdateCity Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+  }
+};
+export const DeleteCity = async (cityId) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/city/deletecity`,
+      cityId,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("DeleteCity Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+};
+
 // =============================Product ==========================
 export const AddProduct = async (data) => {
   try {
@@ -139,7 +237,6 @@ export const AddProduct = async (data) => {
       data,
       config
     );
-    console.log(response.data);
     if (response.data.success) {
       return response.data;
     } else {
@@ -163,7 +260,6 @@ export const GetProduct = async () => {
     const response = await axios.get(`${API_URL}/product/getproduct`, config);
 
     if (response.data.success) {
-      console.log(response.data.data);
       return response.data.data; // Return the data if successful
     } else {
       return []; // Return an empty array if not successful
@@ -176,7 +272,6 @@ export const GetProduct = async () => {
 
 export const UpdateProduct = async (productId) => {
   try {
-    console.log(productId);
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
       headers: {
@@ -227,7 +322,6 @@ export const DeleteProduct = async (productId) => {
 };
 export const Transferproduct = async (transferproductdata) => {
   try {
-    console.log(transferproductdata);
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
       headers: {
@@ -253,7 +347,6 @@ export const Transferproduct = async (transferproductdata) => {
 };
 export const TransferPrintingToProduct = async (transferproductdata) => {
   try {
-    console.log(transferproductdata);
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
       headers: {
@@ -339,7 +432,6 @@ export const AddPurchase = async (data) => {
       data,
       config
     );
-    console.log(response.data);
     if (response.data.success) {
       return response.data;
     } else {
@@ -361,7 +453,6 @@ export const GetPurchases = async () => {
     const response = await axios.get(`${API_URL}/purchase/getpurchase`, config);
 
     if (response.data.success) {
-      console.log(response.data.data);
       return response.data.data; // Return the data if successful
     } else {
       return []; // Return an empty array if not successful
@@ -382,7 +473,6 @@ export const GetPurchaseData = async (id) => {
     );
 
     if (response.data.success) {
-      console.log(response.data.data);
       return response.data.data; // Return the data if successful
     } else {
       return []; // Return an empty array if not successful
@@ -416,3 +506,177 @@ export const DeletePurchase = async (id) => {
     return { success: false, message: error.response.data.message };
   }
 };
+
+// ==================== Sale  ======================
+export const AddSale = async (data) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.post(`${API_URL}/sale/addsale`, data, config);
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.log(error.message);
+    notify("error", error.response.data.message);
+  }
+};
+export const GetSales = async () => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/sale/getsale`, config);
+
+    if (response.data.success) {
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {}
+};
+export const DeleteSale = async (id) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(`${API_URL}/sale/deletesale`, id, config);
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Deletesale Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+};
+export const GetSaleData = async (id) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(
+      `${API_URL}/sale/getsaledata/${id}`,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+//================ Dashboard =====================
+
+export const DashboardData = async () => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(
+      `${API_URL}/dashboard/getdashboarddata`,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+export const GetStock = async () => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.get(`${API_URL}/dashboard/getstock`, config);
+
+    if (response.data.success) {
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const UpdateProductStock = async (data) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.post(
+      `${API_URL}/dashboard/updateproductstock`,
+      data,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const generateReport = async (data)=>{
+  try {
+    console.log("api")
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.post(
+      `${API_URL}/dashboard/generatereport`,
+      data,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    
+  }
+}

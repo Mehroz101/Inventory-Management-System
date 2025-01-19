@@ -66,6 +66,7 @@ export default function PurchaseTable({ data }) {
     invoiceNo: { value: null, matchMode: FilterMatchMode.CONTAINS },
     productName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     category: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    city: { value: null, matchMode: FilterMatchMode.CONTAINS },
     supplierName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     status: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
@@ -89,7 +90,6 @@ const navigate = useNavigate()
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       setPurchases(data);
       setLoading(false);
     }
@@ -146,13 +146,12 @@ const navigate = useNavigate()
   };
   const queryClient = useQueryClient();
 
-  const handleEdit = (data) => {
-  };
+ 
   const deletePurchaseMutation = useMutation({
     mutationFn: DeletePurchase,
     onSuccess: (data) => {
       if (data.success) {
-        notify("success", "Purchase deleted successfully");
+        notify("success", data.message);
         queryClient.invalidateQueries({ queryKey: ["purchases"] });
         queryClient.invalidateQueries({ queryKey: ["products"] });
       }
@@ -203,6 +202,7 @@ const navigate = useNavigate()
           "invoiceNo",
           "productName",
           "category",
+          "city",
           "supplierName",
         ]}
         header={header}
@@ -235,6 +235,14 @@ const navigate = useNavigate()
         <Column
           field="categoryName"
           header="category"
+          filter
+          filterMenuStyle={{ width: "14rem" }}
+          style={{ minWidth: "14rem" }}
+          filterPlaceholder="Search by name"
+        />
+        <Column
+          field="cityName"
+          header="city"
           filter
           filterMenuStyle={{ width: "14rem" }}
           style={{ minWidth: "14rem" }}
