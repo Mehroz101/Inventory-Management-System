@@ -1,0 +1,50 @@
+.user-guide {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .guide-container {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .steps-container {
+    flex: 1;
+  }
+  
+  .details-container {
+    flex: 3;
+  }
+  
+  .step-card {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .step-icon {
+    margin-right: 10px;
+    color: #2c3e50;
+  }
+  
+  .warning {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .warning-icon {
+    margin-right: 5px;
+  }
+  
+  .dashboard-button {
+    margin-top: 20px;
+    background-color: #3498db;
+    border: none;
+  }
+  
+  .dashboard-button:hover {
+    background-color: #2980b9;
+  }

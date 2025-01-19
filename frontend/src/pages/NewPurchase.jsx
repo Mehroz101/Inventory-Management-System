@@ -290,7 +290,7 @@ const NewPurchase = () => {
               </FormColumn>
             </FormRow>
             <FormRow>
-              <Button type="submit" label={`${ispurchaseId? "Edit":"Add"}`}  disabled={fieldEnabled?false:true || addPurchasesMutation.isPending} />
+              <Button type="submit" className="mt-2" label={`${ispurchaseId? "Edit":"Add"}`}  disabled={fieldEnabled?false:true || addPurchasesMutation.isPending} />
             </FormRow>
           </form>
         </div>
