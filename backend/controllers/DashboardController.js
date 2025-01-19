@@ -198,7 +198,6 @@ const GenerateReport = async (req, res) => {
 
     // Log sales data
     console.log("Sales Data:", salesData);
-
     const data = {
       productStock,
       purchases: purchasesData,
