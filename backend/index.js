@@ -43,7 +43,9 @@ const options = {
   },
   apis: ["./routes/**/*.js"], // Correct path for route files
 };
-
+app.get("/",(req,res)=>{
+  res.json("Heo")
+})
 const swaggerSpec = swaggerDocument(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

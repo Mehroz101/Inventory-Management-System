@@ -1,7 +1,9 @@
 import axios from "axios";
 const REACT_APP_API_URL = import.meta.env.REACT_APP_API_BASE_URL;
+
 const API_URL = REACT_APP_API_URL + "api";
 // const API_URL = "https://inventory-management-system-beige.vercel.app/api";
+
 
 import { notify } from "../utils/notification";
 export const login = async (data) => {
@@ -505,7 +507,6 @@ export const DeletePurchase = async (id) => {
     notify("error", error.response?.data?.message || "An error occurred.");
     return { success: false, message: error.response.data.message };
   }
-};
 
 // ==================== Sale  ======================
 export const AddSale = async (data) => {
@@ -680,3 +681,4 @@ export const generateReport = async (data)=>{
     
   }
 }
+
