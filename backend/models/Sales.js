@@ -28,6 +28,14 @@ const saleSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    cityID: {
+      type: Number,
+      required: true,
+    },
+    cityName: {
+      type: String,
+      required: true,
+    },
     customerName: {
       type: String,
       required: true,

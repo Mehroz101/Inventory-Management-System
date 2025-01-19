@@ -66,6 +66,7 @@ export default function PurchaseTable({ data }) {
     invoiceNo: { value: null, matchMode: FilterMatchMode.CONTAINS },
     productName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     category: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    city: { value: null, matchMode: FilterMatchMode.CONTAINS },
     supplierName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     status: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
@@ -201,6 +202,7 @@ const navigate = useNavigate()
           "invoiceNo",
           "productName",
           "category",
+          "city",
           "supplierName",
         ]}
         header={header}
@@ -233,6 +235,14 @@ const navigate = useNavigate()
         <Column
           field="categoryName"
           header="category"
+          filter
+          filterMenuStyle={{ width: "14rem" }}
+          style={{ minWidth: "14rem" }}
+          filterPlaceholder="Search by name"
+        />
+        <Column
+          field="cityName"
+          header="city"
           filter
           filterMenuStyle={{ width: "14rem" }}
           style={{ minWidth: "14rem" }}

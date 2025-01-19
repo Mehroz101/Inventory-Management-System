@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+const City = require("../models/City");
 const Product = require("../models/Product");
 const Purchases = require("../models/Purchases");
 
@@ -11,6 +12,8 @@ const addPurchase = async (req, res) => {
       productName,
       categoryId,
       categoryName,
+      cityId,
+      cityName,
       productPrice,
       supplierName,
       supplierContact,
@@ -38,6 +41,8 @@ const addPurchase = async (req, res) => {
         productName: productName,
         categoryID: categoryId,
         categoryName: categoryName,
+        cityID: cityId,
+        cityName: cityName,
         productPrice,
         supplierName,
         supplierContact,
@@ -114,6 +119,8 @@ const addPurchase = async (req, res) => {
         editPurchase.productName = productName;
         editPurchase.categoryID = categoryId;
         editPurchase.categoryName = categoryName;
+        editPurchase.cityID = cityId;
+        editPurchase.cityName = cityName;
         editPurchase.productPrice = productPrice;
         editPurchase.supplierName = supplierName;
         editPurchase.supplierContact = supplierContact;
@@ -203,6 +210,8 @@ const GetPurchase = async (req, res) => {
             productName: purchase.productName, // Get product name
             categoryId: purchase.categoryID, // Keep the category ID
             categoryName: purchase.categoryName, // Get category name
+            cityId: purchase.cityID, // Keep the city ID
+            cityName: purchase.cityName, // Get city name
             productPrice: purchase.productPrice,
             supplierName: purchase.supplierName,
             supplierContact: purchase.supplierContact,
@@ -246,6 +255,8 @@ const GetPurchaseData = async (req, res) => {
         productName: purchase.productName, // Get product name
         categoryId: purchase.categoryID, // Keep the category ID
         categoryName: purchase.categoryName, // Get category name
+        cityId: purchase.cityID, // Keep the city ID
+        cityName: purchase.cityName, // Get city name
         productPrice: purchase.productPrice,
         supplierName: purchase.supplierName,
         supplierContact: purchase.supplierContact,

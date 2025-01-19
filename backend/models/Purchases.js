@@ -28,6 +28,14 @@ const purchaseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    cityID: {
+      type: Number,
+      required: true,
+    },
+    cityName: {
+      type: String,
+      required: true,
+    },
     supplierName: {
       type: String,
       required: true,

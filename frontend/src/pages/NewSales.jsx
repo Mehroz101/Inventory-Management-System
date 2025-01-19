@@ -5,7 +5,7 @@ import CDropdown from "../components/FormComponents/CDropDown";
 import { FormColumn, FormRow } from "../components/layoutComponent";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AddSale, GetCategory, GetProduct, GetSaleData } from "../services/Api";
+import { AddSale, GetCategory,GetCity, GetProduct, GetSaleData } from "../services/Api";
 import CDatePicker from "../components/FormComponents/CDatePicker";
 import { Button } from "primereact/button";
 import { formatDate } from "../utils/CommonFunction";
@@ -27,6 +27,8 @@ const NewSales = () => {
       productName: "",
       categoryId: null,
       categoryName: "",
+      cityId: null,
+      cityName: "",
       productPrice: 0,
       customerName: "",
       customerContact: "",
@@ -61,6 +63,8 @@ const NewSales = () => {
       productName: data.productName,
       categoryId: data.categoryId,
       categoryName: data.categoryName,
+      cityId: data.cityId,
+      cityName: data.cityName,
       productPrice: parseInt(data.productPrice),
       customerName: data.customerName,
       customerContact: data.customerContact,
@@ -76,6 +80,10 @@ const NewSales = () => {
     queryKey: ["categories"],
     queryFn: GetCategory,
   });
+  const { data: city } = useQuery({
+    queryKey: ["cities"],
+    queryFn: GetCity,
+  });
   const { data: products } = useQuery({
     queryKey: ["products"],
     queryFn: GetProduct,
@@ -89,6 +97,8 @@ const NewSales = () => {
       method.setValue("productName", EditSaleData.productName);
       method.setValue("categoryId", EditSaleData.categoryId);
       method.setValue("categoryName", EditSaleData.categoryName);
+      method.setValue("cityId", EditSaleData.cityId);
+      method.setValue("cityName", EditSaleData.cityName);
       method.setValue("customerName", EditSaleData.customerName);
       method.setValue("customerContact", EditSaleData.customerContact);
       method.setValue("productPrice", EditSaleData.productPrice);
@@ -174,8 +184,25 @@ const NewSales = () => {
                   }}
                 />
               </FormColumn>
+              <FormColumn sm={12} md={5} lg={3} xl={3}>
+                <CDropdown
+                  control={method.control}
+                  name="cityId"
+                  required={true}
+                  label="City"
+                  optionLabel="cityName"
+                  optionValue="cityID"
+                  placeholder="Select city"
+                  options={city}
+                  disabled={fieldEnabled ? false : true}
+                  onChange={(e) => {
+                    method.setValue("cityId", e.value);
+                    method.setValue("cityName", e.label);
+                  }}
+                />
+              </FormColumn>
 
-              <FormColumn sm={12} md={8} lg={3} xl={3}>
+              <FormColumn sm={12} md={7} lg={3} xl={3}>
                 <CustomTextInput
                   control={method.control}
                   name="customerName"

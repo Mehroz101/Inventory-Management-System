@@ -7,6 +7,7 @@ require("dotenv").config();
 const path = require("path");
 const AuthRouter = require("./routes/AuthRouter.js");
 const CategoryRouter = require("./routes/CategoryRouter.js");
+const CityRouter = require("./routes/CityRouter.js");
 const ProductRouter = require("./routes/ProductRouter.js");
 const PurchaseRouter = require("./routes/PurchaseRouter.js");
 const SaleRouter = require("./routes/SaleRouter.js");
@@ -48,6 +49,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/auth", AuthRouter); // Make sure this is correctly set up
 app.use("/api/category", CategoryRouter); // Make sure this is correctly set up
+app.use("/api/city", CityRouter); // Make sure this is correctly set up
 app.use("/api/product", ProductRouter); // Make sure this is correctly set up
 app.use("/api/purchase", PurchaseRouter); // Make sure this is correctly set up
 app.use("/api/sale", SaleRouter); // Make sure this is correctly set up

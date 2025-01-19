@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+const City = require("../models/City");
 const Product = require("../models/Product");
 const Sales = require("../models/Sales");
 
@@ -201,6 +202,8 @@ const addSale = async (req, res) => {
       productName,
       categoryId,
       categoryName,
+      cityId,
+      cityName,
       productPrice,
       customerName,
       customerContact,
@@ -227,6 +230,8 @@ const addSale = async (req, res) => {
       productName: productName,
       categoryID: categoryId,
       categoryName: categoryName,
+      cityID: cityId,
+      cityName: cityName,
       productPrice,
       customerName,
       customerContact,
@@ -321,6 +326,8 @@ const GetSale = async (req, res) => {
             productName: sale.productName, // Get product name
             categoryId: sale.categoryID, // Keep the category ID
             categoryName: sale.categoryName, // Get category name
+            cityId: sale.cityID, // Keep the city ID
+            cityName: sale.cityName, // Get city name
             productPrice: sale.productPrice,
             customerName: sale.customerName,
             customerContact: sale.customerContact,
@@ -364,6 +371,8 @@ const GetSaleData = async (req, res) => {
         productName: sale.productName, // Get product name
         categoryId: sale.categoryID, // Keep the category ID
         categoryName: sale.categoryName, // Get category name
+        cityId: sale.cityID, // Keep the city ID
+        cityName: sale.cityName, // Get city name
         productPrice: sale.productPrice,
         customerName: sale.customerName,
         customerContact: sale.customerContact,

@@ -68,6 +68,7 @@ export default function SalesTable({data}) {
     invoiceNo: { value: null, matchMode: FilterMatchMode.CONTAINS },
     productName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     category: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    city: { value: null, matchMode: FilterMatchMode.CONTAINS },
     customerName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     status: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
@@ -205,6 +206,7 @@ useEffect(() => {
           "invoiceNo",
           "productName",
           "category",
+          "city",
           "customerName",
         ]}
         header={header}
@@ -237,6 +239,14 @@ useEffect(() => {
         <Column
           field="categoryName"
           header="category"
+          filter
+          filterMenuStyle={{ width: "14rem" }}
+          style={{ minWidth: "14rem" }}
+          filterPlaceholder="Search by name"
+        />
+        <Column
+          field="cityName"
+          header="city"
           filter
           filterMenuStyle={{ width: "14rem" }}
           style={{ minWidth: "14rem" }}

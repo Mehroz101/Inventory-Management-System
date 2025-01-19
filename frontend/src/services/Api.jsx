@@ -122,6 +122,106 @@ export const DeleteCategory = async (categoryId) => {
   }
 };
 
+// ====================== City ======================
+export const GetCity = async () => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.get(`${API_URL}/city/getcity`, config);
+
+    if (response.data.success) {
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    console.error("GetCity Error:", error.message);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return []; // Return an empty array in case of an error
+  }
+};
+
+export const AddCity = async (data) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/city/addcity`,
+      data,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("AddCity Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+  }
+};
+export const UpdateCity = async (cityId) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/city/updatecity`,
+      cityId,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.log("UpdateCity Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+  }
+};
+export const DeleteCity = async (cityId) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/city/deletecity`,
+      cityId,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("DeleteCity Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+};
+
 // =============================Product ==========================
 export const AddProduct = async (data) => {
   try {
@@ -555,3 +655,28 @@ export const UpdateProductStock = async (data) => {
     console.log(error.message);
   }
 };
+
+export const generateReport = async (data)=>{
+  try {
+    console.log("api")
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+    const response = await axios.post(
+      `${API_URL}/dashboard/generatereport`,
+      data,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    
+  }
+}

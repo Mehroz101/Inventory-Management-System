@@ -7,7 +7,18 @@ import "../../styles/CustomSidebar.css"; // Optional CSS for custom styles
 import { ROUTES } from "../../utils/routes";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowTrendUp, faCartShopping, faChartLine, faCookieBite, faFileAlt, faGear, faLayerGroup, faPrint } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowTrendUp,
+  faBook,
+  faCartShopping,
+  faChartLine,
+  faCity,
+  faCookieBite,
+  faFileAlt,
+  faGear,
+  faLayerGroup,
+  faPrint,
+} from "@fortawesome/free-solid-svg-icons";
 
 const CustomSidebar = ({ visible, onHide }) => {
   const navigate = useNavigate();
@@ -16,8 +27,7 @@ const CustomSidebar = ({ visible, onHide }) => {
     onHide(); // Close the sidebar
   };
   const handleLogout = () => {
-
-localStorage.removeItem("inventorytoken")
+    localStorage.removeItem("inventorytoken");
 
     navigate("/login");
   };
@@ -29,15 +39,8 @@ localStorage.removeItem("inventorytoken")
         </div>
         <ul className="sidebar-links">
           <li>
-
-          
-            <Link
-              to={"/"}
-              className="sidebar-link"
-              onClick={handleLinkClick}
-            >
-             <FontAwesomeIcon icon={faChartLine} className="pr-2"/>  Dashboard
-
+            <Link to={"/"} className="sidebar-link" onClick={handleLinkClick}>
+              <FontAwesomeIcon icon={faChartLine} className="pr-2" /> Dashboard
             </Link>
           </li>
           <li>
@@ -45,12 +48,9 @@ localStorage.removeItem("inventorytoken")
               to={ROUTES.PURCHASES}
               className="sidebar-link"
               onClick={handleLinkClick}
-
             >
-            
-            <FontAwesomeIcon icon={faCartShopping} className="pr-2"/>
-             Purchases
-
+              <FontAwesomeIcon icon={faCartShopping} className="pr-2" />
+              Purchases
             </Link>
           </li>
           <li>
@@ -59,8 +59,8 @@ localStorage.removeItem("inventorytoken")
               className="sidebar-link "
               onClick={handleLinkClick}
             >
-            <FontAwesomeIcon icon={faArrowTrendUp} className="pr-2"/>
-            Sales
+              <FontAwesomeIcon icon={faArrowTrendUp} className="pr-2" />
+              Sales
             </Link>
           </li>
           <li>
@@ -69,8 +69,8 @@ localStorage.removeItem("inventorytoken")
               className="sidebar-link "
               onClick={handleLinkClick}
             >
-            <FontAwesomeIcon icon={faPrint}  className="pr-2"/>
-            Printing
+              <FontAwesomeIcon icon={faPrint} className="pr-2" />
+              Printing
             </Link>
           </li>
           <li>
@@ -79,8 +79,8 @@ localStorage.removeItem("inventorytoken")
               className="sidebar-link "
               onClick={handleLinkClick}
             >
-            <FontAwesomeIcon icon={faCookieBite} className="pr-2" />
-            Products
+              <FontAwesomeIcon icon={faCookieBite} className="pr-2" />
+              Products
             </Link>
           </li>
           <li>
@@ -89,8 +89,18 @@ localStorage.removeItem("inventorytoken")
               className="sidebar-link "
               onClick={handleLinkClick}
             >
-            <FontAwesomeIcon icon={faLayerGroup} className="pr-2"  />
-            Category
+              <FontAwesomeIcon icon={faLayerGroup} className="pr-2" />
+              Category
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={ROUTES.CITIES}
+              className="sidebar-link "
+              onClick={handleLinkClick}
+            >
+              <FontAwesomeIcon icon={faCity} className="pr-2" />
+              Cities
             </Link>
           </li>
 
@@ -100,51 +110,52 @@ localStorage.removeItem("inventorytoken")
               className="sidebar-link "
               onClick={handleLinkClick}
             >
-              <FontAwesomeIcon icon={faGear} className="pr-2"/>Guide
+              <FontAwesomeIcon icon={faBook} className="pr-2" />
+              Guide
             </Link>
           </li>
+
+          <li>
+            <Link
+              to={ROUTES.REPORTS}
+              className="sidebar-link"
+              onClick={handleLinkClick}
+            >
+              <FontAwesomeIcon icon={faFileAlt} className="pr-2" /> Report
+            </Link>
+          </li>
+
           <li>
             <Link
               to={ROUTES.SETTING}
               className="sidebar-link "
               onClick={handleLinkClick}
             >
-              <FontAwesomeIcon icon={faGear} className="pr-2"/>Settings
+              <FontAwesomeIcon icon={faGear} className="pr-2" />
+              Settings
             </Link>
           </li>
-
-          <li>
-            
-            <Link
-              to={ROUTES.REPORTS}
-              className="sidebar-link"
-              onClick={handleLinkClick}
-            >
-              <FontAwesomeIcon icon={faFileAlt} className="pr-2"/> Report
-            </Link>
-          </li>
-
-         
 
           <li className=" py-2 px-4 rext-black" onClick={() => handleLogout()}>
             <i className="pi pi-sign-out pr-2"></i>
             Logout
           </li>
+          <li>
+            <div className=" ">
+              <hr className="mb-3 mx-3 border-top-1 border-none surface-border" />
+              <a
+                v-ripple
+                className="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+              >
+                <Avatar
+                  image="https://media.licdn.com/dms/image/v2/D4D0BAQFYnsnKEj8M3w/company-logo_200_200/company-logo_200_200/0/1724233190482?e=1744243200&v=beta&t=nUMcynJyqsih3okCbDNLxkSzxIbhHBg8Oo3tuSPVOmo"
+                  shape="circle"
+                />
+                <span className="font-bold">Webtech Inventory Solution</span>
+              </a>
+            </div>
+          </li>
         </ul>
-      </div>
-
-      <div className=" absolute bottom-0">
-        <hr className="mb-3 mx-3 border-top-1 border-none surface-border" />
-        <a
-          v-ripple
-          className="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
-        >
-          <Avatar
-            image="https://media.licdn.com/dms/image/v2/D4D0BAQFYnsnKEj8M3w/company-logo_200_200/company-logo_200_200/0/1724233190482?e=1744243200&v=beta&t=nUMcynJyqsih3okCbDNLxkSzxIbhHBg8Oo3tuSPVOmo"
-            shape="circle"
-          />
-          <span className="font-bold">Webtech Smart Solution</span>
-        </a>
       </div>
     </Sidebar>
   );
