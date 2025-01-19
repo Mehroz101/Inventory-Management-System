@@ -93,7 +93,7 @@ export default function SalesTable({data}) {
 // useEffect(()=>{},[saleId])
 useEffect(() => {
   if (data) {
-    console.log(data);
+    (data);
     setSales(data);
     setLoading(false);
   }

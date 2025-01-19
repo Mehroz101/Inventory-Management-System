@@ -105,7 +105,6 @@ export default function ProductsTable({ data, onEditProduct }) {
     },
   });
   const onsubmit = (data) => {
-    console.log(data);
     transferProductMutation.mutate({
       productId: method.getValues("productId"),
       transferQuantity: parseInt(data.quantity),
@@ -114,7 +113,6 @@ export default function ProductsTable({ data, onEditProduct }) {
     });
   };
   const handleTransfer = (rowData) => {
-    console.log("View clicked for:", rowData);
     // Custom view logic here
     method.setValue("productId", parseInt(rowData.productID));
     setIsTransferVisible(true);

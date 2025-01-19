@@ -103,18 +103,17 @@ const NewPurchase = () => {
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get('id');
   setIsPurchaseId(id)
-  console.log(id,"id")
  },[ispurchaseId])
   return (
     <>
       <div className="newpurchases">
         <div className="page_top">
-          <h2>{ispurchaseId? "Edit":"New"} PURCHASES</h2>
-          {ispurchaseId && (
+          <h2>{ispurchaseId? "View":"New"} PURCHASES</h2>
+          {/* {ispurchaseId && (
             <button className="btn" onClick={()=>setFieldEnabled(true)}>
             Enable
           </button>
-          )}
+          )} */}
           
         </div>
 

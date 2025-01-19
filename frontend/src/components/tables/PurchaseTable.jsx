@@ -89,7 +89,6 @@ const navigate = useNavigate()
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       setPurchases(data);
       setLoading(false);
     }

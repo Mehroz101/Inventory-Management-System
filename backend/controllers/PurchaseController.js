@@ -5,7 +5,6 @@ const Purchases = require("../models/Purchases");
 const addPurchase = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log(req.body);
     const {
       purchaseId,
       productId,
@@ -51,7 +50,6 @@ const addPurchase = async (req, res) => {
       });
       if (purchase) {
         const isProduct = await Product.findOne({ productID: productId });
-        console.log(isProduct); 
         isProduct.quantity = isProduct.quantity + productQuantity;
         isProduct.save();
         res.status(201).json({
@@ -140,7 +138,6 @@ const addPurchase = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error.message);
     res.status(500).json({
       success: false,
       message: "Internal server error",

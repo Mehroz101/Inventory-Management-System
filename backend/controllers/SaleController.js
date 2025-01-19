@@ -195,9 +195,8 @@ const Sales = require("../models/Sales");
 const addSale = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log(req.body);
     const {
-      // saleId,
+      saleId,
       productId,
       productName,
       categoryId,
@@ -213,7 +212,7 @@ const addSale = async (req, res) => {
     } = req.body;
     // Generate the next ProductID
     const lastSale = await Sales.findOne().sort({ saleID: -1 });
-    const nextSaleID = lastSale ? lastSale.purchaseID + 1 : 1;
+    const nextSaleID = lastSale ? lastSale.saleID + 1 : 1;
     const invoiceNumber = await Sales.findOne().sort({ invoiceNo: -1 });
     const nextInvoiceNumber = invoiceNumber ? invoiceNumber.invoiceNo + 1 : 1;
     let status = "unpaid";
@@ -253,7 +252,6 @@ const addSale = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error.message);
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -263,20 +261,18 @@ const addSale = async (req, res) => {
 const deleteSale = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { saleId } = req.body;
+    // const { saleId } = req.body;
     if (!saleId) {
       return res
         .status(400)
         .json({ success: false, message: "sale ID is required." });
     }
     var findSale = await Sales.findOne({ saleID: saleId });
-    console.log(findSale);
     const qunatity = findSale.productQuantity;
     var findProduct = await Product.findOne({
       productID: findSale.productID,
     });
     if (findProduct) {
-      console.log("findProduct: ", findProduct);
       findProduct.quantity = findProduct.quantity + qunatity;
       var deleteSale = await Sales.findOneAndDelete({
         saleID: saleId,
@@ -384,7 +380,6 @@ const GetSaleData = async (req, res) => {
       res.status(404).json({ success: false, message: "Sale not found" });
     }
   } catch (error) {
-    console.log(error.message);
     res.status(500).json({
       success: false,
       message: "Internal server error",

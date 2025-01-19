@@ -56,7 +56,6 @@ const NewSales = () => {
     },
   });
   const onsubmit = (data) => {
-    console.log(method.getValues("saleId"));
     addSalesMutation.mutate({
       productId: data.productId,
       productName: data.productName,
@@ -83,7 +82,6 @@ const NewSales = () => {
   });
   useEffect(() => {
     if (EditSaleData && isSaleId) {
-      console.log("entered");
       setFieldEnabled(false);
       method.setValue("saleId", EditSaleData.saleID);
       method.setValue("invoiceNo", EditSaleData.invoiceNo);
@@ -105,7 +103,6 @@ const NewSales = () => {
     const queryParams = new URLSearchParams(location.search);
     const id = queryParams.get("id");
     setIsSaleId(id);
-    console.log(id, "id");
   }, [isSaleId]);
   const productSize = [
     {
@@ -121,12 +118,12 @@ const NewSales = () => {
     <>
       <div className="newsales">
         <div className="page_top">
-          <h2>{isSaleId ? "Edit" : "New"} Sale</h2>
-          {isSaleId && (
+          <h2>{isSaleId ? "View" : "New"} Sale</h2>
+          {/* {isSaleId && (
             <button className="btn" onClick={() => setFieldEnabled(true)}>
               Enable
             </button>
-          )}
+          )} */}
         </div>
 
         <div className="newsales_container">
