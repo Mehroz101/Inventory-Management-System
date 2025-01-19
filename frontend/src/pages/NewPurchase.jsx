@@ -7,6 +7,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   AddPurchase,
   GetCategory,
+  GetCity,
   GetProduct,
   GetPurchaseData,
 } from "../services/Api";
@@ -32,6 +33,8 @@ const NewPurchase = () => {
       productName: "",
       categoryId: null,
       categoryName: "",
+      cityId: null,
+      cityName: "",
       productPrice: 0,
       supplierName: "",
       supplierContact: "",
@@ -61,6 +64,8 @@ const NewPurchase = () => {
       productName: data.productName,
       categoryId: data.categoryId,
       categoryName: data.categoryName,
+      cityId: data.cityId,
+      cityName: data.cityName,
       productPrice: parseInt(data.productPrice),
       supplierName: data.supplierName,
       supplierContact: data.supplierContact,
@@ -76,6 +81,10 @@ const NewPurchase = () => {
     queryKey: ["categories"],
     queryFn: GetCategory,
   });
+  const { data: city } = useQuery({
+    queryKey: ["cities"],
+    queryFn: GetCity,
+  });
   const { data: products } = useQuery({
     queryKey: ["products"],
     queryFn: GetProduct,
@@ -89,6 +98,8 @@ const NewPurchase = () => {
     method.setValue("productName",editPurchaseData.productName)
     method.setValue("categoryId",editPurchaseData.categoryId)
     method.setValue("categoryName",editPurchaseData.categoryName)
+    method.setValue("cityId",editPurchaseData.cityId)
+    method.setValue("cityName",editPurchaseData.cityName)
     method.setValue("supplierName",editPurchaseData.supplierName)
     method.setValue("supplierContact",editPurchaseData.supplierContact)
     method.setValue("productPrice",editPurchaseData.productPrice)
@@ -103,16 +114,18 @@ const NewPurchase = () => {
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get('id');
   setIsPurchaseId(id)
-  console.log(id,"id")
  },[ispurchaseId])
   return (
     <>
       <div className="newpurchases">
         <div className="page_top">
-          <h2>{ispurchaseId? "Edit":"New"} PURCHASES</h2>
-          <button className="btn" onClick={()=>setFieldEnabled(true)}>
-            enable
+          <h2>{ispurchaseId? "View":"New"} PURCHASES</h2>
+          {/* {ispurchaseId && (
+            <button className="btn" onClick={()=>setFieldEnabled(true)}>
+            Enable
           </button>
+          )} */}
+          
         </div>
 
         <div className="newpurchases_container">
@@ -124,7 +137,7 @@ const NewPurchase = () => {
                   name="invoiceNo"
                   required={true}
                   label="Invoice No"
-                  isEnable={fieldEnabled}
+                  isEnable={false}
                   placeholder="Enter invoice number"
                 />
               </FormColumn>
@@ -162,6 +175,24 @@ const NewPurchase = () => {
                   }}
                   options={category}
                 />
+                </FormColumn>
+              <FormColumn sm={12} md={5} lg={3} xl={3}>
+                <CDropdown
+                  control={method.control}
+                  name="cityId"
+                  required={true}
+                  disabled={fieldEnabled?false:true}
+
+                  label="City"
+                  optionLabel="cityName"
+                  optionValue="cityID"
+                  placeholder="Select city"
+                  onChange={(e) => {
+                    method.setValue("cityId", e.value);
+                    method.setValue("cityName", e.label);
+                  }}
+                  options={city}
+                />
               </FormColumn>
               {/* <FormColumn sm={12} md={6} lg={2} xl={2}>
                 <CDropdown
@@ -175,7 +206,7 @@ const NewPurchase = () => {
                   options={productSize}
                 />
               </FormColumn> */}
-              <FormColumn sm={12} md={8} lg={3} xl={3}>
+              <FormColumn sm={12} md={7} lg={3} xl={3}>
                 <CustomTextInput
                   control={method.control}
                   name="supplierName"

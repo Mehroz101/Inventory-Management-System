@@ -2,6 +2,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   Categories,
+  Cities,
   Home,
   Layout,
   Login,
@@ -12,6 +13,7 @@ import {
   Products,
   ProtectedRoute,
   Purchases,
+  Report,
   Sales,
   Setting,
   Signup,
@@ -81,8 +83,10 @@ function AppRoutes() {
         <Route path={ROUTES.NEWPURCHASE} element={<NewPurchases />} />
         <Route path={ROUTES.PRODUCTS} element={<Products />} />
         <Route path={ROUTES.CATEGORIES} element={<Categories />} />
+        <Route path={ROUTES.CITIES} element={<Cities />} />
         <Route path={ROUTES.PRINTING} element={<Printing />} />
         <Route path={ROUTES.NEWPRINTING} element={<NewPrinting />} />
+        <Route path={ROUTES.REPORTS} element={<Report />} />
         <Route path={ROUTES.GUIDE} element={<UserGuide />} />
         <Route path={ROUTES.USERS} element={<Users />} />
         {/* <Route path={ROUTES.REPORTS} element={<ReportPage />} /> */}

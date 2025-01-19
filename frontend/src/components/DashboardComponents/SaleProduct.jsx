@@ -38,7 +38,6 @@ const SaleProduct = () => {
     },
   ];
   const onsubmit = (data) => {
-    console.log(data);
   };
   return (
     <>

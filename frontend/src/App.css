@@ -4,20 +4,25 @@
 /* ===================State Card========================== */
 .state_card_1{
     background: rgb(38,148,207);
-    background: linear-gradient(317deg, rgba(38,148,207,1) 0%, rgba(18,103,201,1) 100%);
+    background: linear-gradient(135deg, #4CAF50, #81C784);
 }
 .state_card_2{
     background: rgb(203,188,37);
-    background: linear-gradient(319deg, rgba(203,188,37,1) 0%, rgba(159,161,3,1) 100%);
+    background: linear-gradient(135deg, #2196F3, #64B5F6);
 }
 .state_card_3{
     background: rgb(80,148,28);
-    background: linear-gradient(124deg, rgba(80,148,28,1) 0%, rgba(140,201,18,1) 100%);
+    background: linear-gradient(135deg, #FF9800, #FFB74D);
 }
 .state_card_4{
     background: rgb(38,148,207);
-    background: linear-gradient(317deg, rgba(38,148,207,1) 0%, rgba(18,103,201,1) 100%);
+    background: linear-gradient(135deg, #F44336, #EF5350);
 }
+.state_card_5{
+    background: rgb(201, 207, 38);
+    background: inear-gradient(135deg, #673AB7, #9575CD);
+}
+
 .state_card {
  
   padding: 10px 20px;

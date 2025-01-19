@@ -1,17 +1,19 @@
 const Category = require("../models/Category");
+const City = require("../models/City");
 const Product = require("../models/Product");
 const Purchases = require("../models/Purchases");
 
 const addPurchase = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log(req.body);
     const {
       purchaseId,
       productId,
       productName,
       categoryId,
       categoryName,
+      cityId,
+      cityName,
       productPrice,
       supplierName,
       supplierContact,
@@ -39,6 +41,8 @@ const addPurchase = async (req, res) => {
         productName: productName,
         categoryID: categoryId,
         categoryName: categoryName,
+        cityID: cityId,
+        cityName: cityName,
         productPrice,
         supplierName,
         supplierContact,
@@ -51,7 +55,6 @@ const addPurchase = async (req, res) => {
       });
       if (purchase) {
         const isProduct = await Product.findOne({ productID: productId });
-        console.log(isProduct); 
         isProduct.quantity = isProduct.quantity + productQuantity;
         isProduct.save();
         res.status(201).json({
@@ -116,6 +119,8 @@ const addPurchase = async (req, res) => {
         editPurchase.productName = productName;
         editPurchase.categoryID = categoryId;
         editPurchase.categoryName = categoryName;
+        editPurchase.cityID = cityId;
+        editPurchase.cityName = cityName;
         editPurchase.productPrice = productPrice;
         editPurchase.supplierName = supplierName;
         editPurchase.supplierContact = supplierContact;
@@ -140,7 +145,6 @@ const addPurchase = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error.message);
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -189,10 +193,7 @@ const deletePurchase = async (req, res) => {
     });
   }
 };
-const updatePurchase = async (req, res) => {
-  try {
-  } catch (error) {}
-};
+
 const GetPurchase = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -209,6 +210,8 @@ const GetPurchase = async (req, res) => {
             productName: purchase.productName, // Get product name
             categoryId: purchase.categoryID, // Keep the category ID
             categoryName: purchase.categoryName, // Get category name
+            cityId: purchase.cityID, // Keep the city ID
+            cityName: purchase.cityName, // Get city name
             productPrice: purchase.productPrice,
             supplierName: purchase.supplierName,
             supplierContact: purchase.supplierContact,
@@ -252,6 +255,8 @@ const GetPurchaseData = async (req, res) => {
         productName: purchase.productName, // Get product name
         categoryId: purchase.categoryID, // Keep the category ID
         categoryName: purchase.categoryName, // Get category name
+        cityId: purchase.cityID, // Keep the city ID
+        cityName: purchase.cityName, // Get city name
         productPrice: purchase.productPrice,
         supplierName: purchase.supplierName,
         supplierContact: purchase.supplierContact,
@@ -278,7 +283,6 @@ const GetPurchaseData = async (req, res) => {
 
 module.exports = {
   deletePurchase,
-  updatePurchase,
   addPurchase,
   GetPurchase,
   GetPurchaseData,
