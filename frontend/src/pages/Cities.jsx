@@ -4,96 +4,96 @@ import { FormColumn, FormRow } from "../components/layoutComponent";
 import CustomTextInput from "../components/FormComponents/CustomTextInput";
 import { useForm } from "react-hook-form";
 import { Button } from "primereact/button";
-import CategoryTable from "../components/tables/CategoryTable";
+import CityTable from "../components/tables/CityTable";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AddCategory, GetCategory, UpdateCategory } from "../services/Api";
+import { AddCity, GetCity, UpdateCity } from "../services/Api";
 import { notify } from "../utils/notification";
-const Categories = () => {
+const Cities = () => {
   const [visible, setVisible] = useState(false);
-  const [editCategory, setEditCategory] = useState(null); // For editing a category
+  const [editCity, setEditCity] = useState(null); // For editing a city
   const method = useForm({
     defaultValues: {
-      category: "",
+      city: "",
     },
   });
 
-  const addCategoryMutation = useMutation({
-    mutationFn: (data) => AddCategory(data),
+  const addCityMutation = useMutation({
+    mutationFn: (data) => AddCity(data),
     onSuccess: (data) => {
       if (data.success) {
-        notify("success", "Category added successfully");
+        notify("success", "City added successfully");
         setVisible(false);
         refetch();
       }
     },
   });
 
-  const editCategoryMutation = useMutation({
-    mutationFn: UpdateCategory,
+  const editCityMutation = useMutation({
+    mutationFn: UpdateCity,
     onSuccess: (data) => {
       if (data.success) {
-        notify("success", "Category updated successfully");
+        notify("success", "City updated successfully");
         setVisible(false);
-        setEditCategory(null);
-        method.reset()
+        setEditCity(null);
+        method.reset();
+
         refetch();
       }
     },
   });
 
   const onSubmit = (data) => {
-    if (editCategory) {
-      editCategoryMutation.mutate({
-        categoryId: editCategory.categoryID,
-        categoryName: data.category,
+    if (editCity) {
+      editCityMutation.mutate({
+        cityId: editCity.cityID,
+        cityName: data.city,
       });
     } else {
-      addCategoryMutation.mutate({ category: data.category });
+      addCityMutation.mutate({ city: data.city });
     }
   };
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["categories"],
-    queryFn: GetCategory,
+    queryKey: ["cities"],
+    queryFn: GetCity,
   });
 
-  const handleEditCategory = (category) => {
-    setEditCategory(category);
-    method.setValue("category", category.categoryName);
+  const handleEditCity = (city) => {
+    setEditCity(city);
+    method.setValue("city", city.cityName);
     setVisible(true);
   };
 
   return (
     <>
-      <div className="categorypage">
+      <div className="citypage">
         <div className="page_top flex flex-wrap mb-2">
-          <h2>Category</h2>
+          <h2>City</h2>
           <button
             className="btn"
             onClick={() => {
-              setEditCategory(null);
+              setEditCity(null);
               setVisible(true);
-
             }}
           >
-            New Category
+            New City
           </button>
         </div>
-        <div className="all_category">
-          <CategoryTable
+        <div className="all_city">
+          <CityTable
             data={data}
-            onEditCategory={handleEditCategory} // Pass edit handler
+            onEditCity={handleEditCity} // Pass edit handler
           />
         </div>
       </div>
       <Dialog
-        header={editCategory ? "Edit Category" : "Add Category"}
+        header={editCity ? "Edit City" : "Add City"}
         visible={visible}
         style={{ maxWidth: "700px" }}
         onHide={() => {
           setVisible(false);
           method.reset();
-          setEditCategory(null);
+          setEditCity(null);
         }}
       >
         <form onSubmit={method.handleSubmit(onSubmit)}>
@@ -101,16 +101,16 @@ const Categories = () => {
             <FormColumn>
               <CustomTextInput
                 control={method.control}
-                name="category"
+                name="city"
                 required={true}
-                label="Category Name"
+                label="City Name"
                 isEnable={true}
-                placeholder="Enter category name"
+                placeholder="Enter city name"
               />
             </FormColumn>
-           
+
             <FormColumn>
-              <Button label={editCategory ? "Update" : "Add"} type="submit" />
+              <Button label={editCity ? "Update" : "Add"} type="submit" />
             </FormColumn>
           </FormRow>
         </form>
@@ -119,4 +119,4 @@ const Categories = () => {
   );
 };
 
-export default Categories
+export default Cities;

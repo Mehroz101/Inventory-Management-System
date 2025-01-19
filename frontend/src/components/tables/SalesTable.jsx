@@ -21,6 +21,10 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { getQueryParams } from "../../utils/CommonFunction";
 import ActionsBtns from "../ActionsBtns";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { confirmDialog } from "primereact/confirmdialog";
+import { DeleteSale } from "../../services/Api";
+import { notify } from "../../utils/notification";
 const PurchaseData = [
   {
     id: 1,
@@ -57,13 +61,14 @@ const PurchaseData = [
     Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t",
   },
 ];
-export default function SalesTable() {
-  const [purchases, setPurchases] = useState(null);
+export default function SalesTable({data}) {
+  const [sales, setSales] = useState(data);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     invoiceNo: { value: null, matchMode: FilterMatchMode.CONTAINS },
     productName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     category: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    city: { value: null, matchMode: FilterMatchMode.CONTAINS },
     customerName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     status: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
@@ -87,12 +92,13 @@ export default function SalesTable() {
   const location = useLocation();
   const { saleId } = getQueryParams(location.search);
 // useEffect(()=>{},[saleId])
-  useEffect(() => {
-    console.log("saleId")
-    console.log(saleId)
-    setPurchases(PurchaseData);
+useEffect(() => {
+  if (data) {
+    (data);
+    setSales(data);
     setLoading(false);
-  }, [saleId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }
+}, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
   const onGlobalFilterChange = (e) => {
@@ -144,26 +150,39 @@ export default function SalesTable() {
       />
     );
   };
+  const queryClient = useQueryClient();
+  const deleteSaleMutation = useMutation({
+    mutationFn: DeleteSale,
 
-  const handleEdit = (data) => {
-    console.log('Edit clicked for:', data);
-    // Custom edit logic here
-  };
-
+    onSuccess: (data) => {
+      if (data.success) {
+        notify("success", data.message);
+        queryClient.invalidateQueries({ queryKey: ["sales"] });
+        queryClient.invalidateQueries({ queryKey: ["products"] });
+      }
+    },
+  });
   const handleDelete = (data) => {
-    console.log('Delete clicked for:', data);
-    // Custom delete logic here
+    confirmDialog({
+        message: "Do you want to delete this product?",
+        header: "Delete Confirmation",
+        icon: "pi pi-info-circle",
+        defaultFocus: "reject",
+        acceptClassName: "p-button-danger",
+        accept: () =>
+          deleteSaleMutation.mutate({ saleId: data.saleID }),
+      });
   };
-
   const handleView = (data) => {
-    console.log('View clicked for:', data);
+    navigate(`newsales?id=${data.saleID}`)
+
     // Custom view logic here
   };
   const actionBodyTemplate = (rowData) => {
     return (
      <ActionsBtns
          rowData={rowData}
-         onEdit={handleEdit}
+        //  onEdit={handleEdit}
          onDelete={handleDelete}
          onView={handleView}
        />
@@ -176,7 +195,7 @@ export default function SalesTable() {
   return (
     <div className="card">
       <DataTable
-        value={purchases}
+        value={sales}
         paginator
         rows={10}
         dataKey="id"
@@ -187,10 +206,11 @@ export default function SalesTable() {
           "invoiceNo",
           "productName",
           "category",
+          "city",
           "customerName",
         ]}
         header={header}
-        emptyMessage="No purchases found."
+        emptyMessage="No sales found."
       >
         <Column header="#" body={snoBodyTemplate} />
         <Column header="Action" body={actionBodyTemplate} />
@@ -217,7 +237,7 @@ export default function SalesTable() {
           filterPlaceholder="Search by name"
         />
         <Column
-          field="category"
+          field="categoryName"
           header="category"
           filter
           filterMenuStyle={{ width: "14rem" }}
@@ -225,10 +245,14 @@ export default function SalesTable() {
           filterPlaceholder="Search by name"
         />
         <Column
-          field="productSize"
-          header=" Size"
-          style={{ minWidth: "11rem" }}
+          field="cityName"
+          header="city"
+          filter
+          filterMenuStyle={{ width: "14rem" }}
+          style={{ minWidth: "14rem" }}
+          filterPlaceholder="Search by name"
         />
+      
         <Column
           field="productPrice"
           header="Product Price"
@@ -245,12 +269,12 @@ export default function SalesTable() {
           style={{ minWidth: "11rem" }}
         />
         <Column
-          field="reaminingAmount"
+          field="remainingAmount"
           header="Remaining Amount"
           style={{ minWidth: "11rem" }}
         />
         <Column
-          field="soldDate"
+          field="saleDate"
           header="Sold Date"
           style={{ minWidth: "11rem" }}
         />

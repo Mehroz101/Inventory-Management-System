@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const purchaseSchema = new mongoose.Schema(
+const saleSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    purchaseID: {
+    saleID: {
       type: Number,
       required: true,
     },
@@ -36,11 +36,11 @@ const purchaseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    supplierName: {
+    customerName: {
       type: String,
       required: true,
     },
-    supplierContact: {
+    customerContact: {
       type: String,
     },
     productPrice: {
@@ -59,7 +59,7 @@ const purchaseSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    purchaseDate:{
+    saleDate:{
         type: String,
         required:true
     },
@@ -74,4 +74,4 @@ const purchaseSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Purchase", purchaseSchema);
+module.exports = mongoose.model("Sale", saleSchema);

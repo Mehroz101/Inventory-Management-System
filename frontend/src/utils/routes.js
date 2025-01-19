@@ -13,6 +13,7 @@ export const ROUTES = {
   NEWSALES:"/sales/newsales",
   PRODUCTS:"/products",
   CATEGORIES:"/categoies",
+  CITIES:"/cities",
   PRINTING:"/printing",
   NEWPRINTING:"/printing/newprinting",
 

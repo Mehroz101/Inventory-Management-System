@@ -1,184 +1,182 @@
-import React, { useEffect, useState } from "react";
-import { DatePicker } from "antd"; // Ant Design for date picker
-import jsPDF from "jspdf"; // For PDF export
-import "jspdf-autotable"; // For tables in PDF
-import "./Reports.css";
+import React, { useState } from "react";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
+import { useForm } from "react-hook-form";
+import { FormColumn, FormLabel, FormRow } from "./layoutComponent";
+import CDatePicker from "./FormComponents/CDatePicker";
+import { Button } from "primereact/button";
+import { useMutation } from "@tanstack/react-query";
+import { generateReport } from "../services/Api";
+import { notify } from "../utils/notification";
 
-const { RangePicker } = DatePicker;
+function Report() {
+  const [reportData, setReportData] = useState(null); // State to store report data
 
-const ReportPage = () => {
-  // Mock Data for Testing
-  const mockReport = {
-    totalExpenses: 5000,
-    totalDues: 1200,
-    customerDues: [
-      { name: "Customer A", dueAmount: 500, overdueDays: 10 },
-      { name: "Customer B", dueAmount: 700, overdueDays: 5 },
-    ],
-    creditPayments: [
-      { name: "Supplier A", creditAmount: 2000 },
-      { name: "Supplier B", creditAmount: 1500 },
-    ],
-    inventory: [
-      { _id: "Product 1", totalQuantity: 50 },
-      { _id: "Product 2", totalQuantity: 100 },
-    ],
-    totalRevenue: 15000,
-    profit: 8000,
-  };
-
-  const [report, setReport] = useState(mockReport); // Defaulting to mock data
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-
-  const fetchReport = () => {
-    const queryParams = {};
-    if (startDate) queryParams.startDate = startDate;
-    if (endDate) queryParams.endDate = endDate;
-
-    // Uncomment the following to fetch data from backend when ready
-    /*
-    axios
-      .get("/api/report/summary", { params: queryParams })
-      .then((response) => setReport(response.data))
-      .catch((error) => console.error("Error fetching report:", error));
-    */
-  };
-
-  useEffect(() => {
-    fetchReport();
-  }, [startDate, endDate]);
-
-  const exportToPDF = () => {
+  const generatePDF = () => {
+    if (!reportData) return; // Ensure there is data to generate PDF
+console.log("entered")
     const doc = new jsPDF();
-    doc.text("Business Summary Report", 10, 10);
 
-    if (report) {
-      // Add Total Expenses and Dues
-      doc.text(`Total Expenses: ${report.totalExpenses}`, 10, 20);
-      doc.text(`Remaining Dues: ${report.totalDues}`, 10, 30);
+    // Company Details
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.text("Webtech Inventory Solutions", 10, 20);
+    doc.setFontSize(12);
+    doc.text("123 Business St, Springfield, USA", 10, 30);
+    doc.text(
+      "Phone: +1-123-456-7890 | Email: contact@abcinventory.com",
+      10,
+      40
+    );
+    doc.setDrawColor(0);
+    doc.setLineWidth(0.5);
+    doc.line(10, 45, 200, 45);
 
-      // Add Customer Dues with Overdue Days
-      doc.text("Customer Dues:", 10, 40);
-      const customerRows = report.customerDues.map((customer) => [
-        customer.name,
-        customer.dueAmount,
-        customer.overdueDays,
-      ]);
+    // Helper function to add tables
+    const addTable = (title, data, yPosition) => {
+      doc.setFontSize(14);
+      doc.text(title, 10, yPosition);
       doc.autoTable({
-        head: [["Customer Name", "Due Amount", "Overdue Days"]],
-        body: customerRows,
-        startY: 50,
+        head: [data[0]], // Table Headers
+        body: data.slice(1), // Table Body
+        startY: yPosition + 5,
+        theme: "grid",
+        headStyles: { fillColor: [22, 160, 133] }, // Header background
+        alternateRowStyles: { fillColor: [240, 248, 255] }, // Alternate row color
       });
+    };
 
-      // Add Credit Payments
-      doc.text("Credit Payments:", 10, 100);
-      const creditRows = report.creditPayments.map((payment) => [
-        payment.name,
-        payment.creditAmount,
-      ]);
-      doc.autoTable({
-        head: [["Supplier Name", "Credit Amount"]],
-        body: creditRows,
-        startY: 110,
-      });
-
-      // Add Inventory
-      doc.text("Inventory Status:", 10, 150);
-      const inventoryRows = report.inventory.map((item) => [
-        item._id,
-        item.totalQuantity,
-      ]);
-      doc.autoTable({
-        head: [["Product Name", "Total Quantity"]],
-        body: inventoryRows,
-        startY: 160,
-      });
-
-      // Add Revenue and Profit
-      doc.text(`Total Revenue: ${report.totalRevenue}`, 10, 200);
-      doc.text(`Profit: ${report.profit}`, 10, 210);
+    // Add Inventory Tables
+    if (reportData.productStock && reportData.productStock.length > 0) {
+      const productStockData = [
+        ["Product Name", "Total Quantity", "Processing Quantity"],
+        ...reportData.productStock.map((item) => [
+          item.productName,
+          item.quantity,
+          item.inProcessing,
+        ]),
+      ];
+      addTable("Product Stock", productStockData, 50);
     }
 
-    doc.save("Business_Summary_Report.pdf");
+    if (reportData.purchases && reportData.purchases.length > 0) {
+      const purchasesData = [
+        [
+          "Product Name",
+          "Quantity",
+          "Supplier Name",
+          "Supplier Contact",
+          "City",
+          "Purchase Amount",
+          "Paid Amount",
+          "Remaining Amount",
+          "Status",
+        ],
+        ...reportData.purchases.map((item) => [
+          item.productName,
+          item.productQuantity,
+          item.supplierName,
+          item.supplierContact,
+          item.cityName,
+          item.productPrice,
+          item.paidAmount,
+          item.remainingAmount,
+          item.status,
+        ]),
+      ];
+      addTable("Purchases", purchasesData, doc.lastAutoTable.finalY + 10);
+    }
+
+    if (reportData.sales && reportData.sales.length > 0) {
+      const salesData = [
+        [
+          "Product Name",
+          "Quantity",
+          "Customer Name",
+          "Customer Contact",
+          "City",
+          "Purchase Amount",
+          "Paid Amount",
+          "Remaining Amount",
+          "Status",
+        ],
+        ...reportData.sales.map((item) => [
+          item.productName,
+          item.productQuantity,
+          item.customerName,
+          item.customerContact,
+          item.cityName,
+          item.productPrice,
+          item.paidAmount,
+          item.remainingAmount,
+          item.status,
+        ]),
+      ];
+      addTable("Sales", salesData, doc.lastAutoTable.finalY + 10);
+    }
+
+    // Save PDF
+    doc.save("Inventory_Report.pdf");
+  };
+
+  const method = useForm({
+    defaultValues: {
+      startDate: null,
+      endDate: null,
+    },
+  });
+
+  const generateReportMutation = useMutation({
+    mutationFn: generateReport,
+    onSuccess: (data) => {
+      if (data.success) {
+        setReportData(data.data); // Store the report data
+        notify("success", "Report generated successfully");
+        console.log("Generating PDF..."); // Log to confirm PDF generation
+        generatePDF(); // Generate PDF after data is received
+      }
+    },
+  });
+
+  const onsubmit = (data) => {
+    console.log(data);
+    generateReportMutation.mutate({
+      startDate: data.startDate,
+      endDate: data.endDate,
+    });
   };
 
   return (
-    <div className="report-page">
-      <h2>Business Summary Report</h2>
-
-      {/* Filters */}
-      <div className="filters">
-        <label>Select Date Range: </label>
-        <RangePicker
-          onChange={(dates) => {
-            setStartDate(dates[0] ? dates[0].format("YYYY-MM-DD") : null);
-            setEndDate(dates[1] ? dates[1].format("YYYY-MM-DD") : null);
-          }}
-        />
-        <button className="btn-refresh" onClick={fetchReport}>
-          Refresh
-        </button>
-      </div>
-
-      {/* Report Content */}
-      {report ? (
-        <div>
-          <div className="report-section">
-            <h3>Total Expenses</h3>
-            <p>Total Payment: {report.totalExpenses}</p>
-            <p>Remaining Dues: {report.totalDues}</p>
-          </div>
-
-          <div className="report-section">
-            <h3>Remaining Dues</h3>
-            <ul>
-              {report.customerDues.map((customer, index) => (
-                <li key={index}>
-                  {customer.name}: {customer.dueAmount} (Overdue:{" "}
-                  {customer.overdueDays} days)
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="report-section">
-            <h3>Credit Payments</h3>
-            <ul>
-              {report.creditPayments.map((payment, index) => (
-                <li key={index}>
-                  {payment.name}: {payment.creditAmount}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="report-section">
-            <h3>Inventory Status</h3>
-            <ul>
-              {report.inventory.map((item, index) => (
-                <li key={index}>
-                  {item._id}: {item.totalQuantity}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="report-section">
-            <h3>Revenue and Profit</h3>
-            <p>Total Revenue: {report.totalRevenue}</p>
-            <p>Profit: {report.profit}</p>
-          </div>
-
-          <button className="btn-export" onClick={exportToPDF}>
-            Export to PDF
-          </button>
-        </div>
-      ) : (
-        <p>Loading report...</p>
-      )}
-    </div>
+    <form onSubmit={method.handleSubmit(onsubmit)}>
+      <FormRow className="flex align-content-end">
+        <FormColumn sm={12} md={4} lg={3} xl={3}>
+          <CDatePicker
+            control={method.control}
+            name="startDate"
+            isEnable={true}
+            placeholder="Enter start date"
+            label="Start Date"
+          />
+        </FormColumn>
+        <FormColumn sm={12} md={4} lg={3} xl={3}>
+          <CDatePicker
+            control={method.control}
+            name="endDate"
+            isEnable={true}
+            placeholder="Enter end date"
+            label="End Date"
+          />
+        </FormColumn>
+        <FormColumn sm={12} md={4} lg={3} xl={3} className="flex ">
+          <Button
+            label="Generate Report"
+            type="submit"
+            className="align-self-end"
+          />
+        </FormColumn>
+      </FormRow>
+    </form>
   );
-};
+}
 
-export default ReportPage;
+export default Report;
