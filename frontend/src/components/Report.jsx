@@ -22,9 +22,9 @@ function Report() {
     doc.setFontSize(20);
     doc.text("Webtech Inventory Solutions", 10, 20);
     doc.setFontSize(12);
-    doc.text("123 Business St, Springfield, USA", 10, 30);
+    doc.text("Multan Cantt Punjab, Pakistan", 10, 30);
     doc.text(
-      "Phone: +1-123-456-7890 | Email: contact@abcinventory.com",
+      "Phone: +92-322-6671168 | Email: webtechssoultion@gmail.com",
       10,
       40
     );
