@@ -284,6 +284,7 @@ const NewSales = () => {
             </FormRow>
             <FormRow>
               <Button
+               className="mt-2"
                 type="submit"
                 label={`${isSaleId ? "Edit" : "Add"}`}
                 disabled={

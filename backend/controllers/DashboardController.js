@@ -113,32 +113,64 @@ const GenerateReport = async (req, res) => {
     console.log("Start Date:", startDate);
     console.log("End Date:", endDate);
 
+    // Function to convert date to "DD-MMM-YYYY" format
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }).replace(/ /g, '-');
+    };
+
     // Prepare the match conditions for purchases and sales
     const matchConditions = {
       userId: new ObjectId(userId),
+      status: "unpaid",
     };
 
-    // Handle date conditions
+    // Handle date conditions for purchases
+    const purchaseDateConditions = {};
     if (startDate && endDate) {
       // Both dates are provided
-      matchConditions.createdAt = {
-        $gte: new Date(startDate),
-        $lte: new Date(endDate),
+      purchaseDateConditions.purchaseDate = {
+        $gte: formatDate(startDate),
+        $lte: formatDate(endDate),
       };
     } else if (startDate) {
       // Only startDate is provided
-      matchConditions.createdAt = {
-        $gte: new Date(startDate),
+      purchaseDateConditions.purchaseDate = {
+        $gte: formatDate(startDate),
       };
     } else if (endDate) {
       // Only endDate is provided
-      matchConditions.createdAt = {
-        $lte: new Date(endDate),
+      purchaseDateConditions.purchaseDate = {
+        $lte: formatDate(endDate),
+      };
+    }
+
+    // Handle date conditions for sales
+    const saleDateConditions = {};
+    if (startDate && endDate) {
+      // Both dates are provided
+      saleDateConditions.saleDate = {
+        $gte: formatDate(startDate),
+        $lte: formatDate(endDate),
+      };
+    } else if (startDate) {
+      // Only startDate is provided
+      saleDateConditions.saleDate = {
+        $gte: formatDate(startDate),
+      };
+    } else if (endDate) {
+      // Only endDate is provided
+      saleDateConditions.saleDate = {
+        $lte: formatDate(endDate),
       };
     }
 
     // Fetch product stock data without grouping
-    const productStock = await Product.find(matchConditions).select(
+    const productStock = await Product.find({userId:userId}).select(
       "productID productName quantity inProcessing"
     );
 
@@ -146,21 +178,26 @@ const GenerateReport = async (req, res) => {
     console.log("Product Stock Data:", productStock);
 
     // Fetch purchases data without grouping
-    const purchasesData = await Purchases.find(matchConditions).select(
-      "productID productName quantity supplierName supplierContact cityName productPrice paidAmount remainingAmount status"
+    const purchasesData = await Purchases.find({
+      ...matchConditions,
+      ...purchaseDateConditions,
+    }).select(
+      "productID productName productQuantity supplierName supplierContact cityName productPrice paidAmount remainingAmount purchaseDate status"
     );
 
     // Log purchases data
     console.log("Purchases Data:", purchasesData);
 
     // Fetch sales data without grouping
-    const salesData = await Sales.find(matchConditions).select(
-      "purchaseID productName productQuantity customerName customerContact cityName productPrice paidAmount remainingAmount status"
+    const salesData = await Sales.find({
+      ...matchConditions,
+      ...saleDateConditions,
+    }).select(
+      "purchaseID productName productQuantity customerName customerContact cityName productPrice paidAmount remainingAmount saleDate status"
     );
 
     // Log sales data
     console.log("Sales Data:", salesData);
-
     const data = {
       productStock,
       purchases: purchasesData,

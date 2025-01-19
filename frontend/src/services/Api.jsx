@@ -507,7 +507,7 @@ export const DeletePurchase = async (id) => {
     notify("error", error.response?.data?.message || "An error occurred.");
     return { success: false, message: error.response.data.message };
   }
-
+};
 // ==================== Sale  ======================
 export const AddSale = async (data) => {
   try {

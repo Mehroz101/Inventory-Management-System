@@ -14,7 +14,7 @@ function Report() {
 
   const generatePDF = () => {
     if (!reportData) return; // Ensure there is data to generate PDF
-console.log("entered")
+    console.log("entered");
     const doc = new jsPDF();
 
     // Company Details
@@ -22,9 +22,9 @@ console.log("entered")
     doc.setFontSize(20);
     doc.text("Webtech Inventory Solutions", 10, 20);
     doc.setFontSize(12);
-    doc.text("123 Business St, Springfield, USA", 10, 30);
+    doc.text("Multan Cantt Punjab, Pakistan", 10, 30);
     doc.text(
-      "Phone: +1-123-456-7890 | Email: contact@abcinventory.com",
+      "Phone: +92-322-6671168 | Email: webtechssoultion@gmail.com",
       10,
       40
     );
@@ -45,6 +45,7 @@ console.log("entered")
         alternateRowStyles: { fillColor: [240, 248, 255] }, // Alternate row color
       });
     };
+    console.log("near to generate");
 
     // Add Inventory Tables
     if (reportData.productStock && reportData.productStock.length > 0) {
@@ -70,6 +71,7 @@ console.log("entered")
           "Purchase Amount",
           "Paid Amount",
           "Remaining Amount",
+          "Purchase Date",
           "Status",
         ],
         ...reportData.purchases.map((item) => [
@@ -81,6 +83,7 @@ console.log("entered")
           item.productPrice,
           item.paidAmount,
           item.remainingAmount,
+          item.purchaseDate,
           item.status,
         ]),
       ];
@@ -98,6 +101,7 @@ console.log("entered")
           "Purchase Amount",
           "Paid Amount",
           "Remaining Amount",
+          "Sale Date",
           "Status",
         ],
         ...reportData.sales.map((item) => [
@@ -109,12 +113,12 @@ console.log("entered")
           item.productPrice,
           item.paidAmount,
           item.remainingAmount,
+          item.saleDate,
           item.status,
         ]),
       ];
       addTable("Sales", salesData, doc.lastAutoTable.finalY + 10);
     }
-
     // Save PDF
     doc.save("Inventory_Report.pdf");
   };
@@ -147,35 +151,40 @@ console.log("entered")
   };
 
   return (
-    <form onSubmit={method.handleSubmit(onsubmit)}>
-      <FormRow className="flex align-content-end">
-        <FormColumn sm={12} md={4} lg={3} xl={3}>
-          <CDatePicker
-            control={method.control}
-            name="startDate"
-            isEnable={true}
-            placeholder="Enter start date"
-            label="Start Date"
-          />
-        </FormColumn>
-        <FormColumn sm={12} md={4} lg={3} xl={3}>
-          <CDatePicker
-            control={method.control}
-            name="endDate"
-            isEnable={true}
-            placeholder="Enter end date"
-            label="End Date"
-          />
-        </FormColumn>
-        <FormColumn sm={12} md={4} lg={3} xl={3} className="flex ">
-          <Button
-            label="Generate Report"
-            type="submit"
-            className="align-self-end"
-          />
-        </FormColumn>
-      </FormRow>
-    </form>
+    <>
+    <div className="top">
+      <h2>Generate Report of Payable and Receivable</h2>
+    </div>
+      <form onSubmit={method.handleSubmit(onsubmit)}>
+        <FormRow className="flex align-content-end">
+          <FormColumn sm={12} md={4} lg={3} xl={3}>
+            <CDatePicker
+              control={method.control}
+              name="startDate"
+              isEnable={true}
+              placeholder="Enter start date"
+              label="Start Date"
+            />
+          </FormColumn>
+          <FormColumn sm={12} md={4} lg={3} xl={3}>
+            <CDatePicker
+              control={method.control}
+              name="endDate"
+              isEnable={true}
+              placeholder="Enter end date"
+              label="End Date"
+            />
+          </FormColumn>
+          <FormColumn sm={12} md={4} lg={3} xl={3} className="flex ">
+            <Button
+              label="Generate Report"
+              type="submit"
+              className="align-self-end"
+            />
+          </FormColumn>
+        </FormRow>
+      </form>
+    </>
   );
 }
 
