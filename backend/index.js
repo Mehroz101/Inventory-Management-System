@@ -17,10 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "https://webtech-inventorysystem.netlify.app/",
-      "http://localhost:5173",
-    ],
+    origin: true, // Allows all origins
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
