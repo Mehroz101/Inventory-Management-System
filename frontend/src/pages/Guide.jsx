@@ -17,6 +17,7 @@ import {
   faFileAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import '../styles/UserGuide.css'; // Import your custom CSS for styling
+import {  useNavigate } from 'react-router-dom';
 
 const UserGuide = () => {
   const steps = [
@@ -128,14 +129,14 @@ const UserGuide = () => {
       ),
     },
   ];
-
+const navigate = useNavigate();
   return (
     <div className="user-guide">
       <h1>
         <FontAwesomeIcon icon={faFileAlt} className="guide-icon" /> User Guide for Inventory Management System
       </h1>
       <div className="guide-container">
-        <Steps model={steps} orientation="horizontal"  />
+        {/* <Steps model={steps} orientation="horizontal"  /> */}
         <div className="details-container">
           {steps.map((step, index) => (
             <Card key={index} className="step-card">
@@ -148,7 +149,7 @@ const UserGuide = () => {
         </div>
       </div>
       <div className="actions">
-        <Button label="Go to Dashboard" icon="pi pi-arrow-right" className="dashboard-button" />
+        <Button label="Go to Dashboard" icon="pi pi-arrow-right" className="dashboard-button " onClick={() => navigate("/")  }/>
       </div>
     </div>
   );
