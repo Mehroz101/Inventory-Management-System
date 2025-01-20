@@ -72,7 +72,7 @@ const NewPurchase = () => {
       productQuantity: parseInt(data.productQuantity),
       paidAmount: parseInt(data.paidAmount),
       remainingAmount: parseInt(data.remainingAmount),
-      purchaseDate: formatDate(data.purchaseDate),
+      purchaseDate: data.purchaseDate,
       Note: data.Note,
       purchaseId:method.getValues("purchaseId")
     });

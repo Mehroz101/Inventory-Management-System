@@ -28,7 +28,10 @@ import { notify } from "../../utils/notification";
 
 export default function CustomerTable({ data, onEditCustomer }) {
   const queryClient = useQueryClient();
-
+  const [filters, setFilters] = useState({
+    customerName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    
+  });
   const deleteCustomerMutation = useMutation({
     mutationFn: DeleteCustomer,
     onSuccess: (data) => {
@@ -69,12 +72,17 @@ export default function CustomerTable({ data, onEditCustomer }) {
         value={data}
         paginator
         rows={10}
-        dataKey="id"
+        dataKey="customerID"
+        filters={filters}
+        filterDisplay="row"
         globalFilterFields={["customer"]}
         emptyMessage="No customer found."
       >
         <Column header="#" body={(rowData, options) => options.rowIndex + 1} />
-        <Column field="customerName" header="Customer Name" />
+        <Column field="customerName" filter filterPlaceholder="Search by name" header="Customer Name" />
+        <Column field="note"  header="Note" />
+        <Column field="receivable"  header="Total Recievable" />
+        <Column field="payable"  header="Total Payable" />
         <Column header="Action" body={actionBodyTemplate} />
       </DataTable>
     </div>

@@ -1,7 +1,7 @@
 const Product = require("../models/Product");
 const addProduct = async (req, res) => {
   try {
-    const { productName, quantity, isRawData } = req.body;
+    const { productName, quantity, isRawData, productSizeId ,productSizeName} = req.body;
     const userId = req.user.id;
     if (!productName) {
       return res
@@ -12,6 +12,7 @@ const addProduct = async (req, res) => {
     // Check if the Product already exists
     const isExist = await Product.findOne({
       productName: productName,
+      productSizeID: productSizeId,
       isRawData: isRawData,
       userId: userId,
     });
@@ -30,6 +31,8 @@ const addProduct = async (req, res) => {
       userId: userId,
       productID: nextProductID,
       productName: productName,
+      productSizeID: productSizeId,
+      productSizeName: productSizeName,
       quantity: quantity,
       isRawData: isRawData,
       inProcessing: 0,
@@ -52,7 +55,8 @@ const addProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { productId, productName, quantity, isRawData } = req.body;
+    const { productId, productName, quantity, isRawData, productSizeId,productSizeName } =
+      req.body;
     console.log(req.body);
     if (!productId || !productName) {
       return res.status(400).json({
@@ -63,8 +67,9 @@ const updateProduct = async (req, res) => {
     const product = await Product.findOne({
       userId: userId,
       productName: productName,
+      productSizeID: productSizeId,
     });
-    if (product && product.productID!==productId) {
+    if (product && product.productID !== productId) {
       return res
         .status(404)
         .json({ success: false, message: "Product name exist." });
@@ -73,7 +78,7 @@ const updateProduct = async (req, res) => {
     // Find and update the Product
     const updatedProduct = await Product.findOneAndUpdate(
       { productID: productId },
-      { productName: productName, isRawData: isRawData, quantity: quantity },
+      { productName: productName, isRawData: isRawData, quantity: quantity,productSizeID:productSizeId,productSizeName:productSizeName },
 
       { new: true } // Return the updated document
     );
@@ -172,12 +177,14 @@ const TransferProduct = async (req, res) => {
 const TransferPrintingtoProduct = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { productId, transferQuantity,createdProduct,createdQunatity } = req.body;
+    const { productId, transferQuantity, createdProduct, createdQunatity,productSizeId } =
+      req.body;
 
     console.log(req.body);
     const product = await Product.findOne({
       userId: userId,
       productID: productId,
+      productSizeID:productSizeId,
     });
     if (product) {
       console.log(product);
@@ -191,8 +198,8 @@ const TransferPrintingtoProduct = async (req, res) => {
           userId: userId,
           productID: createdProduct,
         });
-        if(createdproduct){
-          console.log("created product: ",createdproduct)
+        if (createdproduct) {
+          console.log("created product: ", createdproduct);
           createdproduct.quantity = createdproduct.quantity + createdQunatity;
           product.inProcessing = product.inProcessing - transferQuantity;
           createdproduct.save();
@@ -202,7 +209,6 @@ const TransferPrintingtoProduct = async (req, res) => {
             message: "Transfer quantity to product stock",
           });
         }
-       
       }
     } else {
       res.status(400).json({ success: false, message: "Product not found" });
@@ -225,6 +231,8 @@ const GetProduct = async (req, res) => {
           quantity: pro.quantity || 0,
           inProcessing: pro.inProcessing || 0,
           isRawData: pro.isRawData,
+          productSizeName: pro.productSizeName,
+          productSizeId: pro.productSizeID,
         };
       });
       return res.status(200).json({
@@ -279,27 +287,26 @@ const PrintingProduct = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const product = await Product.find({ userId: userId, isRawData:true });
+    const product = await Product.find({ userId: userId, isRawData: true });
     if (product) {
       const sendData = product
-      .filter(pro => pro.inProcessing > 0) // Filter out products with inProcessing <= 0
-      .map(pro => {
-        return {
-          productName: pro.productName,
-          inProcessing: pro.inProcessing,
-          quantity: pro.quantity,
-          printingDate: pro.createdAt,
-          note: pro.note,
-          productId: pro.productID
-        };
-      });
-    
-      console.log(sendData)
+        .filter((pro) => pro.inProcessing > 0) // Filter out products with inProcessing <= 0
+        .map((pro) => {
+          return {
+            productName: pro.productName,
+            inProcessing: pro.inProcessing,
+            quantity: pro.quantity,
+            printingDate: pro.createdAt,
+            note: pro.note,
+            productId: pro.productID,
+          };
+        });
+
+      console.log(sendData);
       return res.status(200).json({
         success: true,
         data: sendData,
       });
-    
     } else {
       return res.status(200).json({
         success: true,
@@ -322,5 +329,5 @@ module.exports = {
   TransferProduct,
   SpecificProduct,
   PrintingProduct,
-  TransferPrintingtoProduct
+  TransferPrintingtoProduct,
 };

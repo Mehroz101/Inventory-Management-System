@@ -504,6 +504,32 @@ export const DeletePurchase = async (id) => {
     return { success: false, message: error.response.data.message };
   }
 };
+export const UpdatePruchase = async (id) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/purchase/updatepurchase`,
+      id,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Deletepurchase Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+};
+
 // ==================== Sale  ======================
 export const AddSale = async (data) => {
   try {
@@ -584,7 +610,31 @@ export const GetSaleData = async (id) => {
     console.log(error.message);
   }
 };
+export const UpdateSale = async (id) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
 
+    const response = await axios.post(
+      `${API_URL}/sale/updatesale`,
+      id,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("Deletesale Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+};
 //================ Dashboard =====================
 
 export const DashboardData = async () => {

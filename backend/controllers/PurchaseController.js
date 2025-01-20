@@ -52,6 +52,7 @@ const addPurchase = async (req, res) => {
         note: Note,
         status: status,
         purchaseDate,
+        purchaseUpdateDate: purchaseDate,
       });
       if (purchase) {
         const isProduct = await Product.findOne({ productID: productId });
@@ -151,6 +152,47 @@ const addPurchase = async (req, res) => {
     });
   }
 };
+const updatePurchase = async (req, res) => {
+  try {
+    console.log(req.body);
+    const userId = req.user.id;
+    const { purchaseId, updatedDate, givenAmount } = req.body;
+    const findpurchase = await Purchases.findOne({
+      userId: userId,
+      purchaseID: purchaseId,
+    });
+    if (findpurchase) {
+      findpurchase.remainingAmount = findpurchase.remainingAmount - givenAmount;
+      findpurchase.purchaseUpdateDate = updatedDate;
+      console.log("remainingAmount: ",findpurchase.remainingAmount)
+      console.log("givenAmount: ",givenAmount)
+      console.log(findpurchase.remainingAmount)
+      if (findpurchase.remainingAmount === 0) {
+        findpurchase.status = "paid";
+      }
+      else{
+        findpurchase.status = "unpaid";
+
+      }
+      await findpurchase.save();
+      res.status(201).json({
+        success: true,
+        message: "purchase updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Purchase not found",
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(505).json({
+      success: true,
+      message: "An error occurred",
+    });
+  }
+};
 const deletePurchase = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -220,6 +262,7 @@ const GetPurchase = async (req, res) => {
             remainingAmount: purchase.remainingAmount,
             Note: purchase.note,
             purchaseDate: purchase.purchaseDate,
+            purchaseUpdateDate: purchase.purchaseUpdateDate,
             status: purchase.status,
           };
         })
@@ -286,4 +329,5 @@ module.exports = {
   addPurchase,
   GetPurchase,
   GetPurchaseData,
+  updatePurchase,
 };

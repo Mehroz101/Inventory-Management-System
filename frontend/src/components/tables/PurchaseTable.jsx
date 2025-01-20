@@ -59,7 +59,7 @@ const PurchaseDate = [
     Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t",
   },
 ];
-export default function PurchaseTable({ data,handleEdit }) {
+export default function PurchaseTable({ data, handleEdit }) {
   const [purchases, setPurchases] = useState(data);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -72,7 +72,7 @@ export default function PurchaseTable({ data,handleEdit }) {
   });
   const [loading, setLoading] = useState(true);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
-const navigate = useNavigate()
+  const navigate = useNavigate();
   const [statuses] = useState(["unpaid", "paid"]);
 
   const getSeverity = (status) => {
@@ -146,7 +146,6 @@ const navigate = useNavigate()
   };
   const queryClient = useQueryClient();
 
- 
   const deletePurchaseMutation = useMutation({
     mutationFn: DeletePurchase,
     onSuccess: (data) => {
@@ -159,18 +158,18 @@ const navigate = useNavigate()
   });
   const handleDelete = (data) => {
     confirmDialog({
-        message: "Do you want to delete this product?",
-        header: "Delete Confirmation",
-        icon: "pi pi-info-circle",
-        defaultFocus: "reject",
-        acceptClassName: "p-button-danger",
-        accept: () =>
-          deletePurchaseMutation.mutate({ purchaseId: data.purchaseID }),
-      });
+      message: "Do you want to delete this product?",
+      header: "Delete Confirmation",
+      icon: "pi pi-info-circle",
+      defaultFocus: "reject",
+      acceptClassName: "p-button-danger",
+      accept: () =>
+        deletePurchaseMutation.mutate({ purchaseId: data.purchaseID }),
+    });
   };
 
   const handleView = (data) => {
-    navigate(`newpurchase?id=${data.purchaseID}`)
+    navigate(`newpurchase?id=${data.purchaseID}`);
 
     // Custom view logic here
   };
@@ -199,7 +198,7 @@ const navigate = useNavigate()
         value={purchases || []}
         paginator
         rows={10}
-        dataKey="id"
+        dataKey="invoiceNo"
         filters={filters}
         filterDisplay="row"
         loading={loading}
@@ -274,8 +273,29 @@ const navigate = useNavigate()
           style={{ minWidth: "11rem" }}
         />
         <Column
-         field="purchaseDate"
+          body={(rowData) => {
+            return (
+              <>
+                <span>{formatDate(rowData.purchaseDate)}</span>
+              </>
+            );
+          }}
           header="Purchase Date"
+          style={{ minWidth: "11rem" }}
+        />
+        <Column
+          body={(rowData) => {
+            return (
+              <>
+                <span>
+                  {rowData.purchaseUpdateDate
+                    ? formatDate(rowData.purchaseUpdateDate)
+                    : ""}
+                </span>
+              </>
+            );
+          }}
+          header="Purchase Update Date"
           style={{ minWidth: "11rem" }}
         />
         <Column

@@ -14,6 +14,17 @@ const customerSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    note: {
+      type: String,
+    },
+    recievable: {
+      type: Number,
+      default: 0,
+    },
+    payable: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
