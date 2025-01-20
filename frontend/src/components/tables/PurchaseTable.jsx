@@ -59,7 +59,7 @@ const PurchaseDate = [
     Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t",
   },
 ];
-export default function PurchaseTable({ data }) {
+export default function PurchaseTable({ data,handleEdit }) {
   const [purchases, setPurchases] = useState(data);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -174,11 +174,16 @@ const navigate = useNavigate()
 
     // Custom view logic here
   };
+  // const handleEdit = (data) => {
+  //   // navigate(`newpurchase?id=${data.purchaseID}`)
+
+  //   // Custom view logic here
+  // };
   const actionBodyTemplate = (rowData) => {
     return (
       <ActionsBtns
         rowData={rowData}
-        // onEdit={handleEdit}
+        onEdit={handleEdit}
         onDelete={handleDelete}
         onView={handleView}
       />
