@@ -5,7 +5,13 @@ import CDropdown from "../components/FormComponents/CDropDown";
 import { FormColumn, FormRow } from "../components/layoutComponent";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AddSale, GetCategory,GetCity, GetProduct, GetSaleData } from "../services/Api";
+import {
+  AddSale,
+  GetCategory,
+  GetCity,
+  GetProduct,
+  GetSaleData,
+} from "../services/Api";
 import CDatePicker from "../components/FormComponents/CDatePicker";
 import { Button } from "primereact/button";
 import { formatDate } from "../utils/CommonFunction";
@@ -47,15 +53,11 @@ const NewSales = () => {
       if (data.success) {
         notify("success", data.message);
         navigate("/sales");
-      }
-      else{
+      } else {
         notify("error", data.message);
-
       }
     },
-    onError: (data) => {
-      
-    },
+    onError: (data) => {},
   });
   const onsubmit = (data) => {
     addSalesMutation.mutate({
@@ -159,7 +161,6 @@ const NewSales = () => {
                   optionLabel="productName"
                   optionValue="productID"
                   placeholder="Select product"
-                  
                   onChange={(e) => {
                     method.setValue("productId", e.value);
                     method.setValue("productName", e.label);
@@ -208,7 +209,7 @@ const NewSales = () => {
                   name="customerName"
                   required={true}
                   label="Customer Name"
-                  isEnable={true}
+                  isEnable={fieldEnabled}
                   placeholder="Enter customer name"
                 />
               </FormColumn>
@@ -228,6 +229,7 @@ const NewSales = () => {
                   name="productPrice"
                   required={true}
                   label="Product Price"
+                  type="number"
                   isEnable={fieldEnabled}
                   placeholder="Enter price"
                 />
@@ -238,6 +240,7 @@ const NewSales = () => {
                   name="productQuantity"
                   required={true}
                   label="product Quantity"
+                  type="number"
                   isEnable={fieldEnabled}
                   placeholder="Enter Quantity"
                 />
@@ -248,6 +251,7 @@ const NewSales = () => {
                   name="paidAmount"
                   required={true}
                   label="Paid Amount"
+                  type="number"
                   isEnable={fieldEnabled}
                   placeholder="Enter Paid Amount"
                 />
@@ -257,6 +261,7 @@ const NewSales = () => {
                   control={method.control}
                   name="remainingAmount"
                   required={true}
+                  type="number"
                   label="Remaining Amount"
                   isEnable={fieldEnabled}
                   placeholder="Enter Remaining Amount"
@@ -284,7 +289,7 @@ const NewSales = () => {
             </FormRow>
             <FormRow>
               <Button
-               className="mt-2"
+                className="mt-2"
                 type="submit"
                 label={`${isSaleId ? "Edit" : "Add"}`}
                 disabled={

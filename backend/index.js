@@ -18,6 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
+
     origin: [
       "https://webtech-inventorysystem.netlify.app/",
       "http://localhost:5173",
@@ -45,7 +46,9 @@ const options = {
   },
   apis: ["./routes/**/*.js"], // Correct path for route files
 };
-
+app.get("/",(req,res)=>{
+  res.json("Heo")
+})
 const swaggerSpec = swaggerDocument(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

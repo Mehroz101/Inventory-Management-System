@@ -136,7 +136,7 @@ const CustomSidebar = ({ visible, onHide }) => {
             </Link>
           </li>
 
-          <li>
+          {/* <li>
             <Link
               to={ROUTES.SETTING}
               className="sidebar-link "
@@ -145,7 +145,7 @@ const CustomSidebar = ({ visible, onHide }) => {
               <FontAwesomeIcon icon={faGear} className="pr-2" />
               Settings
             </Link>
-          </li>
+          </li> */}
 
           <li className=" py-2 px-4 rext-black" onClick={() => handleLogout()}>
             <i className="pi pi-sign-out pr-2"></i>
