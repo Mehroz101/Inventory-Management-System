@@ -222,6 +222,15 @@ const addSale = async (req, res) => {
     if (remainingAmount === 0) {
       status = "paid";
     }
+    const productcheck = await Product.findOne({productID:productId})
+    if(productcheck){
+     if(productcheck.quantity < productQuantity){
+      return res.status(400).json({
+        success: false,
+        message: `Available quantity is ${productcheck.quantity}`,
+      });
+     }
+    }
     const sale = await Sales.create({
       saleID: nextSaleID,
       invoiceNo: nextInvoiceNumber,
