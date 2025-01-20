@@ -172,7 +172,7 @@ const TransferProduct = async (req, res) => {
 const TransferPrintingtoProduct = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { productId, transferQuantity,createdProduct, note } = req.body;
+    const { productId, transferQuantity,createdProduct,createdQunatity } = req.body;
 
     console.log(req.body);
     const product = await Product.findOne({
@@ -193,7 +193,7 @@ const TransferPrintingtoProduct = async (req, res) => {
         });
         if(createdproduct){
           console.log("created product: ",createdproduct)
-          createdproduct.quantity = createdproduct.quantity + transferQuantity;
+          createdproduct.quantity = createdproduct.quantity + createdQunatity;
           product.inProcessing = product.inProcessing - transferQuantity;
           createdproduct.save();
           product.save();

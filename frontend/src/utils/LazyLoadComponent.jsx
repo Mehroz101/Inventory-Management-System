@@ -11,6 +11,7 @@ export const NewSales = lazy(() => import("../pages/NewSales"));
 export const Home = lazy(() => import("../pages/Home"));
 export const Products = lazy(() => import("../pages/Products"));
 export const Categories = lazy(() => import("../pages/Categories"));
+export const ProductSize = lazy(() => import("../pages/ProductSize"));
 export const Cities = lazy(() => import("../pages/Cities"));
 export const Customers = lazy(() => import("../pages/Customers"));
 export const Printing = lazy(() => import("../pages/Printing"));

@@ -778,3 +778,103 @@ export const DeleteCustomer = async (customerId) => {
   }
 };
 
+//================= Product Size ======================
+export const GetProductSize = async () => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.get(`${API_URL}/productsize/getproductsize`, config);
+
+    if (response.data.success) {
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    console.error("GetProductSize Error:", error.message);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return []; // Return an empty array in case of an error
+  }
+};
+
+export const AddProductSize = async (data) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/productsize/addproductsize`,
+      data,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("AddProductSize Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+  }
+};
+export const UpdateProductSize = async (productsizeId) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/productsize/updateproductsize`,
+      productsizeId,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.log("UpdateProductSize Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+  }
+};
+export const DeleteProductSize = async (productsizeId) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/productsize/deleteproductsize`,
+      productsizeId,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("DeleteProductSize Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+};
+
