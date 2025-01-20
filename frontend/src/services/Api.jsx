@@ -18,7 +18,7 @@ export const login = async (data) => {
       return response.data;
     }
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     // notify("error", error.response.data.message);
   }
 };
@@ -155,11 +155,7 @@ export const AddCity = async (data) => {
       },
     };
 
-    const response = await axios.post(
-      `${API_URL}/city/addcity`,
-      data,
-      config
-    );
+    const response = await axios.post(`${API_URL}/city/addcity`, data, config);
 
     if (response.data.success) {
       return response.data;
@@ -656,9 +652,9 @@ export const UpdateProductStock = async (data) => {
   }
 };
 
-export const generateReport = async (data)=>{
+export const generateReport = async (data) => {
   try {
-    console.log("api")
+    console.log("api");
     const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
     const config = {
       headers: {
@@ -676,7 +672,106 @@ export const generateReport = async (data)=>{
     } else {
       return []; // Return an empty array if not successful
     }
+  } catch (error) {}
+};
+
+//======================== Customers ==========================
+
+export const GetCustomer = async () => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.get(`${API_URL}/customer/getcustomer`, config);
+
+    if (response.data.success) {
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
   } catch (error) {
-    
+    console.error("GetCustomer Error:", error.message);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return []; // Return an empty array in case of an error
   }
-}
+};
+
+export const AddCustomer = async (data) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/customer/addcustomer`,
+      data,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("AddCustomer Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+  }
+};
+export const UpdateCustomer = async (customerId) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/customer/updatecustomer`,
+      customerId,
+      config
+    );
+
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.log("UpdateCustomer Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+  }
+};
+export const DeleteCustomer = async (customerId) => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/customer/deletecustomer`,
+      customerId,
+      config
+    );
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return { success: false, message: response.data.message };
+    }
+  } catch (error) {
+    console.error("DeleteCustomer Error:", error);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return { success: false, message: error.response.data.message };
+  }
+};
