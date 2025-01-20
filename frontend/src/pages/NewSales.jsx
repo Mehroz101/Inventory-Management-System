@@ -73,7 +73,7 @@ const NewSales = () => {
       productQuantity: parseInt(data.productQuantity),
       paidAmount: parseInt(data.paidAmount),
       remainingAmount: parseInt(data.remainingAmount),
-      saleDate: formatDate(data.saleDate),
+      saleDate: data.saleDate,
       Note: data.Note,
       saleId: method.getValues("saleId"),
     });

@@ -13,6 +13,12 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    productSizeID: {
+      type: Number,
+    },
+    productSizeName: {
+      type: String,
+    },
     quantity: {
       type: Number,
       required: true,
