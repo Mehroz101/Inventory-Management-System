@@ -61,7 +61,7 @@ const PurchaseData = [
     Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t",
   },
 ];
-export default function SalesTable({data}) {
+export default function SalesTable({data,handleEdit}) {
   const [sales, setSales] = useState(data);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -182,7 +182,7 @@ useEffect(() => {
     return (
      <ActionsBtns
          rowData={rowData}
-        //  onEdit={handleEdit}
+         onEdit={handleEdit}
          onDelete={handleDelete}
          onView={handleView}
        />
