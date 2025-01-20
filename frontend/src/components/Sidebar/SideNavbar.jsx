@@ -17,6 +17,7 @@ import {
   faFileAlt,
   faGear,
   faLayerGroup,
+  faPerson,
   faPrint,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -101,6 +102,16 @@ const CustomSidebar = ({ visible, onHide }) => {
             >
               <FontAwesomeIcon icon={faCity} className="pr-2" />
               Cities
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={ROUTES.CUSTOMERS}
+              className="sidebar-link "
+              onClick={handleLinkClick}
+            >
+              <FontAwesomeIcon icon={faPerson} className="pr-2" />
+              Customers
             </Link>
           </li>
 

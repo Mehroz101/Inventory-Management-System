@@ -7,6 +7,7 @@ require("dotenv").config();
 const path = require("path");
 const AuthRouter = require("./routes/AuthRouter.js");
 const CategoryRouter = require("./routes/CategoryRouter.js");
+const CustomerRouter = require("./routes/CustomerRouter.js");
 const CityRouter = require("./routes/CityRouter.js");
 const ProductRouter = require("./routes/ProductRouter.js");
 const PurchaseRouter = require("./routes/PurchaseRouter.js");
@@ -17,7 +18,14 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: true,
+
+
+    origin: [
+      "https://webtech-inventorysystem.netlify.app/",
+      "http://localhost:5173",
+      "http://localhost:5174",
+    ],
+
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
@@ -48,6 +56,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/auth", AuthRouter); // Make sure this is correctly set up
 app.use("/api/category", CategoryRouter); // Make sure this is correctly set up
+app.use("/api/customer", CustomerRouter); // Make sure this is correctly set up
 app.use("/api/city", CityRouter); // Make sure this is correctly set up
 app.use("/api/product", ProductRouter); // Make sure this is correctly set up
 app.use("/api/purchase", PurchaseRouter); // Make sure this is correctly set up
