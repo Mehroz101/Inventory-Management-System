@@ -22,9 +22,7 @@ app.use(
 
 
     origin: [
-      "https://webtech-inventorysystem.netlify.app/",
-      "http://localhost:5173",
-      "http://localhost:5174",
+      "https://inventory-frontend-peach.vercel.app/"
     ],
 
     credentials: true,
