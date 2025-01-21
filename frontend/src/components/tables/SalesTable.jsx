@@ -19,7 +19,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getQueryParams } from "../../utils/CommonFunction";
+import { formatDate, getQueryParams } from "../../utils/CommonFunction";
 import ActionsBtns from "../ActionsBtns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { confirmDialog } from "primereact/confirmdialog";
@@ -28,7 +28,7 @@ import { notify } from "../../utils/notification";
 const PurchaseData = [
   {
     id: 1,
-    saleId:23,
+    saleId: 23,
     productName: "Product1",
     category: "cat1",
     productSize: "12 x 12",
@@ -45,7 +45,7 @@ const PurchaseData = [
   },
   {
     id: 2,
-    saleId:20,
+    saleId: 20,
     productName: "Product2",
     category: "cat2",
     productSize: "12 x 12",
@@ -61,7 +61,7 @@ const PurchaseData = [
     Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t",
   },
 ];
-export default function SalesTable({data,handleEdit}) {
+export default function SalesTable({ data, handleEdit }) {
   const [sales, setSales] = useState(data);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -91,15 +91,14 @@ export default function SalesTable({data,handleEdit}) {
   };
   const location = useLocation();
   const { saleId } = getQueryParams(location.search);
-// useEffect(()=>{},[saleId])
-useEffect(() => {
-  if (data) {
-    (data);
-    setSales(data);
-    setLoading(false);
-  }
-}, [data]); // eslint-disable-line react-hooks/exhaustive-deps
-
+  // useEffect(()=>{},[saleId])
+  useEffect(() => {
+    if (data) {
+      data;
+      setSales(data);
+      setLoading(false);
+    }
+  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
@@ -164,30 +163,29 @@ useEffect(() => {
   });
   const handleDelete = (data) => {
     confirmDialog({
-        message: "Do you want to delete this product?",
-        header: "Delete Confirmation",
-        icon: "pi pi-info-circle",
-        defaultFocus: "reject",
-        acceptClassName: "p-button-danger",
-        accept: () =>
-          deleteSaleMutation.mutate({ saleId: data.saleID }),
-      });
+      message: "Do you want to delete this product?",
+      header: "Delete Confirmation",
+      icon: "pi pi-info-circle",
+      defaultFocus: "reject",
+      acceptClassName: "p-button-danger",
+      accept: () => deleteSaleMutation.mutate({ saleId: data.saleID }),
+    });
   };
   const handleView = (data) => {
-    navigate(`newsales?id=${data.saleID}`)
+    navigate(`newsales?id=${data.saleID}`);
 
     // Custom view logic here
   };
   const actionBodyTemplate = (rowData) => {
     return (
-     <ActionsBtns
-         rowData={rowData}
-         onEdit={handleEdit}
-         onDelete={handleDelete}
-         onView={handleView}
-       />
-    )
-   };
+      <ActionsBtns
+        rowData={rowData}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        onView={handleView}
+      />
+    );
+  };
   const header = renderHeader();
   const snoBodyTemplate = (rowData, options) => {
     return options.rowIndex + 1; // Row index starts from 0, so add 1 for 1-based numbering
@@ -252,7 +250,7 @@ useEffect(() => {
           style={{ minWidth: "14rem" }}
           filterPlaceholder="Search by name"
         />
-      
+
         <Column
           field="productPrice"
           header="Product Price"
@@ -274,8 +272,25 @@ useEffect(() => {
           style={{ minWidth: "11rem" }}
         />
         <Column
-          field="saleDate"
+          body={(rowData) => {
+            return (
+              <>
+                <span>{formatDate(rowData.saleDate)}</span>
+              </>
+            );
+          }}
           header="Sold Date"
+          style={{ minWidth: "11rem" }}
+        />
+          <Column
+          body={(rowData) => {
+            return (
+              <>
+                <span>{rowData.saleUpdateDate ? formatDate(rowData.saleUpdateDate) :"" }</span>
+              </>
+            );
+          }}
+          header="Purchase Update Date"
           style={{ minWidth: "11rem" }}
         />
         <Column

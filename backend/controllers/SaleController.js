@@ -272,6 +272,47 @@ const addSale = async (req, res) => {
     });
   }
 };
+const updateSale = async (req, res) => {
+  try {
+    console.log(req.body);
+    const userId = req.user.id;
+    const { saleId, updatedDate, givenAmount } = req.body;
+    const findsale = await Sales.findOne({
+      userId: userId,
+      saleID: saleId,
+    });
+    if (findsale) {
+      findsale.remainingAmount = findsale.remainingAmount - givenAmount;
+      findsale.saleUpdateDate = updatedDate;
+      console.log("remainingAmount: ",findsale.remainingAmount)
+      console.log("givenAmount: ",givenAmount)
+      console.log(findsale.remainingAmount)
+      if (findsale.remainingAmount === 0) {
+        findsale.status = "paid";
+      }
+      else{
+        findsale.status = "unpaid";
+
+      }
+      await findsale.save();
+      res.status(201).json({
+        success: true,
+        message: "sale updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Purchase not found",
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(505).json({
+      success: true,
+      message: "An error occurred",
+    });
+  }
+};
 const deleteSale = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -345,6 +386,7 @@ const GetSale = async (req, res) => {
             remainingAmount: sale.remainingAmount,
             Note: sale.note,
             saleDate: sale.saleDate,
+            saleUpdateDate: sale.saleUpdateDate || null,
             status: sale.status,
           };
         })
@@ -410,4 +452,5 @@ module.exports = {
   addSale,
   GetSale,
   GetSaleData,
+  updateSale
 };

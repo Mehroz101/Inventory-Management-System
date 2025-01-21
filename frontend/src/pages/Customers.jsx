@@ -14,6 +14,7 @@ const Customers = () => {
   const method = useForm({
     defaultValues: {
       customer: "",
+      note:""
     },
   });
 
@@ -46,6 +47,7 @@ const Customers = () => {
       editCustomerMutation.mutate({
         customerId: editCustomer.customerID,
         customerName: data.customer,
+        note: data.note,
       });
     } else {
       addCustomerMutation.mutate({ customer: data.customer });
@@ -60,6 +62,7 @@ const Customers = () => {
   const handleEditCustomer = (customer) => {
     setEditCustomer(customer);
     method.setValue("customer", customer.customerName);
+    method.setValue("note", customer.note);
     setVisible(true);
   };
 
@@ -106,6 +109,18 @@ const Customers = () => {
                 isEnable={true}
                 placeholder="Enter customer name"
               />
+            </FormColumn>
+            <FormColumn>
+              <textarea
+                className="custom-input"
+                name="note"
+                placeholder="Enter description"
+                {...method.register("note")}
+                defaultValue={editCustomer ? editCustomer.note : ""}
+                rows={7}
+                cols={10}
+                
+              ></textarea>
             </FormColumn>
 
             <FormColumn>

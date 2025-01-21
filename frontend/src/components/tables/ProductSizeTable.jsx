@@ -22,28 +22,25 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getQueryParams } from "../../utils/CommonFunction";
 import ActionsBtns from "../ActionsBtns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DeleteCustomer } from "../../services/Api";
+import { DeleteProductSize } from "../../services/Api";
 import { confirmDialog } from "primereact/confirmdialog";
 import { notify } from "../../utils/notification";
 
-export default function CustomerTable({ data, onEditCustomer }) {
+export default function ProductSizeTable({ data, onEditProductSize }) {
   const queryClient = useQueryClient();
-  const [filters, setFilters] = useState({
-    customerName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    
-  });
-  const deleteCustomerMutation = useMutation({
-    mutationFn: DeleteCustomer,
+
+  const deleteProductSizeMutation = useMutation({
+    mutationFn: DeleteProductSize,
     onSuccess: (data) => {
       if (data.success) {
-        notify("success", "Customer deleted successfully");
-        queryClient.invalidateQueries(["categories"]);
+        notify("success", "Product Size deleted successfully");
+        queryClient.invalidateQueries(["productsizes"]);
       }
     },
   });
 
   const handleEdit = (rowData) => {
-    onEditCustomer(rowData); // Trigger parent's edit dialog
+    onEditProductSize(rowData); // Trigger parent's edit dialog
   };
 
   const handleDelete = (rowData) => {
@@ -53,8 +50,7 @@ export default function CustomerTable({ data, onEditCustomer }) {
       icon: "pi pi-info-circle",
       defaultFocus: "reject",
       acceptClassName: "p-button-danger",
-      accept: () =>
-        deleteCustomerMutation.mutate({ customerId: rowData.customerID }),
+      accept: () => deleteProductSizeMutation.mutate({ productSizeId: rowData.productSizeID }),
     });
   };
 
@@ -72,17 +68,12 @@ export default function CustomerTable({ data, onEditCustomer }) {
         value={data}
         paginator
         rows={10}
-        dataKey="customerID"
-        filters={filters}
-        filterDisplay="row"
-        globalFilterFields={["customer"]}
-        emptyMessage="No customer found."
+        dataKey="id"
+        globalFilterFields={["productSize"]}
+        emptyMessage="No product size found."
       >
         <Column header="#" body={(rowData, options) => options.rowIndex + 1} />
-        <Column field="customerName" filter filterPlaceholder="Search by name" header="Customer Name" />
-        <Column field="note"  header="Note" />
-        <Column field="receivable"  header="Total Recievable" />
-        <Column field="payable"  header="Total Payable" />
+        <Column field="productSizeName" header="ProductSize Name" />
         <Column header="Action" body={actionBodyTemplate} />
       </DataTable>
     </div>

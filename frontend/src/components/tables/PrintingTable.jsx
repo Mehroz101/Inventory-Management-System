@@ -20,7 +20,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ActionsBtns from "../ActionsBtns";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { GetPrintingData, SpecificProducts, TransferPrintingToProduct, Transferproduct } from "../../services/Api";
+import {
+  GetPrintingData,
+  SpecificProducts,
+  TransferPrintingToProduct,
+  Transferproduct,
+} from "../../services/Api";
 import { formatDate } from "../../utils/CommonFunction";
 import { FormColumn, FormRow } from "../layoutComponent";
 import CustomTextInput from "../FormComponents/CustomTextInput";
@@ -82,7 +87,8 @@ export default function PrintingTable() {
     defaultValues: {
       quantity: 0,
       productId: null,
-      createdProduct:null,
+      createdProduct: null,
+      createdQunatity: 0,
       // note:"",
     },
   });
@@ -125,6 +131,7 @@ export default function PrintingTable() {
       productId: method.getValues("productId"),
       transferQuantity: parseInt(data.quantity),
       createdProduct: data.createdProduct,
+      createdQunatity: parseInt(data.createdQunatity),
       // note: data.note,
     });
   };
@@ -186,18 +193,19 @@ export default function PrintingTable() {
 
   const handleEdit = (data) => {
     // Custom edit logic here
-  };const {data:productsData} = useQuery({
-    queryKey:["specificProduct"],
-    queryFn:SpecificProducts
-  })
+  };
+  const { data: productsData } = useQuery({
+    queryKey: ["specificProduct"],
+    queryFn: SpecificProducts,
+  });
 
   const handleDelete = (data) => {
     // Custom delete logic here
   };
 
   const handleTransfer = (data) => {
-    setIsTransferVisible(true)
-    method.setValue("productId",data.productId)
+    setIsTransferVisible(true);
+    method.setValue("productId", data.productId);
     // Custom view logic here
   };
   const actionBodyTemplate = (rowData) => {
@@ -288,16 +296,16 @@ export default function PrintingTable() {
         <form onSubmit={method.handleSubmit(onsubmit)}>
           <FormRow>
             <FormColumn>
-            <CDropdown
-              control={method.control}
-              name={"createdProduct"}
-              optionLabel="productName"
-              optionValue="productID"
-              options={productsData}
-              required={true}
-              label="Created Product"
-              placeholder="Select product"
-            />
+              <CDropdown
+                control={method.control}
+                name={"createdProduct"}
+                optionLabel="productName"
+                optionValue="productID"
+                options={productsData}
+                required={true}
+                label="Created Product"
+                placeholder="Select product"
+              />
             </FormColumn>
             <FormColumn>
               <CustomTextInput
@@ -310,20 +318,21 @@ export default function PrintingTable() {
                 placeholder="Enter quantity"
               />
             </FormColumn>
-            {/* <FormColumn>
+            <FormColumn>
               <CustomTextInput
                 control={method.control}
-                name="note"
-                label="Note"
+                name="createdQunatity"
+                required={true}
+                label="Created Quantity"
                 isEnable={true}
-                placeholder="Write note"
+                type="number"
+                placeholder="Enter created quantity"
               />
-            </FormColumn> */}
+            </FormColumn>
             <Button label="Transfer" type="submit" />
           </FormRow>
         </form>
       </Dialog>
     </div>
-    
   );
 }

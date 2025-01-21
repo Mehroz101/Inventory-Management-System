@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import PurchaseTable from "../components/tables/PurchaseTable";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../utils/routes";
-import { useQuery } from "@tanstack/react-query";
-import { GetPurchases } from "../services/Api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { GetPurchases, UpdatePruchase } from "../services/Api";
 import { Dialog } from "primereact/dialog";
 import { FormColumn, FormRow } from "../components/layoutComponent";
 import { useForm } from "react-hook-form";
 import CustomTextInput from "../components/FormComponents/CustomTextInput";
 import { Button } from "primereact/button";
 import CDatePicker from "../components/FormComponents/CDatePicker";
+import { notify } from "../utils/notification";
 
 const Purchases = () => {
   const [visible, setVisible] = useState(false);
@@ -23,25 +24,41 @@ const Purchases = () => {
       purchaseId: null,
       remainingAmount: 0,
       givenAmount: 0,
-      updatedDate:null
+      updatedDate: null,
+    },
+  });
+  const editPurchaseMutation = useMutation({
+    mutationFn: UpdatePruchase,
+    onSuccess: (data) => {
+      if (data.success) {
+        notify("success", data.message);
+        setVisible(false);
+        method.reset();
+        refetchPurchases();
+      }
     },
   });
   const onSubmit = (data) => {
-    // if (editCategory) {
-    //   editCategoryMutation.mutate({
-    //     categoryId: editCategory.categoryID,
-    //     categoryName: data.category,
-    //   });
-    // } else {
-    //   addCategoryMutation.mutate({ category: data.category });
-    // }
+    if (method.getValues("remainingAmount") < data.givenAmount) {
+      notify(
+        "error",
+        "remaining amount is " + method.getValues("remainingAmount")
+      );
+    } else {
+      editPurchaseMutation.mutate({
+        purchaseId: method.getValues("purchaseId"),
+        updatedDate: data.updatedDate,
+        givenAmount: parseInt(data.givenAmount),
+      });
+    }
   };
   const handleEdit = (data) => {
     // navigate(`newpurchase?id=${data.purchaseID}`)
     // Custom view logic here
-    console.log(data)
-    method.setValue("remainingAmount",data.remainingAmount)
-    setVisible(true)
+    console.log(data);
+    method.setValue("purchaseId", data.purchaseID);
+    method.setValue("remainingAmount", data.remainingAmount);
+    setVisible(true);
   };
   return (
     <>
@@ -89,15 +106,15 @@ const Purchases = () => {
               />
             </FormColumn>
             <FormColumn sm={12} md={12} lg={12} xl={12}>
-                <CDatePicker
-                  control={method.control}
-                  name="updatedDate"
-                  required={true}
-                  isEnable={true}
-                  placeholder="Enter paying date"
-                  label="Pay Date"
-                />
-                </FormColumn>
+              <CDatePicker
+                control={method.control}
+                name="updatedDate"
+                required={true}
+                isEnable={true}
+                placeholder="Enter paying date"
+                label="Pay Date"
+              />
+            </FormColumn>
             <FormColumn>
               <Button label="Pay" type="submit" />
             </FormColumn>

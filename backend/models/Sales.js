@@ -63,6 +63,10 @@ const saleSchema = new mongoose.Schema(
         type: String,
         required:true
     },
+    saleUpdateDate:{
+        type: String,
+        required:true
+    },
     status:{
       type:String,
       default:"unpaid"
