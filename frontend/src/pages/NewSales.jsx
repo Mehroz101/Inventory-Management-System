@@ -9,6 +9,7 @@ import {
   AddSale,
   GetCategory,
   GetCity,
+  GetCustomer,
   GetProduct,
   GetSaleData,
 } from "../services/Api";
@@ -36,7 +37,7 @@ const NewSales = () => {
       cityId: null,
       cityName: "",
       productPrice: 0,
-      customerName: "",
+      customerId: 0,
       customerContact: "",
       productQuantity: 0,
       paidAmount: 0,
@@ -69,6 +70,7 @@ const NewSales = () => {
       cityName: data.cityName,
       productPrice: parseInt(data.productPrice),
       customerName: data.customerName,
+      customerId: data.customerId,
       customerContact: data.customerContact,
       productQuantity: parseInt(data.productQuantity),
       paidAmount: parseInt(data.paidAmount),
@@ -90,6 +92,10 @@ const NewSales = () => {
     queryKey: ["products"],
     queryFn: GetProduct,
   });
+  const { data: customers } = useQuery({
+    queryKey: ["customers"],
+    queryFn: GetCustomer,
+  });
   useEffect(() => {
     if (EditSaleData && isSaleId) {
       setFieldEnabled(false);
@@ -101,7 +107,7 @@ const NewSales = () => {
       method.setValue("categoryName", EditSaleData.categoryName);
       method.setValue("cityId", EditSaleData.cityId);
       method.setValue("cityName", EditSaleData.cityName);
-      method.setValue("customerName", EditSaleData.customerName);
+      method.setValue("customerId", EditSaleData.customerID);
       method.setValue("customerContact", EditSaleData.customerContact);
       method.setValue("productPrice", EditSaleData.productPrice);
       method.setValue("productQuantity", EditSaleData.productQuantity);
@@ -204,13 +210,20 @@ const NewSales = () => {
               </FormColumn>
 
               <FormColumn sm={12} md={7} lg={3} xl={3}>
-                <CustomTextInput
+                <CDropdown
                   control={method.control}
-                  name="customerName"
+                  name="customerId"
                   required={true}
-                  label="Customer Name"
-                  isEnable={fieldEnabled}
-                  placeholder="Enter customer name"
+                  label="Customer"
+                  disabled={fieldEnabled ? false : true}
+                  optionLabel="customerName"
+                  optionValue="customerID"
+                  placeholder="Select customer"
+                  onChange={(e) => {
+                    method.setValue("customerId", e.value);
+                    method.setValue("customerName", e.label);
+                  }}
+                  options={customers}
                 />
               </FormColumn>
               <FormColumn sm={12} md={4} lg={3} xl={3}>

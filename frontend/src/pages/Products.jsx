@@ -41,6 +41,7 @@ const Products = () => {
       if (data.success) {
         notify("success", "Product added successfully");
         setVisible(false);
+        method.reset();
         refetchProducts();
       } else {
         notify("error", data.message);
@@ -52,7 +53,7 @@ const Products = () => {
   const editProductMutation = useMutation({
     mutationFn: UpdateProduct,
     onSuccess: (data) => {
-      if(data.success){
+      if (data.success) {
         notify("success", "Product updated successfully");
         setVisible(false);
         setEditProduct(null);
@@ -145,7 +146,11 @@ const Products = () => {
             )}
 
             <FormColumn>
-              <Button label={editProduct ? "Update" : "Add"} disabled={editProductMutation.isPending} type="submit" />
+              <Button
+                label={editProduct ? "Update" : "Add"}
+                disabled={editProductMutation.isPending}
+                type="submit"
+              />
             </FormColumn>
           </FormRow>
         </form>

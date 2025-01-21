@@ -23,6 +23,7 @@ const Cities = () => {
       if (data.success) {
         notify("success", "City added successfully");
         setVisible(false);
+        method.reset();
         refetch();
       }
     },

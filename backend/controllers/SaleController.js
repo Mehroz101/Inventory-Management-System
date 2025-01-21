@@ -206,6 +206,7 @@ const addSale = async (req, res) => {
       cityName,
       productPrice,
       customerName,
+      customerId,
       customerContact,
       productQuantity,
       paidAmount,
@@ -233,7 +234,8 @@ const addSale = async (req, res) => {
       cityID: cityId,
       cityName: cityName,
       productPrice,
-      customerName,
+      customerName: customerName,
+      customerID: customerId,
       customerContact,
       productQuantity,
       paidAmount,
@@ -257,6 +259,7 @@ const addSale = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -294,9 +297,8 @@ const deleteSale = async (req, res) => {
           message: "Sale deleted successfully.",
         });
       }
-    }
-    else{
-        return res
+    } else {
+      return res
         .status(404)
         .json({ success: false, message: "product not found." });
     }
@@ -329,6 +331,7 @@ const GetSale = async (req, res) => {
             cityId: sale.cityID, // Keep the city ID
             cityName: sale.cityName, // Get city name
             productPrice: sale.productPrice,
+            customerId: sale.customerID,
             customerName: sale.customerName,
             customerContact: sale.customerContact,
             productQuantity: sale.productQuantity,
@@ -375,6 +378,7 @@ const GetSaleData = async (req, res) => {
         cityName: sale.cityName, // Get city name
         productPrice: sale.productPrice,
         customerName: sale.customerName,
+        customerId: sale.customerID,
         customerContact: sale.customerContact,
         productQuantity: sale.productQuantity,
         paidAmount: sale.paidAmount,

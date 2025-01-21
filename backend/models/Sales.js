@@ -36,8 +36,8 @@ const saleSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    customerName: {
-      type: String,
+    customerID: {
+      type: Number,
       required: true,
     },
     customerContact: {
@@ -59,17 +59,17 @@ const saleSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    saleDate:{
-        type: String,
-        required:true
+    saleDate: {
+      type: String,
+      required: true,
     },
-    status:{
-      type:String,
-      default:"unpaid"
+    status: {
+      type: String,
+      default: "unpaid",
     },
-    note:{
-        type: String,
-    }
+    note: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
