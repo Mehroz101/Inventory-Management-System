@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "primereact/button";
 import CustomerTable from "../components/tables/CustomerTable";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AddCustomer, GetCustomer, UpdateCustomer } from "../services/Api";
+import { AddCustomer, GetCustomer, GetCustomerData, UpdateCustomer } from "../services/Api";
 import { notify } from "../utils/notification";
 const Customers = () => {
   const [visible, setVisible] = useState(false);
@@ -24,6 +24,7 @@ const Customers = () => {
       if (data.success) {
         notify("success", "Customer added successfully");
         setVisible(false);
+        method.reset()
         refetch();
       }
     },
@@ -50,13 +51,13 @@ const Customers = () => {
         note: data.note,
       });
     } else {
-      addCustomerMutation.mutate({ customer: data.customer });
+      addCustomerMutation.mutate({ customer: data.customer,note: data.note, });
     }
   };
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["categories"],
-    queryFn: GetCustomer,
+    queryFn: GetCustomerData,
   });
 
   const handleEditCustomer = (customer) => {

@@ -16,6 +16,7 @@ const Sales = require("../models/Sales");
 //         categoryName,
 //         productPrice,
 //         customerName,
+//         customerId,
 //         customerContact,
 //         productQuantity,
 //         paidAmount,
@@ -47,6 +48,7 @@ const Sales = require("../models/Sales");
 //           categoryName: categoryName,
 //           productPrice,
 //           customerName,
+//           customerId,
 //           customerContact,
 //           productQuantity,
 //           paidAmount,
@@ -154,6 +156,8 @@ const Sales = require("../models/Sales");
 //         editSale.categoryName = categoryName;
 //         editSale.productPrice = productPrice;
 //         editSale.customerName = customerName;
+//         editSale.customerName = customerName;
+//         editSale.customerId = customerId;
 //         editSale.customerContact = customerContact;
 //         editSale.productQuantity = productQuantity;
 //         editSale.paidAmount = paidAmount;
@@ -206,6 +210,7 @@ const addSale = async (req, res) => {
       cityName,
       productPrice,
       customerName,
+      customerId,
       customerContact,
       productQuantity,
       paidAmount,
@@ -243,6 +248,7 @@ const addSale = async (req, res) => {
       cityName: cityName,
       productPrice,
       customerName,
+      customerID:customerId,
       customerContact,
       productQuantity,
       paidAmount,
@@ -250,6 +256,7 @@ const addSale = async (req, res) => {
       note: Note,
       status: status,
       saleDate,
+      saleUpdateDate:saleDate,
     });
     if (sale) {
       const isProduct = await Product.findOne({ productID: productId });
@@ -266,6 +273,7 @@ const addSale = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error.message)
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -380,6 +388,8 @@ const GetSale = async (req, res) => {
             cityName: sale.cityName, // Get city name
             productPrice: sale.productPrice,
             customerName: sale.customerName,
+            customerName: sale.customerName,
+            customerId: sale.customerID,
             customerContact: sale.customerContact,
             productQuantity: sale.productQuantity,
             paidAmount: sale.paidAmount,
@@ -426,6 +436,7 @@ const GetSaleData = async (req, res) => {
         cityName: sale.cityName, // Get city name
         productPrice: sale.productPrice,
         customerName: sale.customerName,
+        customerId: sale.customerID,
         customerContact: sale.customerContact,
         productQuantity: sale.productQuantity,
         paidAmount: sale.paidAmount,

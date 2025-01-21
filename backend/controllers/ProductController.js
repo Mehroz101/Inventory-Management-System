@@ -177,14 +177,14 @@ const TransferProduct = async (req, res) => {
 const TransferPrintingtoProduct = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { productId, transferQuantity, createdProduct, createdQunatity,productSizeId } =
+    const { productId, transferQuantity, createdProduct, createdQunatity } =
       req.body;
 
     console.log(req.body);
     const product = await Product.findOne({
       userId: userId,
       productID: productId,
-      productSizeID:productSizeId,
+      
     });
     if (product) {
       console.log(product);
