@@ -40,6 +40,10 @@ const saleSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    customerID: {
+      type: Number,
+      required: true,
+    },
     customerContact: {
       type: String,
     },

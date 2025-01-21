@@ -8,30 +8,45 @@ import { Button } from "primereact/button";
 import { useMutation } from "@tanstack/react-query";
 import { generateReport } from "../services/Api";
 import { notify } from "../utils/notification";
-
+import { formatDate } from "../utils/CommonFunction";
+import developerLogo from "../assets/developer_logo.jpeg"
 function Report() {
   const [reportData, setReportData] = useState(null); // State to store report data
 
   const generatePDF = () => {
+    try{
     if (!reportData) return; // Ensure there is data to generate PDF
     console.log("entered");
     const doc = new jsPDF();
-
+  
     // Company Details
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
-    doc.text("Webtech Inventory Solutions", 10, 20);
+    doc.text("Ishtiak & Sons Packages", 10, 20);
     doc.setFontSize(12);
-    doc.text("Multan Cantt Punjab, Pakistan", 10, 30);
+    doc.text("Hassan Parwana Road, Waheed Plaza, 1st Floor, Multan, Punjab, Pakistan", 10, 30);
     doc.text(
-      "Phone: +92-322-6671168 | Email: webtechssoultion@gmail.com",
+      "Phone: 0309 9909600 | 0316 6528850",
       10,
       40
     );
+    //  doc.setDrawColor(0);
+    // doc.setLineWidth(0.5);
+    // doc.line(10, 45, 200, 45);
+    // doc.text(
+    //   "Developed by: Webtech Smart Solution",
+    //   10,
+    //   40
+    // );
+    // doc.text(
+    //   "Phone N0. 0322 6671168 | Email: webtechssolution@gmail.com",
+    //   10,
+    //   40
+    // );
     doc.setDrawColor(0);
     doc.setLineWidth(0.5);
     doc.line(10, 45, 200, 45);
-
+  
     // Helper function to add tables
     const addTable = (title, data, yPosition) => {
       doc.setFontSize(14);
@@ -45,8 +60,9 @@ function Report() {
         alternateRowStyles: { fillColor: [240, 248, 255] }, // Alternate row color
       });
     };
+  
     console.log("near to generate");
-
+  
     // Add Inventory Tables
     if (reportData.productStock && reportData.productStock.length > 0) {
       const productStockData = [
@@ -59,7 +75,15 @@ function Report() {
       ];
       addTable("Product Stock", productStockData, 50);
     }
-
+  
+    if (reportData.totaldata && reportData.totaldata.length > 0) {
+      const totaldata = [
+        ["Title", "Amount"],
+        ...reportData.totaldata.map((item) => [item.title, item.amount]),
+      ];
+      addTable("Total", totaldata, doc.lastAutoTable.finalY + 10);
+    }
+  
     if (reportData.purchases && reportData.purchases.length > 0) {
       const purchasesData = [
         [
@@ -77,19 +101,19 @@ function Report() {
         ...reportData.purchases.map((item) => [
           item.productName,
           item.productQuantity,
-          item.supplierName,
-          item.supplierContact,
+          item.customerName,
+          item.customerContact,
           item.cityName,
           item.productPrice,
           item.paidAmount,
           item.remainingAmount,
-          item.purchaseDate,
+          formatDate(item.purchaseDate),
           item.status,
         ]),
       ];
       addTable("Purchases", purchasesData, doc.lastAutoTable.finalY + 10);
     }
-
+  
     if (reportData.sales && reportData.sales.length > 0) {
       const salesData = [
         [
@@ -113,14 +137,30 @@ function Report() {
           item.productPrice,
           item.paidAmount,
           item.remainingAmount,
-          item.saleDate,
+          formatDate(item.saleDate),
           item.status,
         ]),
       ];
       addTable("Sales", salesData, doc.lastAutoTable.finalY + 10);
     }
+  
+    // Add Image at the bottom-right corner
+    const img = new Image();
+    img.src = {developerLogo}; // Path to your image (e.g., in the public folder)
+    const imgWidth = 30; // Width of the image
+    const imgHeight = 30; // Height of the image
+    const pageWidth = doc.internal.pageSize.getWidth(); // Get PDF page width
+    const pageHeight = doc.internal.pageSize.getHeight(); // Get PDF page height
+    const x = pageWidth - imgWidth - 10; // X position (10px from the right edge)
+    const y = pageHeight - imgHeight - 10; // Y position (10px from the bottom edge)
+  
+    doc.addImage(img, "jpeg", x, y, imgWidth, imgHeight);
+ 
     // Save PDF
-    doc.save("Inventory_Report.pdf");
+    doc.save("Inventory_Report.pdf");}
+    catch(error){
+      console.log(error)
+    }
   };
 
   const method = useForm({
@@ -152,9 +192,9 @@ function Report() {
 
   return (
     <>
-    <div className="top">
-      <h2>Generate Report of Payable and Receivable</h2>
-    </div>
+      <div className="top">
+        <h2>Generate Report of Payable and Receivable</h2>
+      </div>
       <form onSubmit={method.handleSubmit(onsubmit)}>
         <FormRow className="flex align-content-end">
           <FormColumn sm={12} md={4} lg={3} xl={3}>

@@ -22,6 +22,10 @@
     background: rgb(201, 207, 38);
     background: inear-gradient(135deg, #673AB7, #9575CD);
 }
+.state_card_6{
+    background: rgb(111, 38, 207);
+    background: inear-gradient(135deg, #3ab79c, #75cdcd);
+}
 
 .state_card {
  

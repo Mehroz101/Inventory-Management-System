@@ -751,6 +751,29 @@ export const GetCustomer = async () => {
   }
 
 };
+export const GetCustomerData = async () => {
+  try {
+    const token = localStorage.getItem("inventorytoken"); // Retrieve the token from localStorage
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    };
+
+    const response = await axios.get(`${API_URL}/customer/getcustomerdata`, config);
+
+    if (response.data.success) {
+      return response.data.data; // Return the data if successful
+    } else {
+      return []; // Return an empty array if not successful
+    }
+  } catch (error) {
+    console.error("GetCustomer Error:", error.message);
+    notify("error", error.response?.data?.message || "An error occurred.");
+    return []; // Return an empty array in case of an error
+  }
+
+};
 
 export const AddCustomer = async (data) => {
   try {
