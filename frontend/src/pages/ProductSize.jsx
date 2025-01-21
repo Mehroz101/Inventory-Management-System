@@ -23,6 +23,7 @@ const ProductSize = () => {
       if (data.success) {
         notify("success", "Product Size added successfully");
         setVisible(false);
+        method.reset()
         refetch();
       }
     },

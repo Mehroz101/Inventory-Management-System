@@ -31,14 +31,14 @@ const PurchaseDate = [
     productName: "Product1",
     category: "cat1",
     productSize: "12 x 12",
-    supplierName: "supplier name",
+    customerName: "customer name",
     productPrice: 100,
     productQuantity: 10,
     paidAmount: 345,
     reaminingAmount: 200,
     purchaseDate: "12-Dec-2024",
     invoiceNo: 12,
-    supplierContact: "03017518822",
+    customerContact: "03017518822",
     status: "paid",
     Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t ert er  ert ",
   },
@@ -47,14 +47,14 @@ const PurchaseDate = [
     productName: "Product2",
     category: "cat2",
     productSize: "12 x 12",
-    supplierName: "supplier name",
+    customerName: "customer name",
     productPrice: 100,
     productQuantity: 10,
     paidAmount: 345,
     reaminingAmount: 200,
     purchaseDate: "12-Dec-2024",
     invoiceNo: 12,
-    supplierContact: "03017518822",
+    customerContact: "03017518822",
     status: "unpaid",
     Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t",
   },
@@ -67,7 +67,7 @@ export default function PurchaseTable({ data, handleEdit }) {
     productName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     category: { value: null, matchMode: FilterMatchMode.CONTAINS },
     city: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    supplierName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    customerName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     status: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
   const [loading, setLoading] = useState(true);
@@ -207,7 +207,7 @@ export default function PurchaseTable({ data, handleEdit }) {
           "productName",
           "category",
           "city",
-          "supplierName",
+          "customerName",
         ]}
         header={header}
         emptyMessage="No purchases found."
@@ -229,7 +229,7 @@ export default function PurchaseTable({ data, handleEdit }) {
           style={{ minWidth: "12rem" }}
         />
         <Column
-          field="supplierName"
+          field="customerName"
           header="Supplier Name"
           filter
           filterMenuStyle={{ width: "14rem" }}
@@ -299,7 +299,7 @@ export default function PurchaseTable({ data, handleEdit }) {
           style={{ minWidth: "11rem" }}
         />
         <Column
-          field="supplierContact"
+          field="customerContact"
           header="Supplier Contact"
           style={{ minWidth: "11rem" }}
         />

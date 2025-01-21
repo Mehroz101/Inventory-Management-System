@@ -23,12 +23,15 @@ const GetDashboardData = async (req, res) => {
     const payable = PurchaseData.reduce((initialValue, currentValue) => {
       return initialValue + currentValue.remainingAmount;
     }, 0);
-
+    const profit = revenue - purchase;
     res.status(200).json({
       success: true,
       data: [
         {
           Revenue: revenue,
+        },
+        {
+          Profit: profit,
         },
         {
           Receivable: receivable,
@@ -116,11 +119,13 @@ const GenerateReport = async (req, res) => {
     // Function to convert date to "DD-MMM-YYYY" format
     const formatDate = (dateString) => {
       const date = new Date(dateString);
-      return date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      }).replace(/ /g, '-');
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
     };
 
     // Prepare the match conditions for purchases and sales
@@ -170,7 +175,7 @@ const GenerateReport = async (req, res) => {
     }
 
     // Fetch product stock data without grouping
-    const productStock = await Product.find({userId:userId}).select(
+    const productStock = await Product.find({ userId: userId }).select(
       "productID productName quantity inProcessing"
     );
 
@@ -182,7 +187,7 @@ const GenerateReport = async (req, res) => {
       ...matchConditions,
       ...purchaseDateConditions,
     }).select(
-      "productID productName productQuantity supplierName supplierContact cityName productPrice paidAmount remainingAmount purchaseDate status"
+      "productID productName productQuantity customerName customerContact cityName productPrice paidAmount remainingAmount purchaseDate status"
     );
 
     // Log purchases data
@@ -195,13 +200,58 @@ const GenerateReport = async (req, res) => {
     }).select(
       "purchaseID productName productQuantity customerName customerContact cityName productPrice paidAmount remainingAmount saleDate status"
     );
+    const SalesData = await Sales.find({ userId: userId });
+    const revenue = SalesData.reduce((initialValue, currentValue) => {
+      return initialValue + currentValue.productPrice;
+    }, 0);
+    const receivable = SalesData.reduce((initialValue, currentValue) => {
+      return initialValue + currentValue.remainingAmount;
+    }, 0);
+    const noOfSales = SalesData.length;
+
+    const PurchaseData = await Purchases.find({ userId: userId });
+    const purchase = PurchaseData.reduce((initialValue, currentValue) => {
+      return initialValue + currentValue.productPrice;
+    }, 0);
+    const payable = PurchaseData.reduce((initialValue, currentValue) => {
+      return initialValue + currentValue.remainingAmount;
+    }, 0);
+    const profit = revenue - purchase;
+    const totaldata = [
+      {
+        title:"Revenue",
+        amount:revenue
+      },
+      {
+        title:"Payable",
+        amount:payable
+      },
+      {
+        title:"Profit",
+        amount:profit
+      },
+      {
+        title:"Sales",
+        amount:noOfSales
+      },
+      {
+        title:"Receivable",
+        amount:receivable
+      },
+      {
+        title:"Purchases",
+        amount:purchase
+      }
+
+    ]
+    
 
     // Log sales data
-    console.log("Sales Data:", salesData);
     const data = {
       productStock,
       purchases: purchasesData,
       sales: salesData,
+      totaldata: totaldata,
     };
 
     res.status(201).json({ success: true, data: data });

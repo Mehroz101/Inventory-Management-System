@@ -23,6 +23,7 @@ const Cities = () => {
       if (data.success) {
         notify("success", "City added successfully");
         setVisible(false);
+        method.reset();
         refetch();
       }
     },
@@ -34,9 +35,8 @@ const Cities = () => {
       if (data.success) {
         notify("success", "City updated successfully");
         setVisible(false);
-        setEditCity(null);
         method.reset();
-
+        setEditCity(null);
         refetch();
       }
     },

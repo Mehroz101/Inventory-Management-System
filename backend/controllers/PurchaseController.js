@@ -15,14 +15,16 @@ const addPurchase = async (req, res) => {
       cityId,
       cityName,
       productPrice,
-      supplierName,
-      supplierContact,
+      customerName,
+      customerId,
+      customerContact,
       productQuantity,
       paidAmount,
       remainingAmount,
       Note,
       purchaseDate,
     } = req.body;
+    console.log(req.body)
     if (purchaseId === null) {
       // Generate the next ProductID
       const lastPurchase = await Purchases.findOne().sort({ purchaseID: -1 });
@@ -44,8 +46,9 @@ const addPurchase = async (req, res) => {
         cityID: cityId,
         cityName: cityName,
         productPrice,
-        supplierName,
-        supplierContact,
+        customerName,
+        customerID:customerId,
+        customerContact,
         productQuantity,
         paidAmount,
         remainingAmount,
@@ -123,8 +126,10 @@ const addPurchase = async (req, res) => {
         editPurchase.cityID = cityId;
         editPurchase.cityName = cityName;
         editPurchase.productPrice = productPrice;
-        editPurchase.supplierName = supplierName;
-        editPurchase.supplierContact = supplierContact;
+        editPurchase.customerName = customerName;
+        editPurchase.customerID = customerId
+        editPurchase.customerId = customerId;
+        editPurchase.customerContact = customerContact;
         editPurchase.productQuantity = productQuantity;
         editPurchase.paidAmount = paidAmount;
         editPurchase.remainingAmount = remainingAmount;
@@ -255,8 +260,9 @@ const GetPurchase = async (req, res) => {
             cityId: purchase.cityID, // Keep the city ID
             cityName: purchase.cityName, // Get city name
             productPrice: purchase.productPrice,
-            supplierName: purchase.supplierName,
-            supplierContact: purchase.supplierContact,
+            customerName: purchase.customerName,
+            customerId: purchase.customerID,
+            customerContact: purchase.customerContact,
             productQuantity: purchase.productQuantity,
             paidAmount: purchase.paidAmount,
             remainingAmount: purchase.remainingAmount,
@@ -301,8 +307,9 @@ const GetPurchaseData = async (req, res) => {
         cityId: purchase.cityID, // Keep the city ID
         cityName: purchase.cityName, // Get city name
         productPrice: purchase.productPrice,
-        supplierName: purchase.supplierName,
-        supplierContact: purchase.supplierContact,
+        customerName: purchase.customerName,
+        customerId: purchase.customerID,
+        customerContact: purchase.customerContact,
         productQuantity: purchase.productQuantity,
         paidAmount: purchase.paidAmount,
         remainingAmount: purchase.remainingAmount,

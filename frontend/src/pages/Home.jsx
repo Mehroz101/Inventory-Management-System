@@ -7,6 +7,7 @@ import {
   faHandHoldingUsd,
   faShoppingCart,
   faMoneyCheckAlt,
+  faSackDollar,
 } from "@fortawesome/free-solid-svg-icons";
 import SaleProduct from "../components/DashboardComponents/SaleProduct";
 import UpdateStock from "../components/DashboardComponents/UpdateStock";
@@ -16,6 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const iconMapping = {
   "Revenue": faMoneyBillTrendUp,
+  "Profit": faSackDollar,
   "Receivable": faHandHoldingUsd,
   "Purchase": faShoppingCart,
   "Payable": faMoneyCheckAlt,
