@@ -19,12 +19,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-
-
-    origin: [
-      "https://inventory-frontend-peach.vercel.app/"
-    ],
-
+    origin: true,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
