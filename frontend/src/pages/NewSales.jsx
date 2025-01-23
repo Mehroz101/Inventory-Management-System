@@ -72,6 +72,7 @@ const NewSales = () => {
       productPrice: parseInt(data.productPrice),
       customerId: data.customerId,
       customerName: data.customerName,
+      customerId: data.customerId,
       customerContact: data.customerContact,
       productQuantity: parseInt(data.productQuantity),
       paidAmount: parseInt(data.paidAmount),
@@ -96,7 +97,7 @@ const NewSales = () => {
   const { data: customers } = useQuery({
     queryKey: ["customers"],
     queryFn: GetCustomer,
-    queryFn: GetCustomer,
+
   });
   useEffect(() => {
     if (EditSaleData && isSaleId) {
@@ -111,6 +112,7 @@ const NewSales = () => {
       method.setValue("cityName", EditSaleData.cityName);
       method.setValue("customerId", EditSaleData.customerId);
       method.setValue("customerName", EditSaleData.customerName);
+
       method.setValue("customerContact", EditSaleData.customerContact);
       method.setValue("productPrice", EditSaleData.productPrice);
       method.setValue("productQuantity", EditSaleData.productQuantity);

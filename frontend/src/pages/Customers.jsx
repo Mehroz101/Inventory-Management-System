@@ -24,7 +24,7 @@ const Customers = () => {
       if (data.success) {
         notify("success", "Customer added successfully");
         setVisible(false);
-        method.reset()
+        method.reset();
         refetch();
       }
     },

@@ -23,6 +23,7 @@ const Categories = () => {
       if (data.success) {
         notify("success", "Category added successfully");
         setVisible(false);
+        method.reset();
         refetch();
       }
     },
@@ -35,7 +36,7 @@ const Categories = () => {
         notify("success", "Category updated successfully");
         setVisible(false);
         setEditCategory(null);
-        method.reset()
+        method.reset();
         refetch();
       }
     },
@@ -73,7 +74,6 @@ const Categories = () => {
             onClick={() => {
               setEditCategory(null);
               setVisible(true);
-
             }}
           >
             New Category
@@ -108,7 +108,7 @@ const Categories = () => {
                 placeholder="Enter category name"
               />
             </FormColumn>
-           
+
             <FormColumn>
               <Button label={editCategory ? "Update" : "Add"} type="submit" />
             </FormColumn>
@@ -119,4 +119,4 @@ const Categories = () => {
   );
 };
 
-export default Categories
+export default Categories;
