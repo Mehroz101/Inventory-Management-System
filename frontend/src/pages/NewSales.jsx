@@ -96,7 +96,6 @@ const NewSales = () => {
   const { data: customers } = useQuery({
     queryKey: ["customers"],
     queryFn: GetCustomer,
-    queryFn: GetCustomer,
   });
   useEffect(() => {
     if (EditSaleData && isSaleId) {
