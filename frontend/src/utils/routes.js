@@ -14,6 +14,7 @@ export const ROUTES = {
   PRODUCTS: "/products",
   CATEGORIES: "/categoies",
   CITIES: "/cities",
+  PRODUCTSIZE: "/productsize",
   CUSTOMERS: "/customers",
   PRINTING: "/printing",
   NEWPRINTING: "/printing/newprinting",

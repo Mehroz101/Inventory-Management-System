@@ -8,6 +8,7 @@ import {
   AddPurchase,
   GetCategory,
   GetCity,
+  GetCustomer,
   GetProduct,
   GetPurchaseData,
 } from "../services/Api";
@@ -36,8 +37,9 @@ const NewPurchase = () => {
       cityId: null,
       cityName: "",
       productPrice: 0,
-      supplierName: "",
-      supplierContact: "",
+      customerName: "",
+      customerId: null,
+      customerContact: "",
       productQuantity: 0,
       paidAmount: 0,
       remainingAmount: 0,
@@ -67,12 +69,13 @@ const NewPurchase = () => {
       cityId: data.cityId,
       cityName: data.cityName,
       productPrice: parseInt(data.productPrice),
-      supplierName: data.supplierName,
-      supplierContact: data.supplierContact,
+      customerName: data.customerName,
+      customerId: data.customerId,
+      customerContact: data.customerContact,
       productQuantity: parseInt(data.productQuantity),
       paidAmount: parseInt(data.paidAmount),
       remainingAmount: parseInt(data.remainingAmount),
-      purchaseDate: formatDate(data.purchaseDate),
+      purchaseDate: data.purchaseDate,
       Note: data.Note,
       purchaseId:method.getValues("purchaseId")
     });
@@ -89,6 +92,10 @@ const NewPurchase = () => {
     queryKey: ["products"],
     queryFn: GetProduct,
   });
+  const { data: customers } = useQuery({
+    queryKey: ["customers"],
+    queryFn: GetCustomer,
+  });
  useEffect(()=>{
   if(editPurchaseData && ispurchaseId){
     setFieldEnabled(false)
@@ -100,8 +107,9 @@ const NewPurchase = () => {
     method.setValue("categoryName",editPurchaseData.categoryName)
     method.setValue("cityId",editPurchaseData.cityId)
     method.setValue("cityName",editPurchaseData.cityName)
-    method.setValue("supplierName",editPurchaseData.supplierName)
-    method.setValue("supplierContact",editPurchaseData.supplierContact)
+    method.setValue("customerName",editPurchaseData.customerName)
+    method.setValue("customerId",editPurchaseData.customerID)
+    method.setValue("customerContact",editPurchaseData.customerContact)
     method.setValue("productPrice",editPurchaseData.productPrice)
     method.setValue("productQuantity",editPurchaseData.productQuantity)
     method.setValue("paidAmount",editPurchaseData.paidAmount)
@@ -158,6 +166,7 @@ const NewPurchase = () => {
                   options={products}
                 />
               </FormColumn>
+             
               <FormColumn sm={12} md={5} lg={3} xl={3}>
                 <CDropdown
                   control={method.control}
@@ -194,32 +203,28 @@ const NewPurchase = () => {
                   options={city}
                 />
               </FormColumn>
-              {/* <FormColumn sm={12} md={6} lg={2} xl={2}>
+              <FormColumn sm={12} md={5} lg={3} xl={3}>
                 <CDropdown
                   control={method.control}
-                  name="productSize"
-                  required={true}
-                  label="Product Size"
-                  optionLabel="label"
-                  optionValue="value"
-                  placeholder="Select size"
-                  options={productSize}
-                />
-              </FormColumn> */}
-              <FormColumn sm={12} md={7} lg={3} xl={3}>
-                <CustomTextInput
-                  control={method.control}
-                  name="supplierName"
+                  name="customerId"
                   required={true}
                   label="Supplier Name"
-                  isEnable={fieldEnabled}
-                  placeholder="Enter supplier name"
+                  disabled={fieldEnabled?false:true}
+                  optionLabel="customerName"
+                  optionValue="customerID"
+                  placeholder="Select supplier"
+                  onChange={(e) => {
+                    method.setValue("customerId", e.value);
+                    method.setValue("customerName", e.label);
+                  }}
+                  options={customers}
                 />
               </FormColumn>
+             
               <FormColumn sm={12} md={4} lg={3} xl={3}>
                 <CustomTextInput
                   control={method.control}
-                  name="supplierContact"
+                  name="customerContact"
                   label="Supplier Contact"
                   isEnable={fieldEnabled}
                   placeholder="Enter supplier contact"

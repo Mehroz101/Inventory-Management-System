@@ -13,6 +13,7 @@ import {
   AddProduct,
   GetCategory,
   GetProduct,
+  GetProductSize,
   UpdateProduct,
 } from "../services/Api";
 import { notify } from "../utils/notification";
@@ -25,6 +26,8 @@ const Products = () => {
   const method = useForm({
     defaultValues: {
       productName: "",
+      productSizeId: null,
+      productSizeName:"",
       quantity: 0,
       isRawData: false,
     },
@@ -33,6 +36,10 @@ const Products = () => {
   const { data: product, refetch: refetchProducts } = useQuery({
     queryKey: ["products"],
     queryFn: GetProduct,
+  });
+  const { data: productSize, refetch: refetchProductSize } = useQuery({
+    queryKey: ["productsize"],
+    queryFn: GetProductSize,
   });
 
   const addProductMutation = useMutation({
@@ -78,6 +85,8 @@ const Products = () => {
     method.setValue("productName", product.productName);
     method.setValue("quantity", product.quantity);
     method.setValue("isRawData", product.isRawData);
+    method.setValue("productSizeId", product.productSizeId);
+    method.setValue("productSizeName", product.productSizeName);
     setVisible(true);
   };
 
@@ -122,6 +131,21 @@ const Products = () => {
                 isEnable={true}
                 placeholder="Enter product name"
               />
+            </FormColumn>
+            <FormColumn>
+            <CDropdown
+                  control={method.control}
+                  name="productSizeId"
+                  label="Product"
+                  optionLabel="productSizeName"
+                  optionValue="productSizeID"
+                  placeholder="Select productSize"
+                  onChange={(e) => {
+                    method.setValue("productSizeId", e.value);
+                    method.setValue("productSizeName", e.label);
+                  }}
+                  options={productSize}
+                />
             </FormColumn>
 
             <FormColumn>

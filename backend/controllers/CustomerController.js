@@ -1,7 +1,9 @@
 const Customer = require("../models/Customer");
+const Purchases = require("../models/Purchases");
+const Sales = require("../models/Sales");
 const addCustomer = async (req, res) => {
   try {
-    const { customer } = req.body;
+    const { customer, note } = req.body;
     const userId = req.user.id;
     if (!customer) {
       return res.status(400).json({ message: "Customer name is required." });
@@ -12,9 +14,9 @@ const addCustomer = async (req, res) => {
       customerName: customer,
       userId: userId,
     });
-    if (isExist) {
-      return res.status(400).json({ message: "Customer already exists." });
-    }
+    // if (isExist) {
+    //   return res.status(400).json({ message: "Customer already exists." });
+    // }
 
     // Generate the next customerID
     const lastCustomer = await Customer.findOne().sort({ customerID: -1 });
@@ -25,6 +27,7 @@ const addCustomer = async (req, res) => {
       userId: userId,
       customerID: nextCustomerID,
       customerName: customer,
+      note: note,
     });
 
     return res.status(201).json({
@@ -42,7 +45,7 @@ const addCustomer = async (req, res) => {
 const updateCustomer = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { customerId, customerName } = req.body;
+    const { customerId, customerName, note } = req.body;
     console.log(req.body);
     if (!customerId || !customerName) {
       return res
@@ -51,19 +54,12 @@ const updateCustomer = async (req, res) => {
     }
     const customer = await Customer.findOne({
       userId: userId,
-      customerName: customerName,
     });
-    if (customer) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Customer name exist." });
-    }
 
     // Find and update the customer
     const updatedCustomer = await Customer.findOneAndUpdate(
-      { customerID: customerId },
-      { customerName: customerName },
-      { userId: userId },
+      { userId: userId, customerID: customerId },
+      { customerName: customerName, note: note },
       { new: true } // Return the updated document
     );
     console.log(updatedCustomer);
@@ -134,6 +130,9 @@ const GetCustomer = async (req, res) => {
         return {
           customerID: cat.customerID,
           customerName: cat.customerName,
+          note: cat.note,
+          payable: cat.payable,
+          receivable: cat.recievable,
         };
       });
       return res.status(200).json({
@@ -154,4 +153,45 @@ const GetCustomer = async (req, res) => {
       .json({ message: "An error occurred.", error: error.message });
   }
 };
-module.exports = { deleteCustomer, updateCustomer, addCustomer, GetCustomer };
+const GetCustomersData = async (req, res) => {
+  try {
+    // Fetch all customers
+    const customers = await Customer.find({});
+
+    // Array to hold the final customer data with balances
+    let customersWithBalances = [];
+
+    for (let customer of customers) {
+      // Calculate total remaining balance from sales
+      const sales = await Sales.find({ customerID: customer.customerID });
+      const receivable = sales.reduce(
+        (acc, sale) => acc + sale.remainingAmount,
+        0
+      );
+
+      // Calculate total remaining balance from purchases
+      const purchases = await Purchases.find({
+        customerID: customer.customerID,
+      });
+      const payable = purchases.reduce(
+        (acc, purchase) => acc + purchase.remainingAmount,
+        0
+      );
+
+      // Add the calculated balances to the customer object
+      customersWithBalances.push({
+        ...customer._doc,
+        receivable,
+        payable,
+      });
+    }
+    console.log(customersWithBalances);
+
+    // Send the response
+    res.status(200).json({success:true, data:customersWithBalances});
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({success:false, message: error.message });
+  }
+};
+module.exports = { deleteCustomer, updateCustomer, addCustomer, GetCustomer,GetCustomersData };

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "primereact/button";
 import CustomerTable from "../components/tables/CustomerTable";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AddCustomer, GetCustomer, UpdateCustomer } from "../services/Api";
+import { AddCustomer, GetCustomer, GetCustomerData, UpdateCustomer } from "../services/Api";
 import { notify } from "../utils/notification";
 const Customers = () => {
   const [visible, setVisible] = useState(false);
@@ -14,6 +14,7 @@ const Customers = () => {
   const method = useForm({
     defaultValues: {
       customer: "",
+      note:""
     },
   });
 
@@ -47,20 +48,22 @@ const Customers = () => {
       editCustomerMutation.mutate({
         customerId: editCustomer.customerID,
         customerName: data.customer,
+        note: data.note,
       });
     } else {
-      addCustomerMutation.mutate({ customer: data.customer });
+      addCustomerMutation.mutate({ customer: data.customer,note: data.note, });
     }
   };
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["categories"],
-    queryFn: GetCustomer,
+    queryFn: GetCustomerData,
   });
 
   const handleEditCustomer = (customer) => {
     setEditCustomer(customer);
     method.setValue("customer", customer.customerName);
+    method.setValue("note", customer.note);
     setVisible(true);
   };
 
@@ -107,6 +110,18 @@ const Customers = () => {
                 isEnable={true}
                 placeholder="Enter customer name"
               />
+            </FormColumn>
+            <FormColumn>
+              <textarea
+                className="custom-input"
+                name="note"
+                placeholder="Enter description"
+                {...method.register("note")}
+                defaultValue={editCustomer ? editCustomer.note : ""}
+                rows={7}
+                cols={10}
+                
+              ></textarea>
             </FormColumn>
 
             <FormColumn>

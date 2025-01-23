@@ -11,6 +11,7 @@ import {
   NewPurchases,
   NewSales,
   Printing,
+  ProductSize,
   Products,
   ProtectedRoute,
   Purchases,
@@ -86,6 +87,7 @@ function AppRoutes() {
         <Route path={ROUTES.CATEGORIES} element={<Categories />} />
         <Route path={ROUTES.CITIES} element={<Cities />} />
         <Route path={ROUTES.CUSTOMERS} element={<Customers />} />
+        <Route path={ROUTES.PRODUCTSIZE} element={<ProductSize />} />
         <Route path={ROUTES.PRINTING} element={<Printing />} />
         <Route path={ROUTES.NEWPRINTING} element={<NewPrinting />} />
         <Route path={ROUTES.REPORTS} element={<Report />} />

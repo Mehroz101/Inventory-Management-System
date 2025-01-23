@@ -15,14 +15,16 @@ const addPurchase = async (req, res) => {
       cityId,
       cityName,
       productPrice,
-      supplierName,
-      supplierContact,
+      customerName,
+      customerId,
+      customerContact,
       productQuantity,
       paidAmount,
       remainingAmount,
       Note,
       purchaseDate,
     } = req.body;
+    console.log(req.body)
     if (purchaseId === null) {
       // Generate the next ProductID
       const lastPurchase = await Purchases.findOne().sort({ purchaseID: -1 });
@@ -44,14 +46,16 @@ const addPurchase = async (req, res) => {
         cityID: cityId,
         cityName: cityName,
         productPrice,
-        supplierName,
-        supplierContact,
+        customerName,
+        customerID:customerId,
+        customerContact,
         productQuantity,
         paidAmount,
         remainingAmount,
         note: Note,
         status: status,
         purchaseDate,
+        purchaseUpdateDate: purchaseDate,
       });
       if (purchase) {
         const isProduct = await Product.findOne({ productID: productId });
@@ -122,8 +126,10 @@ const addPurchase = async (req, res) => {
         editPurchase.cityID = cityId;
         editPurchase.cityName = cityName;
         editPurchase.productPrice = productPrice;
-        editPurchase.supplierName = supplierName;
-        editPurchase.supplierContact = supplierContact;
+        editPurchase.customerName = customerName;
+        editPurchase.customerID = customerId
+        editPurchase.customerId = customerId;
+        editPurchase.customerContact = customerContact;
         editPurchase.productQuantity = productQuantity;
         editPurchase.paidAmount = paidAmount;
         editPurchase.remainingAmount = remainingAmount;
@@ -148,6 +154,47 @@ const addPurchase = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Internal server error",
+    });
+  }
+};
+const updatePurchase = async (req, res) => {
+  try {
+    console.log(req.body);
+    const userId = req.user.id;
+    const { purchaseId, updatedDate, givenAmount } = req.body;
+    const findpurchase = await Purchases.findOne({
+      userId: userId,
+      purchaseID: purchaseId,
+    });
+    if (findpurchase) {
+      findpurchase.remainingAmount = findpurchase.remainingAmount - givenAmount;
+      findpurchase.purchaseUpdateDate = updatedDate;
+      console.log("remainingAmount: ",findpurchase.remainingAmount)
+      console.log("givenAmount: ",givenAmount)
+      console.log(findpurchase.remainingAmount)
+      if (findpurchase.remainingAmount === 0) {
+        findpurchase.status = "paid";
+      }
+      else{
+        findpurchase.status = "unpaid";
+
+      }
+      await findpurchase.save();
+      res.status(201).json({
+        success: true,
+        message: "purchase updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Purchase not found",
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(505).json({
+      success: true,
+      message: "An error occurred",
     });
   }
 };
@@ -213,13 +260,15 @@ const GetPurchase = async (req, res) => {
             cityId: purchase.cityID, // Keep the city ID
             cityName: purchase.cityName, // Get city name
             productPrice: purchase.productPrice,
-            supplierName: purchase.supplierName,
-            supplierContact: purchase.supplierContact,
+            customerName: purchase.customerName,
+            customerId: purchase.customerID,
+            customerContact: purchase.customerContact,
             productQuantity: purchase.productQuantity,
             paidAmount: purchase.paidAmount,
             remainingAmount: purchase.remainingAmount,
             Note: purchase.note,
             purchaseDate: purchase.purchaseDate,
+            purchaseUpdateDate: purchase.purchaseUpdateDate,
             status: purchase.status,
           };
         })
@@ -258,8 +307,9 @@ const GetPurchaseData = async (req, res) => {
         cityId: purchase.cityID, // Keep the city ID
         cityName: purchase.cityName, // Get city name
         productPrice: purchase.productPrice,
-        supplierName: purchase.supplierName,
-        supplierContact: purchase.supplierContact,
+        customerName: purchase.customerName,
+        customerId: purchase.customerID,
+        customerContact: purchase.customerContact,
         productQuantity: purchase.productQuantity,
         paidAmount: purchase.paidAmount,
         remainingAmount: purchase.remainingAmount,
@@ -286,4 +336,5 @@ module.exports = {
   addPurchase,
   GetPurchase,
   GetPurchaseData,
+  updatePurchase,
 };

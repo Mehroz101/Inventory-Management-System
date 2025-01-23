@@ -4,96 +4,97 @@ import { FormColumn, FormRow } from "../components/layoutComponent";
 import CustomTextInput from "../components/FormComponents/CustomTextInput";
 import { useForm } from "react-hook-form";
 import { Button } from "primereact/button";
-import CityTable from "../components/tables/CityTable";
+import ProductSizeTable from "../components/tables/ProductSizeTable";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AddCity, GetCity, UpdateCity } from "../services/Api";
+import { AddProductSize, GetProductSize, UpdateProductSize } from "../services/Api";
 import { notify } from "../utils/notification";
-const Cities = () => {
+const ProductSize = () => {
   const [visible, setVisible] = useState(false);
-  const [editCity, setEditCity] = useState(null); // For editing a city
+  const [editProductSize, setEditProductSize] = useState(null); // For editing a productSize
   const method = useForm({
     defaultValues: {
-      city: "",
+      productSize: "",
     },
   });
 
-  const addCityMutation = useMutation({
-    mutationFn: (data) => AddCity(data),
+  const addProductSizeMutation = useMutation({
+    mutationFn: (data) => AddProductSize(data),
     onSuccess: (data) => {
       if (data.success) {
-        notify("success", "City added successfully");
+        notify("success", "Product Size added successfully");
         setVisible(false);
-        method.reset();
+        method.reset()
         refetch();
       }
     },
   });
 
-  const editCityMutation = useMutation({
-    mutationFn: UpdateCity,
+  const editProductSizeMutation = useMutation({
+    mutationFn: UpdateProductSize,
     onSuccess: (data) => {
       if (data.success) {
-        notify("success", "City updated successfully");
+        notify("success", "Product Size updated successfully");
         setVisible(false);
-        method.reset();
-        setEditCity(null);
+        setEditProductSize(null);
+        method.reset()
         refetch();
       }
     },
   });
 
   const onSubmit = (data) => {
-    if (editCity) {
-      editCityMutation.mutate({
-        cityId: editCity.cityID,
-        cityName: data.city,
+    if (editProductSize) {
+      editProductSizeMutation.mutate({
+        productSizeId: editProductSize.productSizeID,
+        productSizeName: data.productSize,
       });
     } else {
-      addCityMutation.mutate({ city: data.city });
+      addProductSizeMutation.mutate({ productSize: data.productSize });
     }
   };
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["cities"],
-    queryFn: GetCity,
+    queryKey: ["categories"],
+    queryFn: GetProductSize,
   });
 
-  const handleEditCity = (city) => {
-    setEditCity(city);
-    method.setValue("city", city.cityName);
+  const handleEditProductSize = (productSize) => {
+    setEditProductSize(productSize);
+    method.setValue("productSize", productSize.productSizeName);
     setVisible(true);
   };
 
   return (
     <>
-      <div className="citypage">
+      <div className="productSizepage">
         <div className="page_top flex flex-wrap mb-2">
-          <h2>City</h2>
+          <h2>Product Size</h2>
           <button
             className="btn"
             onClick={() => {
-              setEditCity(null);
+              setEditProductSize(null);
               setVisible(true);
+
             }}
           >
-            New City
+            New Product Size
           </button>
         </div>
-        <div className="all_city">
-          <CityTable
+        <div className="all_productSize">
+          <ProductSizeTable
             data={data}
-            onEditCity={handleEditCity} // Pass edit handler
+            onEditProductSize={handleEditProductSize} // Pass edit handler
           />
         </div>
       </div>
       <Dialog
-        header={editCity ? "Edit City" : "Add City"}
+        header={editProductSize ? "Edit Product Size" : "Add Product Size"}
         visible={visible}
         style={{ maxWidth: "700px" }}
         onHide={() => {
           setVisible(false);
           method.reset();
-          setEditCity(null);
+          setEditProductSize(null);
         }}
       >
         <form onSubmit={method.handleSubmit(onSubmit)}>
@@ -101,16 +102,16 @@ const Cities = () => {
             <FormColumn>
               <CustomTextInput
                 control={method.control}
-                name="city"
+                name="productSize"
                 required={true}
-                label="City Name"
+                label="Product size name"
                 isEnable={true}
-                placeholder="Enter city name"
+                placeholder="Enter product size name"
               />
             </FormColumn>
-
+           
             <FormColumn>
-              <Button label={editCity ? "Update" : "Add"} type="submit" />
+              <Button label={editProductSize ? "Update" : "Add"} type="submit" />
             </FormColumn>
           </FormRow>
         </form>
@@ -119,4 +120,4 @@ const Cities = () => {
   );
 };
 
-export default Cities;
+export default ProductSize

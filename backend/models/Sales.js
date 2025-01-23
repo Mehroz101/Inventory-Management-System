@@ -40,6 +40,10 @@ const saleSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    customerID: {
+      type: Number,
+      required: true,
+    },
     customerContact: {
       type: String,
     },
@@ -62,6 +66,10 @@ const saleSchema = new mongoose.Schema(
     saleDate: {
       type: String,
       required: true,
+    },
+    saleUpdateDate:{
+        type: String,
+        required:true
     },
     status: {
       type: String,

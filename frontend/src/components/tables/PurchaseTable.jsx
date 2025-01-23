@@ -31,14 +31,14 @@ const PurchaseDate = [
     productName: "Product1",
     category: "cat1",
     productSize: "12 x 12",
-    supplierName: "supplier name",
+    customerName: "customer name",
     productPrice: 100,
     productQuantity: 10,
     paidAmount: 345,
     reaminingAmount: 200,
     purchaseDate: "12-Dec-2024",
     invoiceNo: 12,
-    supplierContact: "03017518822",
+    customerContact: "03017518822",
     status: "paid",
     Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t ert er  ert ",
   },
@@ -47,19 +47,19 @@ const PurchaseDate = [
     productName: "Product2",
     category: "cat2",
     productSize: "12 x 12",
-    supplierName: "supplier name",
+    customerName: "customer name",
     productPrice: 100,
     productQuantity: 10,
     paidAmount: 345,
     reaminingAmount: 200,
     purchaseDate: "12-Dec-2024",
     invoiceNo: 12,
-    supplierContact: "03017518822",
+    customerContact: "03017518822",
     status: "unpaid",
     Note: "ls sd sd e fjfkjdoiwifeof ewr  et re t",
   },
 ];
-export default function PurchaseTable({ data,handleEdit }) {
+export default function PurchaseTable({ data, handleEdit }) {
   const [purchases, setPurchases] = useState(data);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -67,12 +67,12 @@ export default function PurchaseTable({ data,handleEdit }) {
     productName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     category: { value: null, matchMode: FilterMatchMode.CONTAINS },
     city: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    supplierName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    customerName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     status: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
   const [loading, setLoading] = useState(true);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
-const navigate = useNavigate()
+  const navigate = useNavigate();
   const [statuses] = useState(["unpaid", "paid"]);
 
   const getSeverity = (status) => {
@@ -146,7 +146,6 @@ const navigate = useNavigate()
   };
   const queryClient = useQueryClient();
 
- 
   const deletePurchaseMutation = useMutation({
     mutationFn: DeletePurchase,
     onSuccess: (data) => {
@@ -159,18 +158,18 @@ const navigate = useNavigate()
   });
   const handleDelete = (data) => {
     confirmDialog({
-        message: "Do you want to delete this product?",
-        header: "Delete Confirmation",
-        icon: "pi pi-info-circle",
-        defaultFocus: "reject",
-        acceptClassName: "p-button-danger",
-        accept: () =>
-          deletePurchaseMutation.mutate({ purchaseId: data.purchaseID }),
-      });
+      message: "Do you want to delete this product?",
+      header: "Delete Confirmation",
+      icon: "pi pi-info-circle",
+      defaultFocus: "reject",
+      acceptClassName: "p-button-danger",
+      accept: () =>
+        deletePurchaseMutation.mutate({ purchaseId: data.purchaseID }),
+    });
   };
 
   const handleView = (data) => {
-    navigate(`newpurchase?id=${data.purchaseID}`)
+    navigate(`newpurchase?id=${data.purchaseID}`);
 
     // Custom view logic here
   };
@@ -199,7 +198,7 @@ const navigate = useNavigate()
         value={purchases || []}
         paginator
         rows={10}
-        dataKey="id"
+        dataKey="invoiceNo"
         filters={filters}
         filterDisplay="row"
         loading={loading}
@@ -208,7 +207,7 @@ const navigate = useNavigate()
           "productName",
           "category",
           "city",
-          "supplierName",
+          "customerName",
         ]}
         header={header}
         emptyMessage="No purchases found."
@@ -230,7 +229,7 @@ const navigate = useNavigate()
           style={{ minWidth: "12rem" }}
         />
         <Column
-          field="supplierName"
+          field="customerName"
           header="Supplier Name"
           filter
           filterMenuStyle={{ width: "14rem" }}
@@ -274,12 +273,33 @@ const navigate = useNavigate()
           style={{ minWidth: "11rem" }}
         />
         <Column
-         field="purchaseDate"
+          body={(rowData) => {
+            return (
+              <>
+                <span>{formatDate(rowData.purchaseDate)}</span>
+              </>
+            );
+          }}
           header="Purchase Date"
           style={{ minWidth: "11rem" }}
         />
         <Column
-          field="supplierContact"
+          body={(rowData) => {
+            return (
+              <>
+                <span>
+                  {rowData.purchaseUpdateDate
+                    ? formatDate(rowData.purchaseUpdateDate)
+                    : ""}
+                </span>
+              </>
+            );
+          }}
+          header="Purchase Update Date"
+          style={{ minWidth: "11rem" }}
+        />
+        <Column
+          field="customerContact"
           header="Supplier Contact"
           style={{ minWidth: "11rem" }}
         />

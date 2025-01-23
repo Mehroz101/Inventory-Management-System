@@ -70,6 +70,7 @@ export default function ProductsTable({ data, onEditProduct }) {
   };
 
   const handleEdit = (rowData) => {
+    console.log(rowData)
     onEditProduct(rowData); // Trigger parent's edit dialog or action
   };
   const deleteProductMutation = useMutation({
@@ -167,6 +168,7 @@ export default function ProductsTable({ data, onEditProduct }) {
           />
           <Column field="quantity" header="Quantity" />
           <Column field="inProcessing" header="Printing Dept Quantity" />
+          <Column field="productSizeName" header="product Size" />
           <Column body={RawDataStatusTemplate} header="RawData" />
           <Column
             header="Action"

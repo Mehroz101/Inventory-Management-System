@@ -36,11 +36,15 @@ const purchaseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    supplierName: {
+    customerName: {
       type: String,
       required: true,
     },
-    supplierContact: {
+    customerID: {
+      type: Number,
+      required: true,
+    },
+    customerContact: {
       type: String,
     },
     productPrice: {
@@ -60,6 +64,10 @@ const purchaseSchema = new mongoose.Schema(
       required: true,
     },
     purchaseDate:{
+        type: String,
+        required:true
+    },
+    purchaseUpdateDate:{
         type: String,
         required:true
     },

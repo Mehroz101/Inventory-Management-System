@@ -16,6 +16,7 @@ const Sales = require("../models/Sales");
 //         categoryName,
 //         productPrice,
 //         customerName,
+//         customerId,
 //         customerContact,
 //         productQuantity,
 //         paidAmount,
@@ -47,6 +48,7 @@ const Sales = require("../models/Sales");
 //           categoryName: categoryName,
 //           productPrice,
 //           customerName,
+//           customerId,
 //           customerContact,
 //           productQuantity,
 //           paidAmount,
@@ -154,6 +156,8 @@ const Sales = require("../models/Sales");
 //         editSale.categoryName = categoryName;
 //         editSale.productPrice = productPrice;
 //         editSale.customerName = customerName;
+//         editSale.customerName = customerName;
+//         editSale.customerId = customerId;
 //         editSale.customerContact = customerContact;
 //         editSale.productQuantity = productQuantity;
 //         editSale.paidAmount = paidAmount;
@@ -223,6 +227,15 @@ const addSale = async (req, res) => {
     if (remainingAmount === 0) {
       status = "paid";
     }
+    const productcheck = await Product.findOne({productID:productId})
+    if(productcheck){
+     if(productcheck.quantity < productQuantity){
+      return res.status(400).json({
+        success: false,
+        message: `Available quantity is ${productcheck.quantity}`,
+      });
+     }
+    }
     const sale = await Sales.create({
       saleID: nextSaleID,
       invoiceNo: nextInvoiceNumber,
@@ -234,8 +247,9 @@ const addSale = async (req, res) => {
       cityID: cityId,
       cityName: cityName,
       productPrice,
-      customerName: customerName,
-      customerID: customerId,
+      customerName,
+      customerID:customerId,
+
       customerContact,
       productQuantity,
       paidAmount,
@@ -243,6 +257,7 @@ const addSale = async (req, res) => {
       note: Note,
       status: status,
       saleDate,
+      saleUpdateDate:saleDate,
     });
     if (sale) {
       const isProduct = await Product.findOne({ productID: productId });
@@ -259,10 +274,52 @@ const addSale = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
+
     res.status(500).json({
       success: false,
       message: "Internal server error",
+    });
+  }
+};
+const updateSale = async (req, res) => {
+  try {
+    console.log(req.body);
+    const userId = req.user.id;
+    const { saleId, updatedDate, givenAmount } = req.body;
+    const findsale = await Sales.findOne({
+      userId: userId,
+      saleID: saleId,
+    });
+    if (findsale) {
+      findsale.remainingAmount = findsale.remainingAmount - givenAmount;
+      findsale.saleUpdateDate = updatedDate;
+      console.log("remainingAmount: ",findsale.remainingAmount)
+      console.log("givenAmount: ",givenAmount)
+      console.log(findsale.remainingAmount)
+      if (findsale.remainingAmount === 0) {
+        findsale.status = "paid";
+      }
+      else{
+        findsale.status = "unpaid";
+
+      }
+      await findsale.save();
+      res.status(201).json({
+        success: true,
+        message: "sale updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Purchase not found",
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(505).json({
+      success: true,
+      message: "An error occurred",
     });
   }
 };
@@ -333,12 +390,15 @@ const GetSale = async (req, res) => {
             productPrice: sale.productPrice,
             customerId: sale.customerID,
             customerName: sale.customerName,
+            customerName: sale.customerName,
+            customerId: sale.customerID,
             customerContact: sale.customerContact,
             productQuantity: sale.productQuantity,
             paidAmount: sale.paidAmount,
             remainingAmount: sale.remainingAmount,
             Note: sale.note,
             saleDate: sale.saleDate,
+            saleUpdateDate: sale.saleUpdateDate || null,
             status: sale.status,
           };
         })
@@ -405,4 +465,5 @@ module.exports = {
   addSale,
   GetSale,
   GetSaleData,
+  updateSale
 };
