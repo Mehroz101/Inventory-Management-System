@@ -324,7 +324,7 @@ const updateSale = async (req, res) => {
 const deleteSale = async (req, res) => {
   try {
     const userId = req.user.id;
-    // const { saleId } = req.body;
+    const { saleId } = req.body;
     if (!saleId) {
       return res
         .status(400)
