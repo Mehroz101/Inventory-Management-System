@@ -382,3 +382,4 @@ module.exports = {
   GenerateReport,
   GetMonthlyData,
 };
+
