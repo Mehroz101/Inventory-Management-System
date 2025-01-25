@@ -8,6 +8,7 @@ import { Button } from "primereact/button";
 import { useMutation } from "@tanstack/react-query";
 import { generateReport } from "../services/Api";
 import { notify } from "../utils/notification";
+import { formatDate } from "../utils/CommonFunction";
 
 function Report() {
   const [reportData, setReportData] = useState(null); // State to store report data
@@ -61,6 +62,17 @@ function Report() {
         ];
         addTable("Product Stock", productStockData, 50);
       }
+      // Add Inventory Tables
+      if (reportData.totaldata && reportData.totaldata.length > 0) {
+        const totaldataData = [
+          ["Title", "Total Amount"],
+          ...reportData.totaldata.map((item) => [
+            item.title,
+            item.amount,
+          ]),
+        ];
+        addTable("Total Amount", totaldataData, doc.lastAutoTable.finalY + 10);
+      }
 
       if (reportData.purchases && reportData.purchases.length > 0) {
         const purchasesData = [
@@ -85,7 +97,7 @@ function Report() {
             item.productPrice,
             item.paidAmount,
             item.remainingAmount,
-            item.purchaseDate,
+            formatDate(item.purchaseDate),
             item.status,
           ]),
         ];
@@ -115,7 +127,7 @@ function Report() {
             item.productPrice,
             item.paidAmount,
             item.remainingAmount,
-            item.saleDate,
+            formatDate(item.saleDate),
             item.status,
           ]),
         ];
